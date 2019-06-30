@@ -1,0 +1,84 @@
+# vi:syntax=zsh
+#Utilites
+alias grep='grep --color=auto'
+alias dmesg='dmesg -HL'
+alias x='exit'
+alias cp='cp -iv'
+alias rm='rm -iv --one-file-system'
+alias mv='mv -iv'
+alias mkdir='mkdir -p -v'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias tnew='new-tmux-from-dir-name'
+alias ff='find-in-files'
+alias tree='tree -C'
+alias zsource='source ~/.zshrc'
+
+# Cache utilities
+alias bb="sudo bleachbit --delete system.cache system.localizations system.trash system.tmp"
+alias cc="sudo pkgcacheclean 2"
+
+#ls
+alias ls='ls -hF --color=auto'
+alias lr='ls -R'                    # recursive ls
+alias ll='ls -l'
+alias la='ll -A'
+alias lx='ll -BX'                   # sort by extension
+alias lz='ll -rS'                   # sort by size
+alias lt='ll -rt'                   # sort by date
+alias lm='la | more'
+
+## Pacman aliases
+alias pac="pacaur -S"	# default action
+alias pacu="pacaur -Syu"	# '[u]pdate'-
+alias pacr="pacaur -Rs"	# '[r]emove'
+alias pacs="pacaur -Ss"		# '[s]earch'
+alias pacq="pacaur -Q"		# '[Q]uery'
+alias paci="pacaur -Si"		# '[i]nfo'
+alias paclo="pacaur -Qdt"		# '[l]ist [o]rphans'
+alias pacc="sudo pacaur -Sc"		# '[c]lean cache'
+alias paclf="pacaur -Ql"		# '[l]ist [f]iles'n
+alias pacexpl="pacaur -D --asexp"	# 'mark as [expl]icit'
+alias pacimpl="pacaur -D --asdep"	# 'mark as [impl]icit'
+
+# git
+alias gitl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'"
+
+alias gpgreset="gpg-connect-agent updatestartuptty /bye"
+
+# dev stuff
+export CAPDIR=~/workspace/capture-backend
+
+
+alias dc="docker-compose"
+alias dcdev="dc -f docker-compose.yml -f docker-compose.dev.yml"
+alias dcdeploy="dc -f docker-compose.yml -f docker-compose.deploy.yml"
+alias dps="docker ps"
+alias dcipy="dcdev exec -e LINES=\$LINES -e COLUMNS=\$COLUMNS test ipython"
+alias dcsh="dcdev exec -e LINES=\$LINES -e COLUMNS=\$COLUMNS test /bin/bash"
+
+alias dbu="psql -h localhost -p $DB_PORT -U trinitysys capture_user_lo_1"
+alias dbs="psql -h localhost -p $DB_PORT -U stories stories"
+alias dbk="psql -h localhost -p $DB_PORT -U kserver kserver"
+
+alias cdst="cd $CAPDIR/capture-storage/"
+alias cdit="cd $CAPDIR/capture-storage/tests/internal"
+alias cdut="cd $CAPDIR/capture-storage/tests/unit"
+alias cdat="cd $CAPDIR/capture-storage/tests/api"
+alias cdpy="cd $CAPDIR/capture-storage/nbs_storage"
+
+
+
+# Notes
+alias notes="vim -c 'NV'"
+alias sync_notes="downsync_notes && upsync_notes"
+
+alias httpnv="http --verify=no -v"
+alias https='http --default-scheme=https'
+
+alias emacs="emacs -nw"
+
+# dotfile storage config
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
