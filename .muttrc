@@ -1,0 +1,145 @@
+set realname = "Peder Notto Galteland
+set from = "peder.galteland@telenordigital.com"
+set use_from = yes
+set envelope_from = yes
+
+# Ensure TLS is enforced
+set ssl_starttls = yes
+set ssl_force_tls = yes
+
+set smtp_url = 'smtps://peder.galteland@telenordigital.com@smtp.gmail.com:465/'
+set smtp_pass = `pass gmailmutt`
+
+set folder = "~/.mail"
+mailboxes +gmail/INBOX \
+          +gmail/drafts \
+          +gmail/sent
+
+set spoolfile        = "+gmail/INBOX"
+set record           = "+gmail/sent"
+set postponed        = "+gmail/drafts"
+set header_cache     = "~/.mutt/cache/headers"
+set message_cachedir = "~/.mutt/cache/bodies"
+set certificate_file = "~/.mutt/certificates"
+set move = no
+set delete
+unset confirmappend
+set quit
+
+# sidebar
+# set sidebar_delim   = '  │'
+set sidebar_visible = yes
+set sidebar_width   = 32
+color sidebar_new color221 color233
+
+# Needed to get and display mail (imap-fetch-mail)
+set editor = "vim"
+set charset = "utf-8"
+set record = ""
+
+# Viewing
+set sort = threads
+set sort_aux = last-date-received
+
+set date_format = "%m/%d"
+set index_format = "[%Z]  %D  %-20.20F  %s"
+set uncollapse_jump
+set sort_re
+set reply_regexp = "^(([Rr][Ee]?(\[[0-9]+\])?: *)?(\[[^]]+\] *)?)*"
+
+# Bindings
+bind index - collapse-all
+bind index,pager \` next-unread
+bind index <space> collapse-thread
+bind index \Cj sidebar-next
+bind index \Ck sidebar-prev
+bind index \Co sidebar-open
+bind attach,index g first-entry
+bind attach,index G last-entry
+bind index R group-reply
+
+macro index \Cr "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" "mark all messages as read"
+macro index,pager o "<shell-escape>offlineimap<enter>"
+
+# Pager View Options ---------------------------------
+set pager_index_lines = 50 # number of index lines to show
+set pager_context = 3      # number of context lines to show
+set pager_stop             # don't go to next message automatically
+set menu_scroll            # scroll in menus
+set tilde                  # show tildes like in vim
+unset markers              # no ugly plus signs
+
+set quote_regexp = "^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"
+alternative_order text/plain text/enriched text/html
+
+# Pager Key Bindings ---------------------------------
+bind pager g top
+bind pager G bottom
+bind pager p previous-subthread
+bind pager n next-subthread
+
+bind pager R  group-reply
+
+# View attachments properly.
+bind attach <return> view-mailcap
+
+# pgp
+set pgp_use_gpg_agent = yes
+set pgp_sign_as = 221FE5B1
+set pgp_timeout = 3600
+set crypt_autosign = yes
+set crypt_replyencrypt = yes
+
+# Gruvbox
+# basic colors ---------------------------------------------------------
+#     name        foreground  background  pattern
+color normal      color20     color0
+color error       color1      color0
+color tilde       color20     color0
+color message     color20     color0
+color markers     color1      color0
+color attachment  color8      color0
+color search      color2      color0
+color status      color8      color18
+color indicator   color7      color19
+color tree        color19     color0                  # arrow in threads
+
+color index       color20     color0       "~A"       # all messages
+color index       color1      color0       "~F"       # flagged messages
+color index       color20     color0       "~v~(!~N)" # collapsed thread with no unread
+color index       color4      color0       "~U"       # unread messages
+color index       color4      color0       "~v~(~N)"  # collapsed thread with some unread
+color index       color1      color0       "~v~(~F)"  # collapsed thread with some flagged
+color index       color0      color1       "~D"       # deleted messages
+
+# header
+color hdrdefault  color20     color18
+color header      color20     color18      "^"
+color header      color7      color18      "^(From)"
+color header      color7      color18      "^(Subject)"
+
+# body
+color normal      color7      color0
+color underline   color7      color0
+color bold        color7      color0
+color signature   color20     color0
+
+color quoted      color3      color0
+color quoted1     color2      color0
+color quoted2     color5      color0
+color quoted3     color6      color0
+color quoted4     color4      color0
+
+# pgp
+color body        color2      color0       "(Good signature)"
+color body        color2      color0       "^gpg: Good signature .*"
+color body        color20     color0       "^gpg: "
+color body        color1      color0       "(BAD signature)"
+color body        color1      color1       "^gpg: BAD signature from.*"
+
+# body url
+color body        color4      color0       "([a-z][a-z0-9+-]*://(((([a-z0-9_.!~*'();:&=+$,-]|%[0-9a-f][0-9a-f])*@)?((([a-z0-9]([a-z0-9-]*[a-z0-9])?)\\.)*([a-z]([a-z0-9-]*[a-z0-9])?)\\.?|[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+)(:[0-9]+)?)|([a-z0-9_.!~*'()$,;:@&=+-]|%[0-9a-f][0-9a-f])+)(/([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*(;([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*)*(/([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*(;([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*)*)*)?(\\?([a-z0-9_.!~*'();/?:@&=+$,-]|%[0-9a-f][0-9a-f])*)?(#([a-z0-9_.!~*'();/?:@&=+$,-]|%[0-9a-f][0-9a-f])*)?|(www|ftp)\\.(([a-z0-9]([a-z0-9-]*[a-z0-9])?)\\.)*([a-z]([a-z0-9-]*[a-z0-9])?)\\.?(:[0-9]+)?(/([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*(;([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*)*(/([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*(;([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*)*)*)?(\\?([-a-z0-9_.!~*'();/?:@&=+$,]|%[0-9a-f][0-9a-f])*)?(#([-a-z0-9_.!~*'();/?:@&=+$,]|%[0-9a-f][0-9a-f])*)?)[^].,:;!)? \t\r\n<>\"]"
+# body email
+color body        color4      color0       "((@(([0-9a-z-]+\\.)*[0-9a-z-]+\\.?|#[0-9]+|\\[[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\]),)*@(([0-9a-z-]+\\.)*[0-9a-z-]+\\.?|#[0-9]+|\\[[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\]):)?[0-9a-z_.+%$-]+@(([0-9a-z-]+\\.)*[0-9a-z-]+\\.?|#[0-9]+|\\[[0-2]?[0-9]?[0-9]\\.[0-2]?[0-9]?[0-9]\\.[0-2]?[0-9]?[0-9]\\.[0-2]?[0-9]?[0-9]\\])"
+
+source ~/.mutt/gpg.rc

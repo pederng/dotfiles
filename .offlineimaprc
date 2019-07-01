@@ -1,0 +1,44 @@
+[general]
+ui = ttyui
+accounts = PederGalteland
+pythonfile=~/.mutt/offlineimap.py
+fsync = False
+
+[Account PederGalteland]
+localrepository = PederGalteland-Local
+remoterepository = PederGalteland-Remote
+postsynchook = notmuch new
+
+[Repository PederGalteland-Local]
+type = Maildir
+localfolders = ~/.mail/gmail
+nametrans = lambda folder: {'drafts':    '[Gmail]/Drafts',
+														'sent':      '[Gmail]/Sent Mail',
+														'spam':      '[Gmail]/Spam',
+														'flagged':   '[Gmail]/Starred',
+														'trash':     '[Gmail]/Trash',
+														'archive':   '[Gmail]/All Mail',
+														}.get(folder, folder)
+
+[Repository PederGalteland-Remote]
+maxconnections = 1
+type = Gmail
+remoteuser = peder.galteland@telenordigital.com
+remotepasseval = get_pass("gmailmutt")
+realdelete = no
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+ssl_version = tls1_2
+nametrans = lambda folder: {'[Gmail]/Drafts':    'drafts',
+														'[Gmail]/Sent Mail': 'sent',
+														'[Gmail]/Starred':   'flagged',
+														'[Gmail]/Spam':      'spam',
+														'[Gmail]/Trash':     'trash',
+														'[Gmail]/All Mail':  'archive',
+														}.get(folder, folder)
+folderfilter = lambda folder: folder not in ['[Gmail]/Trash',
+                                             '[Gmail]/Important',
+                                             '[Gmail]/Spam',
+                                             'Jira',
+                                             'Vipps',
+                                             'capture-backend',
+                                             ]
