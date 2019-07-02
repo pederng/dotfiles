@@ -588,3 +588,11 @@ let g:vim_markdown_conceal = 0
 let g:vim_markdown_math = 1
 let g:vim_markdown_new_list_indent = 2
 autocmd FileType markdown setlocal formatoptions=tqr
+
+" =============================================================================
+" Machine specific config
+" =============================================================================
+
+if filereadable(expand('~/.vim/machine_specific_vimrc'))
+	source ~/.vim/machine_specific_vimrc
+endif
