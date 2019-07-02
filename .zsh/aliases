@@ -79,6 +79,7 @@ alias httpnv="http --verify=no -v"
 alias https='http --default-scheme=https'
 
 alias emacs="emacs -nw"
+alias mutt='neomutt'
 
 # dotfile storage config
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'

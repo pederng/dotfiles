@@ -60,6 +60,8 @@ bind index R group-reply
 
 macro index \Cr "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" "mark all messages as read"
 macro index,pager o "<shell-escape>offlineimap<enter>"
+macro index,pager \cb "<pipe-message> urlscan<Enter>" "call urlscan to extract URLs out of a message"
+macro attach,compose \cb "<pipe-entry> urlscan<Enter>" "call urlscan to extract URLs out of a message"
 
 # Pager View Options ---------------------------------
 set pager_index_lines = 50 # number of index lines to show
