@@ -90,6 +90,7 @@ conf() {
         xresources)  vim ~/.Xresources && xrdb ~/.Xresources ;;
         zathura)     vim ~/.config/zathura/zathurarc ;;
         zsh)         vim ~/.zshrc && source ~/.zshrc ;;
+        zsh-local)   vim ~/.zsh/machine_specific && source ~/.zshrc ;;
         aliases)     vim ~/.zsh/aliases && source ~/.zshrc ;;
         functions)   vim ~/.zsh/functions && source ~/.zshrc ;;
         xmonad)      vim ~/.xmonad/xmonad.hs && xmonad --recompile && xmonad --restart ;;
@@ -103,7 +104,7 @@ conf() {
 }
 
 function _complete_conf {
-  reply=('functions' 'aliases' 'zsh' 'vim' 'emacs' 'mutt' 'xmonad' 'termite' 'alacritty' 'qutebrowser' 'tmux' 'ssh')
+  reply=('functions' 'aliases' 'zsh' 'zsh-local' 'vim' 'emacs' 'mutt' 'xmonad' 'termite' 'alacritty' 'qutebrowser' 'tmux' 'ssh')
 }
 compctl -K _complete_conf conf
 
