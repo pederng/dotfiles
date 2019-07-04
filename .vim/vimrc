@@ -75,6 +75,9 @@ call plug#begin('~/.vim/plugged')
   Plug 'purescript-contrib/purescript-vim'
   Plug 'jkotlinski/forth.vim'
 
+  " Dart
+  Plug 'dart-lang/dart-vim-plugin'
+  " Plug 'thosake/vim-flutter'
 
   " Haskell
   Plug 'neovimhaskell/haskell-vim'
@@ -331,12 +334,14 @@ let g:ale_linters = {
       \ 'vim': ['vint'],
       \ 'rust': ['rls', 'cargo'],
       \ 'c': ['clang'],
+      \ 'dart': ['dartanalyzer'],
       \}
 
 let g:ale_fixers = {
       \ 'python': ['black'],
       \ 'haskell': ['brittany'],
       \ 'rust': ['rustfmt'],
+      \ 'dart': [],
       \}
 
 let g:ale_completion_enabled = 0
@@ -394,6 +399,14 @@ au User lsp_setup call lsp#register_server({
 		\ 'name': 'clangd',
 		\ 'cmd': {server_info->['clangd']},
 		\ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+		\ })
+endif
+
+if executable('dart_language_server')
+au User lsp_setup call lsp#register_server({
+		\ 'name': 'dart_language_server',
+		\ 'cmd': {server_info->['dart_language_server']},
+		\ 'whitelist': ['dart'],
 		\ })
 endif
 
