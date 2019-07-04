@@ -14,10 +14,11 @@ set folder = "~/.mail"
 mailboxes +gmail/INBOX \
           +gmail/drafts \
           +gmail/sent \
-          +gmail/Jira \
           +gmail/github.capture-backend \
           +gmail/github.scripture \
-          +gmail/github.search
+          +gmail/github.search \
+          +gmail/Jira \
+          +gmail/Bedriftsidrettslaget
 
 set spoolfile        = "+gmail/INBOX"
 set record           = "+gmail/sent"
