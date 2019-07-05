@@ -418,6 +418,7 @@ endif
 
 imap <c-l> <Plug>(asyncomplete_force_refresh)
 nmap <leader>gd :LspDefinition<CR>
+nmap <c-k> :LspHover<CR>
 
 function! s:check_back_space() abort
  let col = col('.') - 1
@@ -432,7 +433,6 @@ inoremap <silent><expr> <TAB>
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 " inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
-nmap <leader>gd :LspDefinition<CR>
 
 " let g:lsp_log_verbose = 1
 " let g:lsp_log_file = expand('~/.vim/vim-lsp.log')

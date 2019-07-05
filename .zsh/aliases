@@ -55,9 +55,7 @@ export CAPDIR=~/workspace/capture-backend
 alias dc="docker-compose"
 alias dcdev="dc -f docker-compose.yml -f docker-compose.dev.yml"
 alias dcdeploy="dc -f docker-compose.yml -f docker-compose.deploy.yml"
-alias dps="docker ps"
 alias dcipy="dcdev exec -e LINES=\$LINES -e COLUMNS=\$COLUMNS test ipython"
-alias dcsh="dcdev exec -e LINES=\$LINES -e COLUMNS=\$COLUMNS test /bin/bash"
 
 alias dbu="psql -h localhost -p $DB_PORT -U trinitysys capture_user_lo_1"
 alias dbs="psql -h localhost -p $DB_PORT -U stories stories"

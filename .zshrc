@@ -22,6 +22,9 @@ compinit
 
 setopt NO_HUP
 
+# Disable c-s hanging of terminal
+stty -ixon
+
 # Path
 # typeset -U path
 export GOPATH=~/workspace/go
