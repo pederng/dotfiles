@@ -58,9 +58,6 @@ call plug#begin('~/.vim/plugged')
   Plug 'hynek/vim-python-pep8-indent'
   Plug 'lepture/vim-jinja'
 
-  " Go
-  Plug 'fatih/vim-go'
-
   " Rust
   Plug 'rust-lang/rust.vim'
 
@@ -328,7 +325,7 @@ noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 24, 4)<CR>
 
 let g:ale_linters = {
       \ 'python': ['pylint', 'mypy'],
-      \ 'go': [],
+      \ 'go': ['golint'],
       \ 'typescript': ['tslint'],
       \ 'haskell': ['hie', 'ghc-mod'],
       \ 'vim': ['vint'],
@@ -342,6 +339,7 @@ let g:ale_fixers = {
       \ 'haskell': ['brittany'],
       \ 'rust': ['rustfmt'],
       \ 'dart': [],
+      \ 'go': ['gofmt', 'goimports'],
       \}
 
 let g:ale_completion_enabled = 0
@@ -410,6 +408,14 @@ au User lsp_setup call lsp#register_server({
 		\ })
 endif
 
+if executable('gopls')
+au User lsp_setup call lsp#register_server({
+		\ 'name': 'gopls',
+		\ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
+		\ 'whitelist': ['go'],
+		\ })
+endif
+
 imap <c-l> <Plug>(asyncomplete_force_refresh)
 nmap <leader>gd :LspDefinition<CR>
 
@@ -465,24 +471,6 @@ let g:sexp_enable_insert_mode_mappings = 0
 let g:tslime_normal_mapping = '<leader>t'
 let g:tslime_visual_mapping = '<leader>t'
 let g:tslime_vars_mapping = '<leader>T'
-
-" =============================================================================
-" Go
-" =============================================================================
-
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_types = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_build_constraints = 1
-
-augroup go
-  au FileType go nmap <leader>gr <Plug>(go-run)
-  au FileType go nmap <leader>gb <Plug>(go-build)
-  au FileType go nmap <leader>gt :w<CR>:GoTest<CR>
-  au FileType go nmap <leader>gc <Plug>(go-coverage)
-augroup end
 
 " =============================================================================
 " Haskell
