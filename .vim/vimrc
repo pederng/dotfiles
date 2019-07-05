@@ -339,7 +339,7 @@ let g:ale_fixers = {
       \ 'haskell': ['brittany'],
       \ 'rust': ['rustfmt'],
       \ 'dart': [],
-      \ 'go': ['gofmt', 'goimports'],
+      \ 'go': ['gofmt'],
       \}
 
 let g:ale_completion_enabled = 0
@@ -418,7 +418,7 @@ endif
 
 imap <c-l> <Plug>(asyncomplete_force_refresh)
 nmap <leader>gd :LspDefinition<CR>
-nmap <c-k> :LspHover<CR>
+nmap <leader>gk :LspHover<CR>
 
 function! s:check_back_space() abort
  let col = col('.') - 1
