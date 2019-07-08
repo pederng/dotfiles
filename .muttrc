@@ -18,7 +18,8 @@ mailboxes +gmail/INBOX \
           +gmail/github.scripture \
           +gmail/github.search \
           +gmail/Jira \
-          +gmail/Bedriftsidrettslaget
+          +gmail/Bedriftsidrettslaget \
+          +gmail/Workplace
 
 set spoolfile        = "+gmail/INBOX"
 set record           = "+gmail/sent"
