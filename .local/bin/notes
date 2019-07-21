@@ -2,6 +2,9 @@
 
 ndir=${NOTES_DIR-$HOME/.notes}
 cmd=$1
+COMMANDS=(
+  list completion
+)
 shift
 
 function downsync_notes() {
@@ -26,7 +29,15 @@ else
     list)
       find_md
     ;;
-
+  completion)
+cat << EOF
+__notes_completions()
+{
+    COMPREPLY=( \$(compgen -W "${COMMANDS[*]}" "\${COMP_KEY}") )
+}
+complete -F __notes_completions notes
+EOF
+  ;;
     *)
       downsync_notes
       vim "$ndir/$cmd"

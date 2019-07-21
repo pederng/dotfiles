@@ -172,6 +172,9 @@ eval "$(pipenv --completion)"
 # Stack completion
 eval "$(stack --bash-completion-script stack)"
 
+eval "$(notes completion)"
+
+
 export GPG_TTY="$(tty)"
 export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 
