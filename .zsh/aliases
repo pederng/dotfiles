@@ -67,12 +67,6 @@ alias cdut="cd $CAPDIR/capture-storage/tests/unit"
 alias cdat="cd $CAPDIR/capture-storage/tests/api"
 alias cdpy="cd $CAPDIR/capture-storage/nbs_storage"
 
-
-
-# Notes
-alias notes="vim -c 'NV'"
-alias sync_notes="downsync_notes && upsync_notes"
-
 alias httpnv="http --verify=no -v"
 alias https='http --default-scheme=https'
 
