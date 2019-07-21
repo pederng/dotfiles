@@ -1,7 +1,7 @@
 #! /bin/bash
 
 ndir=${NOTES_DIR-$HOME/.notes}
-fname=$1
+cmd=$1
 shift
 
 function downsync_notes() {
@@ -14,11 +14,23 @@ function upsync_notes() {
   git --git-dir="$ndir"/.git --work-tree="$ndir"  push
 }
 
+find_md() {
+  find "$ndir" -iname '*.md' | awk -F / '{print $NF}'
+}
 
-if [ "$fname" = "" ]; then
-  notes "$(find "$ndir" -iname '*.md' | fzf --preview='cat {}' | awk -F / '{print $NF}')"
+
+if [ "$cmd" = "" ]; then
+  notes "$(find_md | fzf --preview='cat {}')"
 else
-  downsync_notes
-  vim "$ndir/$fname"
-  upsync_notes
+  case $cmd in
+    list)
+      find_md
+    ;;
+
+    *)
+      downsync_notes
+      vim "$ndir/$cmd"
+      upsync_notes
+    ;;
+  esac
 fi
