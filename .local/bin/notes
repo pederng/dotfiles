@@ -1,0 +1,24 @@
+#! /bin/bash
+
+ndir=${NOTES_DIR-$HOME/.notes}
+fname=$1
+shift
+
+function downsync_notes() {
+  git --git-dir="$ndir"/.git --work-tree="$ndir" pull
+}
+
+function upsync_notes() {
+  git --git-dir="$ndir"/.git --work-tree="$ndir"  add .
+  git --git-dir="$ndir"/.git --work-tree="$ndir"  commit --author="Autocommiter <>" -m "Autocommit"
+  git --git-dir="$ndir"/.git --work-tree="$ndir"  push
+}
+
+
+if [ "$fname" = "" ]; then
+  notes "$(find "$ndir" -iname '*.md' | fzf --preview='cat {}' | awk -F / '{print $NF}')"
+else
+  downsync_notes
+  vim "$ndir/$fname"
+  upsync_notes
+fi
