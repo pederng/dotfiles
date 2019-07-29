@@ -23,7 +23,7 @@ find_md() {
 
 
 if [ "$cmd" = "" ]; then
-  notes "$(find_md | fzf --preview='cat {}')"
+  notes "$(find_md | fzf --preview="cat $ndir/{}")"
 else
   case $cmd in
     list)
