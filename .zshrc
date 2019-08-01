@@ -30,7 +30,8 @@ stty -ixon
 export GOPATH=~/workspace/go
 export rubypath=$(ruby -rrubygems -e "puts Gem.user_dir")
 export cabalpath=~/.cabal
-path=(~/.local/bin $GOPATH/bin $rubypath/bin $cabalpath/bin $path)
+export npmpath=~/.npm-packages
+path=(~/.local/bin $GOPATH/bin $rubypath/bin $cabalpath/bin $npmpath/bin $path)
 source $HOME/.cargo/env
 
 # Tab completion for cd ..
