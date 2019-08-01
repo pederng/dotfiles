@@ -56,7 +56,6 @@ call plug#begin('~/.vim/plugged')
   Plug 'davidhalter/jedi-vim'
   Plug 'bps/vim-textobj-python'
   Plug 'hynek/vim-python-pep8-indent'
-  Plug 'lepture/vim-jinja'
 
   " Rust
   Plug 'rust-lang/rust.vim'
@@ -71,6 +70,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'ElmCast/elm-vim'
   Plug 'purescript-contrib/purescript-vim'
   Plug 'jkotlinski/forth.vim'
+  Plug 'sheerun/vim-polyglot'
 
   " Dart
   Plug 'dart-lang/dart-vim-plugin'
@@ -325,6 +325,7 @@ noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 24, 4)<CR>
 
 let g:ale_linters = {
       \ 'python': ['pylint', 'mypy'],
+      \ 'javascript': ['jshint'],
       \ 'go': ['golint'],
       \ 'typescript': ['tslint'],
       \ 'haskell': ['hie', 'ghc-mod'],
@@ -340,6 +341,9 @@ let g:ale_fixers = {
       \ 'rust': ['rustfmt'],
       \ 'dart': [],
       \ 'go': ['gofmt'],
+      \ 'javascript': ['prettier'],
+      \ 'html': ['prettier'],
+      \ 'css': ['prettier'],
       \}
 
 let g:ale_completion_enabled = 0
@@ -455,8 +459,6 @@ let g:jedi#documentation_command = '<leader>gK'
 let g:jedi#usages_command = ''
 let g:jedi#rename_command = '<leader>gr'
 let g:jedi#completions_enabled = 0
-
-au BufNewFile,BufRead *.html,*.htm,*.shtml,*.stm set ft=jinja
 
 " =============================================================================
 " Clojure
