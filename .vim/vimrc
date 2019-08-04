@@ -325,7 +325,7 @@ noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 24, 4)<CR>
 
 let g:ale_linters = {
       \ 'python': ['pylint', 'mypy'],
-      \ 'javascript': ['jshint'],
+      \ 'javascript': ['standard'],
       \ 'go': ['golint'],
       \ 'typescript': ['tslint'],
       \ 'haskell': ['hie', 'ghc-mod'],
@@ -341,7 +341,7 @@ let g:ale_fixers = {
       \ 'rust': ['rustfmt'],
       \ 'dart': [],
       \ 'go': ['gofmt'],
-      \ 'javascript': ['prettier'],
+      \ 'javascript': ['prettier-standard'],
       \ 'html': ['prettier'],
       \ 'css': ['prettier'],
       \}
