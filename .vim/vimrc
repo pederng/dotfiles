@@ -327,7 +327,7 @@ let g:ale_linters = {
       \ 'python': ['pylint', 'mypy'],
       \ 'javascript': ['standard'],
       \ 'go': ['golint'],
-      \ 'typescript': ['tslint'],
+      \ 'typescript': ['tslint', 'tsserver'],
       \ 'haskell': ['hie', 'ghc-mod'],
       \ 'vim': ['vint'],
       \ 'rust': ['rls', 'cargo'],
@@ -342,6 +342,7 @@ let g:ale_fixers = {
       \ 'dart': [],
       \ 'go': ['gofmt'],
       \ 'javascript': ['prettier-standard'],
+      \ 'typescript': ['tslint'],
       \ 'html': ['prettier'],
       \ 'css': ['prettier'],
       \}
@@ -420,6 +421,15 @@ au User lsp_setup call lsp#register_server({
 		\ })
 endif
 
+if executable('typescript-language-server')
+au User lsp_setup call lsp#register_server({
+		\ 'name': 'typescript-language-server',
+		\ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
+		\ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
+		\ 'whitelist': ['typescript', 'typescript.tsx'],
+		\ })
+endif
+
 imap <c-l> <Plug>(asyncomplete_force_refresh)
 nmap <leader>gd :LspDefinition<CR>
 nmap <leader>gk :LspHover<CR>
@@ -437,6 +447,8 @@ inoremap <silent><expr> <TAB>
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 " inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+
+let g:lsp_diagnostics_enabled = 0
 
 " let g:lsp_log_verbose = 1
 " let g:lsp_log_file = expand('~/.vim/vim-lsp.log')
