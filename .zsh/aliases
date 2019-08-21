@@ -67,7 +67,6 @@ alias cdut="cd $CAPDIR/capture-storage/tests/unit"
 alias cdat="cd $CAPDIR/capture-storage/tests/api"
 alias cdpy="cd $CAPDIR/capture-storage/nbs_storage"
 
-alias httpnv="http --verify=no -v"
 alias https='http --default-scheme=https'
 
 alias emacs="emacs -nw"
