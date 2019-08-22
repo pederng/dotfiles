@@ -16,6 +16,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'marcweber/vim-addon-mw-utils'
   Plug 'chrisbra/unicode.vim'
   Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-unimpaired'
   Plug 'tpope/vim-speeddating'
   Plug 'kana/vim-textobj-user'
   Plug 'ntpeters/vim-better-whitespace'
