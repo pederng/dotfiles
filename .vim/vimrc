@@ -230,17 +230,6 @@ nmap <C-l> <C-w>l
 " =============================================================================
 " Buffers
 " =============================================================================
-set nohidden
-
-augroup netrw_buf_hidden_fix
-  autocmd!
-  " Set all non-netrw buffers to bufhidden=hide
-  autocmd BufWinEnter *
-              \  if &ft != 'netrw'
-              \|     set bufhidden=hide
-              \| endif
-
-augroup end
 
 map <leader>bd :bp<CR>:bd #<CR>
 map <leader>bD :set noconfirm <CR> :bufdo bd<CR> :set confirm<CR>
@@ -511,7 +500,9 @@ autocmd Filetype gitcommit setlocal spell textwidth=72
 " Fugitive
 " =============================================================================
 
-map <leader>gs :Gstatus<CR><C-w>20+
+augroup FugitiveCustom
+  autocmd BufRead fugitive://* set bufhidden=delete
+augroup END
 
 " =============================================================================
 " Lightline
