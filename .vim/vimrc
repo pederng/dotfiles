@@ -232,6 +232,10 @@ nmap <C-l> <C-w>l
 " Buffers
 " =============================================================================
 
+set hidden
+
+let g:netrw_fastbrowse = 0
+
 map <leader>bd :bp<CR>:bd #<CR>
 map <leader>bD :set noconfirm <CR> :bufdo bd<CR> :set confirm<CR>
 
