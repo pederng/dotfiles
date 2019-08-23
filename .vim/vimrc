@@ -16,11 +16,11 @@ call plug#begin('~/.vim/plugged')
   Plug 'marcweber/vim-addon-mw-utils'
   Plug 'chrisbra/unicode.vim'
   Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-unimpaired'
   Plug 'tpope/vim-speeddating'
   Plug 'kana/vim-textobj-user'
   Plug 'ntpeters/vim-better-whitespace'
   Plug 'tpope/vim-surround'
-  Plug 'vim-scripts/BufOnly.vim'
   Plug 'jonhiggs/vim-readline'
 
   Plug 'prabirshrestha/async.vim'
@@ -231,37 +231,9 @@ nmap <C-l> <C-w>l
 " =============================================================================
 " Buffers
 " =============================================================================
-set nohidden
 
-augroup netrw_buf_hidden_fix
-  autocmd!
-  " Set all non-netrw buffers to bufhidden=hide
-  autocmd BufWinEnter *
-              \  if &ft != 'netrw'
-              \|     set bufhidden=hide
-              \| endif
-
-augroup end
-
-map <leader>bn :bnext<CR>
-map <leader>bp :bprevious<CR>
-map <leader>bf :bfirst<CR>
-map <leader>bl :blast<CR>
-map <leader>bm :bmodified<CR>
-map <leader>bb :b#<CR>
-map <leader>b1 :b1<CR>
-map <leader>b2 :b2<CR>
-map <leader>b3 :b3<CR>
-map <leader>b4 :b4<CR>
-map <leader>b5 :b5<CR>
-map <leader>b6 :b6<CR>
-map <leader>b7 :b7<CR>
-map <leader>b8 :b8<CR>
-map <leader>b9 :b9<CR>
-map <leader>b0 :b0<CR>
 map <leader>bd :bp<CR>:bd #<CR>
 map <leader>bD :set noconfirm <CR> :bufdo bd<CR> :set confirm<CR>
-map <leader>be :set noconfirm <CR> :bufdo e<CR> :set confirm<CR>
 
 " =============================================================================
 " Spell checking
@@ -529,7 +501,9 @@ autocmd Filetype gitcommit setlocal spell textwidth=72
 " Fugitive
 " =============================================================================
 
-map <leader>gs :Gstatus<CR><C-w>20+
+augroup FugitiveCustom
+  autocmd BufRead fugitive://* set bufhidden=delete
+augroup END
 
 " =============================================================================
 " Lightline
