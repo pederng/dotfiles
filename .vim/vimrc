@@ -505,6 +505,9 @@ augroup FugitiveCustom
   autocmd BufRead fugitive://* set bufhidden=delete
 augroup END
 
+" :Gbrowse uses netrw, set default browser for that
+let g:netrw_browsex_viewer = "qutebrowser"
+
 " =============================================================================
 " Lightline
 " =============================================================================
