@@ -207,18 +207,6 @@ inoremap <Left> <NOP>
 inoremap <Right> <NOP>
 
 " =============================================================================
-" File managment
-" =============================================================================
-nnoremap <Leader>w :w<CR>
-nnoremap <Leader>W :wa<CR>
-nnoremap <Leader>x :x<CR>
-nnoremap <Leader>X :xa<CR>
-nnoremap <Leader>e :e<CR>
-nnoremap <Leader>E :ea<CR>
-nnoremap <Leader>q :q<CR>
-nnoremap <Leader>Q :qa<CR>
-
-" =============================================================================
 " Windows
 " =============================================================================
 
