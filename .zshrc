@@ -13,11 +13,14 @@ setopt prompt_subst
 zstyle ':completion:*' completer _complete _ignored
 zstyle :compinstall filename '/home/peder/.zshrc'
 
+
 fpath=(~/.zsh/completions $fpath)
-fpath=(/usr/share/git/completion $fpath)
 fpath=($(rustc --print sysroot)/share/zsh/site-functions $fpath)
 autoload -Uz compinit
 compinit
+
+autoload -U bashcompinit
+bashcompinit
 # End of lines added by compinstall
 
 setopt NO_HUP
@@ -131,9 +134,6 @@ BASE16_SHELL=$HOME/.config/base16-shell/
 # export python lib path
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib:/usr/local/lib
 
-
-autoload -U bashcompinit
-bashcompinit
 
 #Syntax highlighting
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
