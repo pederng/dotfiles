@@ -55,17 +55,6 @@ export CAPDIR=~/workspace/capture-backend
 alias dc="docker-compose"
 alias dcdev="dc -f docker-compose.yml -f docker-compose.dev.yml"
 alias dcdeploy="dc -f docker-compose.yml -f docker-compose.deploy.yml"
-alias dcipy="dcdev exec -e LINES=\$LINES -e COLUMNS=\$COLUMNS test ipython"
-
-alias dbu="psql -h localhost -p $DB_PORT -U trinitysys capture_user_lo_1"
-alias dbs="psql -h localhost -p $DB_PORT -U stories stories"
-alias dbk="psql -h localhost -p $DB_PORT -U kserver kserver"
-
-alias cdst="cd $CAPDIR/capture-storage/"
-alias cdit="cd $CAPDIR/capture-storage/tests/internal"
-alias cdut="cd $CAPDIR/capture-storage/tests/unit"
-alias cdat="cd $CAPDIR/capture-storage/tests/api"
-alias cdpy="cd $CAPDIR/capture-storage/nbs_storage"
 
 alias https='http --default-scheme=https'
 
