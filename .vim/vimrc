@@ -302,7 +302,7 @@ let g:ale_linters = {
 
 let g:ale_fixers = {
       \ 'python': ['black'],
-      \ 'haskell': ['brittany'],
+      \ 'haskell': ['brittany', 'stylish-haskell'],
       \ 'rust': ['rustfmt'],
       \ 'dart': [],
       \ 'go': ['gofmt'],
