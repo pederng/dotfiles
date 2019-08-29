@@ -79,8 +79,6 @@ call plug#begin('~/.vim/plugged')
 
   " Haskell
   Plug 'neovimhaskell/haskell-vim'
-  Plug 'eagletmt/ghcmod-vim'
-  Plug 'eagletmt/neco-ghc'
 
   " Clojure/other lisps
   Plug 'tpope/vim-fireplace'
@@ -293,7 +291,7 @@ let g:ale_linters = {
       \ 'javascript': ['standard'],
       \ 'go': ['golint'],
       \ 'typescript': ['tslint', 'tsserver'],
-      \ 'haskell': ['hie', 'ghc-mod'],
+      \ 'haskell': ['hie'],
       \ 'vim': ['vint'],
       \ 'rust': ['rls', 'cargo'],
       \ 'c': ['clang'],
@@ -450,21 +448,6 @@ let g:sexp_enable_insert_mode_mappings = 0
 let g:tslime_normal_mapping = '<leader>t'
 let g:tslime_visual_mapping = '<leader>t'
 let g:tslime_vars_mapping = '<leader>T'
-
-" =============================================================================
-" Haskell
-" =============================================================================
-
-augroup haskell
-  au FileType haskell nmap <leader>gt :GhcModType<CR>
-  au FileType haskell nmap <leader>gc :GhcModTypeClear<CR>
-  au FileType haskell nmap <leader>gi :GhcModInfoPreview<CR>
-augroup end
-
-let g:haskell_tabular = 1
-vmap a= :Tabularize /=<CR>
-vmap a; :Tabularize /::<CR>
-vmap a- :Tabularize /-><CR>
 
 " =============================================================================
 " expand-region
