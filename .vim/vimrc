@@ -314,7 +314,6 @@ let g:ale_completion_enabled = 0
 
 let g:ale_fix_on_save = 1
 let g:ale_python_black_options  = '-l 100'
-let g:ale_haskell_brittany_options  = '-columns 100'
 
 let g:ale_rust_cargo_use_clippy = 1
 
