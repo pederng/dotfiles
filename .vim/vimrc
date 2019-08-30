@@ -11,10 +11,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'terryma/vim-smooth-scroll'
   Plug 'terryma/vim-expand-region'
   Plug 'tpope/vim-commentary'
-  Plug 'ivyl/vim-bling'
-  Plug 'tmhedberg/matchit'
-  Plug 'marcweber/vim-addon-mw-utils'
-  Plug 'chrisbra/unicode.vim'
+  " Plug 'marcweber/vim-addon-mw-utils'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-unimpaired'
   Plug 'tpope/vim-speeddating'
@@ -27,7 +24,6 @@ call plug#begin('~/.vim/plugged')
   Plug 'prabirshrestha/vim-lsp'
   Plug 'prabirshrestha/asyncomplete.vim'
   Plug 'prabirshrestha/asyncomplete-lsp.vim'
-  Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 
   " Tags
   Plug 'ludovicchabant/vim-gutentags'
@@ -56,41 +52,17 @@ call plug#begin('~/.vim/plugged')
   " Python
   Plug 'davidhalter/jedi-vim'
   Plug 'bps/vim-textobj-python'
-  Plug 'hynek/vim-python-pep8-indent'
-
-  " Rust
-  Plug 'rust-lang/rust.vim'
 
   " Other langs
-  Plug 'cespare/vim-toml'
-  Plug 'chase/vim-ansible-yaml'
-  Plug 'plasticboy/vim-markdown'
-  Plug 'shmup/vim-sql-syntax'
-  Plug 'martinda/Jenkinsfile-vim-syntax'
-  Plug 'zah/nim.vim'
-  Plug 'ElmCast/elm-vim'
-  Plug 'purescript-contrib/purescript-vim'
-  Plug 'jkotlinski/forth.vim'
   Plug 'sheerun/vim-polyglot'
+  Plug 'martinda/Jenkinsfile-vim-syntax'
 
   " Dart
   Plug 'dart-lang/dart-vim-plugin'
-  " Plug 'thosake/vim-flutter'
 
-  " Haskell
-  Plug 'neovimhaskell/haskell-vim'
-
-  " Clojure/other lisps
-  Plug 'tpope/vim-fireplace'
-  Plug 'tpope/vim-salve'
-  Plug 'guns/vim-sexp'
-  Plug 'tpope/vim-sexp-mappings-for-regular-people'
-  Plug 'guns/vim-clojure-static'
-  Plug 'guns/vim-clojure-highlight'
-  " Plug 'kien/rainbow_parentheses.vim'
+  " Lisps
   Plug 'wlangstroth/vim-racket'
   Plug 'bhurlow/vim-parinfer'
-  Plug 'MicahElliott/vrod'
   Plug 'sjl/tslime.vim'
 
 
@@ -311,14 +283,11 @@ let g:ale_fixers = {
       \}
 
 let g:ale_completion_enabled = 0
-
 let g:ale_fix_on_save = 1
 let g:ale_python_black_options  = '-l 100'
 
 let g:ale_rust_cargo_use_clippy = 1
 
-nmap <silent> <leader>lk <Plug>(ale_previous_wrap)
-nmap <silent> <leader>lj <Plug>(ale_next_wrap)
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
@@ -330,7 +299,6 @@ let g:ale_type_map = {'flake8': {'ES': 'WS', 'E': 'W'}}
 " =============================================================================
 
 let g:asyncomplete_remove_duplicates = 1
-
 let g:asyncomplete_smart_completion = 1
 let g:asyncomplete_auto_popup = 1
 
@@ -393,21 +361,21 @@ au User lsp_setup call lsp#register_server({
 endif
 
 imap <c-l> <Plug>(asyncomplete_force_refresh)
-nmap <leader>gd :LspDefinition<CR>
-nmap <leader>gk :LspHover<CR>
+nmap d<c-]> :LspDefinition<CR>
+nmap <c-h> :LspHover<CR>
+nmap r<c-]> :LspReferences<CR><CR>
 
 function! s:check_back_space() abort
  let col = col('.') - 1
  return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
 
-" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <silent><expr> <TAB>
-\ pumvisible() ? "\<C-n>" :
-\ <SID>check_back_space() ? "\<TAB>" :
-\ asyncomplete#force_refresh()
+  \ pumvisible() ? "\<C-n>" :
+  \ <SID>check_back_space() ? "\<TAB>" :
+  \ asyncomplete#force_refresh()
+
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
 
 let g:lsp_diagnostics_enabled = 0
@@ -435,13 +403,7 @@ let g:jedi#rename_command = '<leader>gr'
 let g:jedi#completions_enabled = 0
 
 " =============================================================================
-" Clojure
-" =============================================================================
-
-let g:sexp_enable_insert_mode_mappings = 0
-
-" =============================================================================
-" Racket
+" Tslime (lisps)
 " =============================================================================
 
 let g:tslime_normal_mapping = '<leader>t'
