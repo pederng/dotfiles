@@ -14,10 +14,10 @@ call plug#begin('~/.vim/plugged')
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-unimpaired'
   Plug 'tpope/vim-speeddating'
-  Plug 'kana/vim-textobj-user'
-  Plug 'ntpeters/vim-better-whitespace'
   Plug 'tpope/vim-surround'
-  Plug 'jonhiggs/vim-readline'
+  Plug 'tpope/vim-rsi'
+  Plug 'ntpeters/vim-better-whitespace'
+  Plug 'kana/vim-textobj-user'
 
   Plug 'prabirshrestha/async.vim'
   Plug 'prabirshrestha/vim-lsp'
@@ -361,7 +361,7 @@ endif
 
 imap <c-l> <Plug>(asyncomplete_force_refresh)
 nmap d<c-]> :LspDefinition<CR>
-nmap <c-h> :LspHover<CR>
+nmap <c-i> :LspHover<CR>
 nmap r<c-]> :LspReferences<CR><CR>
 
 function! s:check_back_space() abort
