@@ -361,7 +361,7 @@ endif
 
 imap <c-l> <Plug>(asyncomplete_force_refresh)
 nmap d<c-]> :LspDefinition<CR>
-nmap <c-i> :LspHover<CR>
+nmap <c-y> :LspHover<CR>
 nmap r<c-]> :LspReferences<CR><CR>
 
 function! s:check_back_space() abort
@@ -514,7 +514,7 @@ endfunction
 let g:vim_markdown_folding_disabled = 1
 let g:vim_markdown_conceal = 0
 let g:vim_markdown_math = 1
-let g:vim_markdown_new_list_indent = 2
+let g:vim_markdown_new_list_item_indent = 0
 autocmd FileType markdown setlocal formatoptions=tqr
 
 " =============================================================================
