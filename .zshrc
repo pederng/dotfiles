@@ -163,7 +163,6 @@ function _pip_completion {
 compctl -K _pip_completion pip
 # pip zsh completion end
 
-# source ~/.zsh/plugins/zsh-interactive-cd.plugin.zsh
 source ~/.zsh/plugins/z.sh
 alias j=z
 
