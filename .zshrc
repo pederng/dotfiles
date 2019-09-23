@@ -62,25 +62,7 @@ bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
 
 #Prompt
-function prompt_char {
-    git branch >/dev/null 2>/dev/null && echo '±' && return
-    hg root >/dev/null 2>/dev/null && echo '☿' && return
-    echo '○'
-}
-autoload -U colors && colors
-source ~/.zsh/git_prompt.zsh
-
-# Set the right-hand prompt
-PROMPT=$'\n%{$fg[red]%} »  %{$reset_color%}'
-PATHPROMPT='%B%{$fg[cyan]%}%~ $(git_prompt_string)%{$reset_color%}'
-RPROMPT=$PATHPROMPT
-function zle-line-init zle-keymap-select {
-    VIM_PROMPT="%{$fg_bold[yellow]%} [% NORMAL]%  %{$reset_color%}"
-    RPROMPT="${${KEYMAP/vicmd/$VIM_PROMPT$PATHPROMPT}/(main|viins)/$PATHPROMPT} $EPS1"
-    zle reset-prompt
-}
-zle -N zle-line-init
-zle -N zle-keymap-select
+eval "$(starship init zsh)"
 
 # Visual mode fixes
 export KEYTIMEOUT=1
