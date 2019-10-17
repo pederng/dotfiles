@@ -70,13 +70,11 @@ export KEYTIMEOUT=1
 #Configurations
 conf() {
     case $1 in
-        ncmpcpp)     vim ~/.ncmpcpp/config ;;
         pacman)      svim /etc/pacman.conf ;;
         tmux)        vim ~/.tmux.conf ;;
         mutt)        vim ~/.muttrc ;;
         vim)         vim ~/.vim/vimrc ;;
         xinit)       vim ~/.xinitrc ;;
-        xresources)  vim ~/.Xresources && xrdb ~/.Xresources ;;
         zathura)     vim ~/.config/zathura/zathurarc ;;
         zsh)         vim ~/.zshrc && source ~/.zshrc ;;
         zsh-local)   vim ~/.zsh/machine_specific && source ~/.zshrc ;;
@@ -88,12 +86,13 @@ conf() {
         qutebrowser) vim ~/.config/qutebrowser/config.py ;;
         ssh)         vim ~/.ssh/config ;;
         emacs)       vim ~/.emacs.d/init.el ;;
-        *)          echo "Unknown application: $1" ;;
+        starship)    vim ~/.config/starship.toml ;;
+        *)           echo "Unknown application: $1" ;;
     esac
 }
 
 function _complete_conf {
-  reply=('functions' 'aliases' 'zsh' 'zsh-local' 'vim' 'emacs' 'mutt' 'xmonad' 'termite' 'alacritty' 'qutebrowser' 'tmux' 'ssh')
+  reply=('functions' 'aliases' 'zsh' 'zsh-local' 'vim' 'emacs' 'mutt' 'xmonad' 'alacritty' 'qutebrowser' 'tmux' 'ssh' 'starship')
 }
 compctl -K _complete_conf conf
 
