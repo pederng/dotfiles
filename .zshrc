@@ -15,7 +15,7 @@ zstyle :compinstall filename '/home/peder/.zshrc'
 
 
 fpath=(~/.zsh/completions $fpath)
-fpath=($(rustc --print sysroot)/share/zsh/site-functions $fpath)
+fpath=(~/.zfunc $fpath)
 autoload -Uz compinit
 compinit
 
