@@ -11,6 +11,13 @@ function tm() {
     tmux attach-session -t "$session" || tmux new-session -s $newsession
 }
 
+function tw() {
+  local target
+  target=$(tmux list-windows -a -F "#{window_name} #{session_name}:#{window_index}" | \
+    fzf --select-1 --exit-0 | awk '{print $2}') && \
+    tmux switch-client -t "$target"
+}
+
 function ftpane() {
   local panes current_window current_pane target target_window target_pane
   panes=$(tmux list-panes -s -F '#I:#P - #{pane_current_path} #{pane_current_command}')
