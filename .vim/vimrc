@@ -86,6 +86,7 @@ set relativenumber
 set nocursorline
 set showcmd
 set textwidth=100
+set nowrap
 
 
 "Status line
