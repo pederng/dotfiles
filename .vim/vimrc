@@ -28,6 +28,9 @@ call plug#begin('~/.vim/plugged')
   " Tags
   Plug 'ludovicchabant/vim-gutentags'
 
+  " DB
+  Plug 'tpope/vim-dadbod'
+
   " Syntax/linting
   Plug 'w0rp/ale'
 
