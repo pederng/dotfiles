@@ -28,6 +28,9 @@ call plug#begin('~/.vim/plugged')
   " Tags
   Plug 'ludovicchabant/vim-gutentags'
 
+  " DB
+  Plug 'tpope/vim-dadbod'
+
   " Syntax/linting
   Plug 'w0rp/ale'
 
@@ -86,6 +89,7 @@ set relativenumber
 set nocursorline
 set showcmd
 set textwidth=100
+set nowrap
 
 
 "Status line

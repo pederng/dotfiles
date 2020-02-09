@@ -74,6 +74,7 @@ conf() {
         tmux)        vim ~/.tmux.conf ;;
         mutt)        vim ~/.muttrc ;;
         vim)         vim ~/.vim/vimrc ;;
+        vim-local)   vim ~/.vim/machine_specific_vimrc ;;
         xinit)       vim ~/.xinitrc ;;
         zathura)     vim ~/.config/zathura/zathurarc ;;
         zsh)         vim ~/.zshrc && source ~/.zshrc ;;
@@ -92,7 +93,7 @@ conf() {
 }
 
 function _complete_conf {
-  reply=('functions' 'aliases' 'zsh' 'zsh-local' 'vim' 'emacs' 'mutt' 'xmonad' 'alacritty' 'qutebrowser' 'tmux' 'ssh' 'starship')
+  reply=('functions' 'aliases' 'zsh' 'zsh-local' 'vim' 'vim-local' 'emacs' 'mutt' 'xmonad' 'alacritty' 'qutebrowser' 'tmux' 'ssh' 'starship')
 }
 compctl -K _complete_conf conf
 
