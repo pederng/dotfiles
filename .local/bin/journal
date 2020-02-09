@@ -1,0 +1,94 @@
+#!/usr/bin/env python
+from itertools import chain
+from pprint import pprint
+from typing import Dict, List
+from pathlib import Path
+from datetime import datetime
+from dataclasses import dataclass, field, asdict
+import subprocess
+
+FMT = "%Y-%m-%d"
+BRK = "\n"
+HEADER = "#"
+TASK = "* TASK: "
+DONE = "(DONE)"
+JOURNAL = Path("/home/peder/.notes/journal.md")
+
+
+@dataclass
+class Entry:
+    loc: int
+    date: datetime
+    content: List[str] = field(default_factory=list)
+
+
+Entries = Dict[str, Entry]
+
+
+def add_latest_header(path: Path) -> None:
+    header = f"{HEADER} {datetime.now().strftime(FMT)}"
+    if path.exists():
+        content = path.read_text()
+        if header in content:
+            return
+        header = f"{BRK if content else ''}{header}{BRK}{BRK}"
+    with path.open("a" if path.exists() else "w") as f:
+        f.write(header)
+
+
+def edit(path: Path) -> None:
+    subprocess.run([f"vim", "+$", f"{path}"])
+
+
+def write(entries: Entries, path: Path) -> None:
+    length = sum(1 for _ in chain(*(e.content for e in entries.values())))
+    with path.open("w") as f:
+        for line_no, line in enumerate(chain(*(e.content for e in entries.values()))):
+            f.write(line + BRK)
+
+
+def is_task(line: str) -> bool:
+    return line.startswith(TASK)
+
+
+def is_done(line: str) -> bool:
+    if not is_task(line):
+        return False
+    return line.endswith(DONE)
+
+
+def is_open_task(line: str) -> bool:
+    return is_task(line) and not is_done(line)
+
+
+def get_entries(path: Path) -> Entries:
+    entries: Entries = {}
+    for line_no, line in enumerate(path.read_text().split("\n")):
+        if line.startswith(HEADER):
+            _, _, date_str = line.partition(" ")
+            entries[date_str] = Entry(line_no, datetime.strptime(date_str, FMT))
+        entries[date_str].content.append(line)
+    # Remove last newline
+    last_entry = list(entries.values())[-1]
+    if not last_entry.content[-1]:
+        last_entry.content = last_entry.content[:-1]
+    return entries
+
+
+def bump_todos(entries: Entries) -> Entries:
+    if len(entries) == 1:
+        return entries
+    previous, current = list(entries.values())[-2:]
+    for line in previous.content:
+        if is_open_task(line) and line not in current.content:
+            current.content.append(line)
+    return entries
+
+
+if __name__ == "__main__":
+    file = JOURNAL
+    add_latest_header(file)
+    entries = get_entries(file)
+    bump_todos(entries)
+    write(entries, file)
+    edit(file)
