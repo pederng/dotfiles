@@ -8,7 +8,7 @@ from datetime import datetime
 from dataclasses import dataclass, field, asdict
 import subprocess
 
-FMT = "%Y-%m-%d"
+FMT = "%A %B %d %Y"
 BRK = "\n"
 HEADER = "#"
 TASK = "* TASK: "
