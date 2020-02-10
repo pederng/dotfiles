@@ -1,7 +1,8 @@
 #!/usr/bin/env python
+import sys
 from itertools import chain
 from pprint import pprint
-from typing import Dict, List
+from typing import Dict, List, Iterator
 from pathlib import Path
 from datetime import datetime
 from dataclasses import dataclass, field, asdict
@@ -12,6 +13,7 @@ BRK = "\n"
 HEADER = "#"
 TASK = "* TASK: "
 DONE = "(DONE)"
+CANCELLED = "(CANCELLED)"
 JOURNAL = Path("/home/peder/.notes/journal.md")
 
 
@@ -23,6 +25,10 @@ class Entry:
 
 
 Entries = Dict[str, Entry]
+
+
+def all_content(entries: Entries) -> Iterator[str]:
+    return chain(*(entry.content for entry in entries.values()))
 
 
 def add_latest_header(path: Path) -> None:
@@ -41,9 +47,9 @@ def edit(path: Path) -> None:
 
 
 def write(entries: Entries, path: Path) -> None:
-    length = sum(1 for _ in chain(*(e.content for e in entries.values())))
+    length = len(list(all_content(entries)))
     with path.open("w") as f:
-        for line_no, line in enumerate(chain(*(e.content for e in entries.values()))):
+        for line_no, line in enumerate(all_content(entries)):
             f.write(line + BRK)
 
 
@@ -54,7 +60,7 @@ def is_task(line: str) -> bool:
 def is_done(line: str) -> bool:
     if not is_task(line):
         return False
-    return line.endswith(DONE)
+    return line.endswith(DONE) or line.endswith(CANCELLED)
 
 
 def is_open_task(line: str) -> bool:
@@ -85,10 +91,29 @@ def bump_todos(entries: Entries) -> Entries:
     return entries
 
 
-if __name__ == "__main__":
-    file = JOURNAL
+def list_tasks(file: Path) -> None:
+    entries = get_entries(file)
+    for line in set(l for l in all_content(get_entries(file)) if is_open_task(l)):
+        print(line)
+
+
+def default(file: Path) -> None:
     add_latest_header(file)
     entries = get_entries(file)
     bump_todos(entries)
     write(entries, file)
     edit(file)
+
+
+if __name__ == "__main__":
+    file = JOURNAL
+    if len(sys.argv) == 1:
+        default(file)
+        sys.exit(0)
+    cmd = sys.argv[1]
+    if cmd == "tasks":
+        list_tasks(file)
+    elif cmd == "sync":
+        subprocess.run(["notes", "sync"])
+    else:
+        assert False, f"Unknown command {cmd}"
