@@ -40,24 +40,24 @@ def all_content(entries: Entries) -> Iterator[str]:
     return chain(*(entry.content for entry in entries.values()))
 
 
-def add_latest_header(path: Path) -> None:
+def add_latest_header() -> None:
     header = f"{HEADER} {datetime.now().strftime(FMT)}"
-    if path.exists():
-        content = path.read_text()
+    if JOURNAL.exists():
+        content = JOURNAL.read_text()
         if header in content:
             return
         header = f"{BRK if content else ''}{header}{BRK}{BRK}"
-    with path.open("a" if path.exists() else "w") as f:
+    with JOURNAL.open("a" if JOURNAL.exists() else "w") as f:
         f.write(header)
 
 
-def edit(path: Path) -> None:
-    subprocess.run([f"vim", "+$", f"{path}"])
+def edit() -> None:
+    subprocess.run([f"vim", "+$", f"{JOURNAL}"])
 
 
-def write(entries: Entries, path: Path) -> None:
+def write(entries: Entries) -> None:
     length = len(list(all_content(entries)))
-    with path.open("w") as f:
+    with JOURNAL.open("w") as f:
         for line_no, line in enumerate(all_content(entries)):
             f.write(line + BRK)
 
@@ -76,9 +76,9 @@ def is_open_task(line: str) -> bool:
     return is_task(line) and not is_done(line)
 
 
-def get_entries(path: Path) -> Entries:
+def get_entries() -> Entries:
     entries: Entries = {}
-    for line_no, line in enumerate(path.read_text().split("\n")):
+    for line_no, line in enumerate(JOURNAL.read_text().split("\n")):
         if line.startswith(HEADER):
             _, _, date_str = line.partition(" ")
             entries[date_str] = Entry(line_no, datetime.strptime(date_str, FMT))
@@ -100,30 +100,29 @@ def bump_todos(entries: Entries) -> Entries:
     return entries
 
 
-def list_tasks(file: Path) -> None:
-    entries = get_entries(file)
-    for line in set(l for l in all_content(get_entries(file)) if is_open_task(l)):
+def list_tasks() -> None:
+    entries = get_entries()
+    for line in set(l for l in all_content(get_entries()) if is_open_task(l)):
         print(line)
 
 
-def default(file: Path) -> None:
-    add_latest_header(file)
-    entries = get_entries(file)
+def default() -> None:
+    add_latest_header()
+    entries = get_entries()
     bump_todos(entries)
-    write(entries, file)
-    edit(file)
+    write(entries)
+    edit()
 
 
 if __name__ == "__main__":
-    file = JOURNAL
     if len(sys.argv) == 1:
-        default(file)
+        default()
         sys.exit(0)
     cmd = sys.argv[1]
     if cmd not in COMMANDS:
         raise RuntimeError(f"Unknown command {cmd}")
     if cmd == "tasks":
-        list_tasks(file)
+        list_tasks()
     elif cmd == "sync":
         subprocess.run(["notes", "sync"])
     elif cmd == "completion":
