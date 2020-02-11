@@ -16,6 +16,15 @@ DONE = "(DONE)"
 CANCELLED = "(CANCELLED)"
 JOURNAL = Path("/home/peder/.notes/journal.md")
 
+COMMANDS = ["tasks", "sync", "completion"]
+COMPLETION = f"""
+__journal_completions()
+{{
+    COMPREPLY=( $(compgen -W "{' '.join(COMMANDS)}" "${{COMP_KEY}}") )
+}}
+complete -F __journal_completions journal
+"""
+
 
 @dataclass
 class Entry:
@@ -111,9 +120,11 @@ if __name__ == "__main__":
         default(file)
         sys.exit(0)
     cmd = sys.argv[1]
+    if cmd not in COMMANDS:
+        raise RuntimeError(f"Unknown command {cmd}")
     if cmd == "tasks":
         list_tasks(file)
     elif cmd == "sync":
         subprocess.run(["notes", "sync"])
-    else:
-        assert False, f"Unknown command {cmd}"
+    elif cmd == "completion":
+        print(COMPLETION)
