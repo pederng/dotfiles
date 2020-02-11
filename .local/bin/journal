@@ -26,21 +26,60 @@ complete -F __journal_completions journal
 """
 
 
+def is_task(line: str) -> bool:
+    return line.startswith(TASK)
+
+
+def is_closed(line: str) -> bool:
+    if not is_task(line):
+        return False
+    return line.endswith(DONE) or line.endswith(CANCELLED)
+
+
+def is_open_task(line: str) -> bool:
+    return is_task(line) and not is_closed(line)
+
+
+def is_closed_task(line: str) -> bool:
+    return is_task(line) and is_closed(line)
+
+
+def strip_task(line: str) -> str:
+    if not is_task(line):
+        return line
+    _, _, line = line.partition(TASK)
+    line, _, _ = line.partition(DONE)
+    line, _, _ = line.partition(CANCELLED)
+    return line.strip()
+
+
 @dataclass
 class Entry:
     loc: int
     date: datetime
     content: List[str] = field(default_factory=list)
 
+    def __iter__(self) -> Iterator[str]:
+        return iter(self.content)
+
     def has_task(self, line: str) -> bool:
         return strip_task(line) in [strip_task(l) for l in self.content]
 
+    def _filter_iter(self, pred) -> Iterator[str]:
+        for line in self:
+            if pred(line):
+                yield line
+
+    @property
+    def open_tasks(self) -> Iterator[str]:
+        return self._filter_iter(is_open_task)
+
+    @property
+    def closed_tasks(self) -> Iterator[str]:
+        return self._filter_iter(is_closed_task)
+
 
 Entries = Dict[str, Entry]
-
-
-def all_content(entries: Entries) -> Iterator[str]:
-    return chain(*(entry.content for entry in entries.values()))
 
 
 def add_latest_header() -> None:
@@ -59,33 +98,16 @@ def edit() -> None:
 
 
 def write(entries: Entries) -> None:
-    length = len(list(all_content(entries)))
     with JOURNAL.open("w") as f:
-        for line_no, line in enumerate(all_content(entries)):
+        for line in chain(*entries.values()):
             f.write(line + BRK)
 
 
-def is_task(line: str) -> bool:
-    return line.startswith(TASK)
-
-
-def is_done(line: str) -> bool:
-    if not is_task(line):
-        return False
-    return line.endswith(DONE) or line.endswith(CANCELLED)
-
-
-def is_open_task(line: str) -> bool:
-    return is_task(line) and not is_done(line)
-
-
-def strip_task(line: str) -> str:
-    if not is_task(line):
-        return line
-    _, _, line = line.partition(TASK)
-    line, _, _ = line.partition(DONE)
-    line, _, _ = line.partition(CANCELLED)
-    return line
+def remove_final_newline(entries: Entries) -> Entries:
+    last_entry = list(entries.values())[-1]
+    if not last_entry.content[-1]:
+        last_entry.content = last_entry.content[:-1]
+    return entries
 
 
 def get_entries() -> Entries:
@@ -95,34 +117,29 @@ def get_entries() -> Entries:
             _, _, date_str = line.partition(" ")
             entries[date_str] = Entry(line_no, datetime.strptime(date_str, FMT))
         entries[date_str].content.append(line)
-    # Remove last newline
-    last_entry = list(entries.values())[-1]
-    if not last_entry.content[-1]:
-        last_entry.content = last_entry.content[:-1]
-    return entries
+    return remove_final_newline(entries)
 
 
-def bump_todos(entries: Entries) -> Entries:
+def bump_tasks(entries: Entries) -> Entries:
     if len(entries) == 1:
         return entries
     previous, current = list(entries.values())[-2:]
-    for line in previous.content:
-        if is_open_task(line) and current.has_task(line):
-            current.content.append(line)
+    for task in previous.open_tasks:
+        if not current.has_task(task):
+            current.content.append(task)
     return entries
 
 
 def list_tasks() -> None:
-    entries = get_entries()
-    for line in set(l for l in all_content(get_entries()) if is_open_task(l)):
-        print(line)
+    for task in set(chain(*(e.open_tasks for e in get_entries().values()))):
+        print(task)
 
 
 def default() -> None:
     add_latest_header()
     entries = get_entries()
-    bump_todos(entries)
-    write(entries)
+    bump_tasks(entries)
+    write(bump_tasks(get_entries()))
     edit()
 
 
