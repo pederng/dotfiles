@@ -32,6 +32,9 @@ class Entry:
     date: datetime
     content: List[str] = field(default_factory=list)
 
+    def has_task(self, line: str) -> bool:
+        return strip_task(line) in [strip_task(l) for l in self.content]
+
 
 Entries = Dict[str, Entry]
 
@@ -76,6 +79,15 @@ def is_open_task(line: str) -> bool:
     return is_task(line) and not is_done(line)
 
 
+def strip_task(line: str) -> str:
+    if not is_task(line):
+        return line
+    _, _, line = line.partition(TASK)
+    line, _, _ = line.partition(DONE)
+    line, _, _ = line.partition(CANCELLED)
+    return line
+
+
 def get_entries() -> Entries:
     entries: Entries = {}
     for line_no, line in enumerate(JOURNAL.read_text().split("\n")):
@@ -95,7 +107,7 @@ def bump_todos(entries: Entries) -> Entries:
         return entries
     previous, current = list(entries.values())[-2:]
     for line in previous.content:
-        if is_open_task(line) and line not in current.content:
+        if is_open_task(line) and current.has_task(line):
             current.content.append(line)
     return entries
 
