@@ -137,8 +137,6 @@ def list_tasks() -> None:
 
 def default() -> None:
     add_latest_header()
-    entries = get_entries()
-    bump_tasks(entries)
     write(bump_tasks(get_entries()))
     edit()
 
