@@ -155,6 +155,7 @@ eval "$(pipenv --completion)"
 eval "$(stack --bash-completion-script stack)"
 
 eval "$(notes completion)"
+eval "$(journal completion)"
 
 
 export GPG_TTY="$(tty)"
