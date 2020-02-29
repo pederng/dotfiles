@@ -1,5 +1,7 @@
 #!/usr/bin/env python
+from __future__ import annotations
 import sys
+from enum import Enum
 from itertools import chain
 from pprint import pprint
 from typing import Dict, List, Iterator
@@ -40,17 +42,53 @@ def is_open_task(line: str) -> bool:
     return is_task(line) and not is_closed(line)
 
 
-def is_closed_task(line: str) -> bool:
-    return is_task(line) and is_closed(line)
+def is_tag(word: str) -> bool:
+    return word.startswith(":") and word.endswith(":")
 
 
-def strip_task(line: str) -> str:
-    if not is_task(line):
-        return line
-    _, _, line = line.partition(TASK)
-    line, _, _ = line.partition(DONE)
-    line, _, _ = line.partition(CANCELLED)
-    return line.strip()
+class TaskState(Enum):
+    OPEN = "open"
+    DONE = "done"
+    CANCELLED = "cancelled"
+
+
+@dataclass()
+class Task:
+    raw: str
+    content: str = field(init=False)
+    tags: List[str] = field(init=False)
+    state: TaskState = field(init=False)
+
+    def __post_init__(self) -> None:
+        self.state = TaskState.OPEN
+        _, _, stripped = self.raw.partition(TASK)
+        stripped, done, _ = stripped.partition(DONE)
+        stripped, cancelled, _ = stripped.partition(CANCELLED)
+        assert not (done and cancelled)
+        if done:
+            self.state = TaskState.DONE
+        if cancelled:
+            self.state = TaskState.CANCELLED
+        self.tags = list(map(lambda t: t.strip(":"), filter(is_tag, stripped.split())))
+        for tag in self.tags:
+            stripped = stripped.replace(tag, "")
+        self.content = stripped.strip()
+
+    @property
+    def is_open(self) -> bool:
+        return self.state == TaskState.OPEN
+
+    @property
+    def is_closed(self) -> bool:
+        return not self.is_open
+
+    def __hash__(self) -> int:
+        return hash(self.content)
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Task):
+            raise ValueError("object is not a Task")
+        return self.content == other.content
 
 
 @dataclass
@@ -62,8 +100,8 @@ class Entry:
     def __iter__(self) -> Iterator[str]:
         return iter(self.content)
 
-    def has_task(self, line: str) -> bool:
-        return strip_task(line) in [strip_task(l) for l in self.content]
+    def has_task(self, task: Task) -> bool:
+        return task in self.tasks
 
     def _filter_iter(self, pred) -> Iterator[str]:
         for line in self:
@@ -71,12 +109,12 @@ class Entry:
                 yield line
 
     @property
-    def open_tasks(self) -> Iterator[str]:
-        return self._filter_iter(is_open_task)
+    def tasks(self) -> Iterator[Task]:
+        return map(Task, self._filter_iter(is_task))
 
     @property
-    def closed_tasks(self) -> Iterator[str]:
-        return self._filter_iter(is_closed_task)
+    def open_tasks(self) -> Iterator[Task]:
+        return map(Task, self._filter_iter(is_open_task))
 
 
 Entries = Dict[str, Entry]
@@ -126,13 +164,22 @@ def bump_tasks(entries: Entries) -> Entries:
     previous, current = list(entries.values())[-2:]
     for task in previous.open_tasks:
         if not current.has_task(task):
-            current.content.append(task)
+            current.content.append(task.raw)
     return entries
 
 
-def list_tasks() -> None:
-    for task in set(chain(*(e.open_tasks for e in get_entries().values()))):
-        print(task)
+def list_tasks(tags: List[str]) -> None:
+    tasks: List[Task] = []
+    for task in chain(*(e.tasks for e in get_entries().values())):
+        if task in tasks:
+            tasks.remove(task)
+        tasks.append(task)
+    for task in tasks:
+        if task.is_closed:
+            continue
+        if tags and not all(t in task.tags for t in tags):
+            continue
+        print(task.raw)
 
 
 def default() -> None:
@@ -149,7 +196,7 @@ if __name__ == "__main__":
     if cmd not in COMMANDS:
         raise RuntimeError(f"Unknown command {cmd}")
     if cmd == "tasks":
-        list_tasks()
+        list_tasks(sys.argv[2:])
     elif cmd == "sync":
         subprocess.run(["notes", "sync"])
     elif cmd == "completion":
