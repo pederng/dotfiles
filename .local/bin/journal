@@ -2,9 +2,10 @@
 from __future__ import annotations
 import sys
 from enum import Enum
+from operator import attrgetter
 from itertools import chain
 from pprint import pprint
-from typing import Dict, List, Iterator
+from typing import Dict, List, Iterator, Protocol, cast, runtime_checkable
 from pathlib import Path
 from datetime import datetime
 from dataclasses import dataclass, field, asdict
@@ -32,16 +33,6 @@ def is_task(line: str) -> bool:
     return line.startswith(TASK)
 
 
-def is_closed(line: str) -> bool:
-    if not is_task(line):
-        return False
-    return line.endswith(DONE) or line.endswith(CANCELLED)
-
-
-def is_open_task(line: str) -> bool:
-    return is_task(line) and not is_closed(line)
-
-
 def is_tag(word: str) -> bool:
     return word.startswith(":") and word.endswith(":")
 
@@ -52,9 +43,43 @@ class TaskState(Enum):
     CANCELLED = "cancelled"
 
 
+@runtime_checkable
+class LineP(Protocol):
+    @property
+    def raw(self) -> str:
+        ...
+
+    @property
+    def line_no(self) -> int:
+        ...
+
+
+@dataclass
+class Header:
+    raw: str
+    line_no: int
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, LineP):
+            return self.raw == other.raw
+        return self.raw == other
+
+
+@dataclass
+class Line:
+    raw: str
+    line_no: int
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, LineP):
+            return self.raw == other.raw
+        return self.raw == other
+
+
 @dataclass()
 class Task:
     raw: str
+    line_no: int
     content: str = field(init=False)
     tags: List[str] = field(init=False)
     state: TaskState = field(init=False)
@@ -87,90 +112,89 @@ class Task:
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Task):
-            raise ValueError("object is not a Task")
+            return False
         return self.content == other.content
 
 
-@dataclass
-class Entry:
-    loc: int
-    date: datetime
-    content: List[str] = field(default_factory=list)
+class Journal:
+    def __init__(self) -> None:
+        self._content: List[LineP] = []
+        self._tasks: List[Task] = []
+        self._headers: List[Header] = []
+        self._size = -1
 
-    def __iter__(self) -> Iterator[str]:
-        return iter(self.content)
+    @property
+    def size(self) -> int:
+        return self._size
 
-    def has_task(self, task: Task) -> bool:
-        return task in self.tasks
+    def add(self, line: str) -> None:
+        self._size += 1
+        line_no = self.size
+        if is_task(line):
+            line_: LineP = Task(line, line_no)
+            self._tasks.append(cast(Task, line_))
+        elif line.startswith(HEADER):
+            line_ = Header(line, line_no)
+            self._headers.append(line_)
+        else:
+            line_ = Line(line, line_no)
+        return self._content.append(line_)
 
-    def _filter_iter(self, pred) -> Iterator[str]:
-        for line in self:
-            if pred(line):
-                yield line
+    @property
+    def raw_lines(self) -> Iterator[str]:
+        for line in self._content[:-2]:  # Skip last newline
+            yield line.raw + BRK
 
     @property
     def tasks(self) -> Iterator[Task]:
-        return map(Task, self._filter_iter(is_task))
+        for task in self._tasks:
+            yield task
 
-    @property
-    def open_tasks(self) -> Iterator[Task]:
-        return map(Task, self._filter_iter(is_open_task))
-
-
-Entries = Dict[str, Entry]
-
-
-def add_latest_header() -> None:
-    header = f"{HEADER} {datetime.now().strftime(FMT)}"
-    if JOURNAL.exists():
-        content = JOURNAL.read_text()
-        if header in content:
+    def _add_latest_header(self) -> None:
+        header = f"{HEADER} {datetime.now().strftime(FMT)}"
+        size = len(self._content)
+        if header in self._headers:
             return
-        header = f"{BRK if content else ''}{header}{BRK}{BRK}"
-    with JOURNAL.open("a" if JOURNAL.exists() else "w") as f:
-        f.write(header)
+        self.add(header)
+        self.add("")
+
+    def bump(self) -> None:
+        self._add_latest_header()
+        if len(self._headers) == 1:
+            return
+        previous_header_line = self._headers[-2].line_no
+        last_header_line = self._headers[-1].line_no
+        tasks = filter(
+            lambda t: t not in filter(lambda t: t.line_no > last_header_line, self.tasks),
+            filter(
+                attrgetter("is_open"),
+                filter(lambda t: previous_header_line < t.line_no < last_header_line, self.tasks),
+            ),
+        )
+        for task in list(tasks):  # evaluate it to avoid endless looping when adding new tasks
+            self.add(task.raw)
 
 
 def edit() -> None:
     subprocess.run([f"vim", "+$", f"{JOURNAL}"])
 
 
-def write(entries: Entries) -> None:
+def read() -> Journal:
+    journal = Journal()
+    for line in JOURNAL.read_text().split("\n"):
+        journal.add(line)
+    return journal
+
+
+def write(journal: Journal) -> None:
     with JOURNAL.open("w") as f:
-        for line in chain(*entries.values()):
-            f.write(line + BRK)
-
-
-def remove_final_newline(entries: Entries) -> Entries:
-    last_entry = list(entries.values())[-1]
-    if not last_entry.content[-1]:
-        last_entry.content = last_entry.content[:-1]
-    return entries
-
-
-def get_entries() -> Entries:
-    entries: Entries = {}
-    for line_no, line in enumerate(JOURNAL.read_text().split("\n")):
-        if line.startswith(HEADER):
-            _, _, date_str = line.partition(" ")
-            entries[date_str] = Entry(line_no, datetime.strptime(date_str, FMT))
-        entries[date_str].content.append(line)
-    return remove_final_newline(entries)
-
-
-def bump_tasks(entries: Entries) -> Entries:
-    if len(entries) == 1:
-        return entries
-    previous, current = list(entries.values())[-2:]
-    for task in previous.open_tasks:
-        if not current.has_task(task):
-            current.content.append(task.raw)
-    return entries
+        for line in journal.raw_lines:
+            f.write(line)
 
 
 def list_tasks(tags: List[str]) -> None:
     tasks: List[Task] = []
-    for task in chain(*(e.tasks for e in get_entries().values())):
+    for task in read().tasks:
         if task in tasks:
             tasks.remove(task)
         tasks.append(task)
@@ -183,8 +207,9 @@ def list_tasks(tags: List[str]) -> None:
 
 
 def default() -> None:
-    add_latest_header()
-    write(bump_tasks(get_entries()))
+    journal = read()
+    journal.bump()
+    write(journal)
     edit()
 
 
