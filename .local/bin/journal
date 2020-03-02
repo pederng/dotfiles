@@ -5,7 +5,7 @@ from enum import Enum
 from operator import attrgetter
 from itertools import chain
 from pprint import pprint
-from typing import Dict, List, Iterator, Protocol, cast, runtime_checkable
+from typing import Dict, List, Iterator, Protocol, cast, runtime_checkable, Set
 from pathlib import Path
 from datetime import datetime
 from dataclasses import dataclass, field, asdict
@@ -13,7 +13,9 @@ import subprocess
 
 FMT = "%A %B %d %Y"
 BRK = "\n"
-HEADER = "#"
+HEADER = "# "
+OPEN_TASKS = "## Open tasks"
+CLOSED_TASKS = "## Closed tasks"
 TASK = "* TASK: "
 DONE = "(DONE)"
 CANCELLED = "(CANCELLED)"
@@ -119,7 +121,7 @@ class Task:
 class Journal:
     def __init__(self) -> None:
         self._content: List[LineP] = []
-        self._tasks: List[Task] = []
+        self._tasks: Set[Task] = set()
         self._headers: List[Header] = []
         self._size = -1
 
@@ -130,24 +132,46 @@ class Journal:
     def add(self, line: str) -> None:
         self._size += 1
         line_no = self.size
+        if line in [OPEN_TASKS, CLOSED_TASKS]:
+            return
         if is_task(line):
-            line_: LineP = Task(line, line_no)
-            self._tasks.append(cast(Task, line_))
-        elif line.startswith(HEADER):
-            line_ = Header(line, line_no)
-            self._headers.append(line_)
+            task = Task(line, line_no)
+            if task in self._tasks:
+                self._tasks.remove(task)
+            return self._tasks.add(task)
+        if line.startswith(HEADER):
+            line_: LineP = Header(line, line_no)
+            self._headers.append(cast(Header, line_))
         else:
             line_ = Line(line, line_no)
         return self._content.append(line_)
 
+    @staticmethod
+    def _skip_consecutive_empty_lines(lines: Iterator[str]) -> Iterator[str]:
+        prev = None
+        for line in lines:
+            if prev and (prev, line) == (BRK, BRK):
+                continue
+            yield line
+            prev = line
+
+    @property
+    def _raw_lines(self) -> Iterator[str]:
+        yield "## Closed tasks" + BRK
+        yield BRK
+        for task in filter(attrgetter("is_closed"), self._tasks):
+            yield task.raw + BRK
+        yield BRK
+        for line in self._content:
+            yield line.raw + BRK
+        yield "## Open tasks" + BRK
+        yield BRK
+        for task in filter(attrgetter("is_open"), self._tasks):
+            yield task.raw + BRK
+
     @property
     def raw_lines(self) -> Iterator[str]:
-        size = len(self._content)
-        for idx, line in enumerate(self._content):
-            if idx == size - 1:
-                yield line.raw
-            else:
-                yield line.raw + BRK
+        yield from self._skip_consecutive_empty_lines(self._raw_lines)
 
     @property
     def tasks(self) -> Iterator[Task]:
@@ -155,7 +179,7 @@ class Journal:
             yield task
 
     def _add_latest_header(self) -> None:
-        header = f"{HEADER} {datetime.now().strftime(FMT)}"
+        header = f"{HEADER}{datetime.now().strftime(FMT)}"
         size = len(self._content)
         if header in self._headers:
             return
