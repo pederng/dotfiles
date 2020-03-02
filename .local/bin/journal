@@ -142,8 +142,12 @@ class Journal:
 
     @property
     def raw_lines(self) -> Iterator[str]:
-        for line in self._content[:-2]:  # Skip last newline
-            yield line.raw + BRK
+        size = len(self._content)
+        for idx, line in enumerate(self._content):
+            if idx == size - 1:
+                yield line.raw
+            else:
+                yield line.raw + BRK
 
     @property
     def tasks(self) -> Iterator[Task]:
