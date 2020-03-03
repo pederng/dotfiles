@@ -9,7 +9,6 @@ call plug#begin('~/.vim/plugged')
 
   " General Utils
   Plug 'terryma/vim-smooth-scroll'
-  Plug 'terryma/vim-expand-region'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-unimpaired'
@@ -17,8 +16,12 @@ call plug#begin('~/.vim/plugged')
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-rsi'
   Plug 'ntpeters/vim-better-whitespace'
-  Plug 'kana/vim-textobj-user'
 
+  " Text objects
+  Plug 'kana/vim-textobj-user'
+  Plug 'bps/vim-textobj-python'
+
+  " Completion
   Plug 'prabirshrestha/async.vim'
   Plug 'prabirshrestha/vim-lsp'
   Plug 'prabirshrestha/asyncomplete.vim'
@@ -53,14 +56,10 @@ call plug#begin('~/.vim/plugged')
 
   " Python
   Plug 'davidhalter/jedi-vim'
-  Plug 'bps/vim-textobj-python'
 
   " Other langs
   Plug 'sheerun/vim-polyglot'
   Plug 'martinda/Jenkinsfile-vim-syntax'
-
-  " Dart
-  Plug 'dart-lang/dart-vim-plugin'
 
   " Lisps
   Plug 'wlangstroth/vim-racket'
