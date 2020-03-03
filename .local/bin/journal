@@ -6,6 +6,7 @@ import subprocess
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+from itertools import chain
 from operator import attrgetter
 from pathlib import Path
 from pprint import pprint
@@ -57,7 +58,10 @@ class Line:
 
 @dataclass
 class Header(Line):
-    pass
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, Header):
+            return self.raw == other.raw
+        return self.raw == other
 
 
 @dataclass()
@@ -151,11 +155,13 @@ class Journal:
 
     @property
     def _raw_lines(self) -> Iterator[str]:
-        yield from sub_header("Closed tasks")
-        yield from raw_line_iter(self.closed_tasks)
-        yield from raw_line_iter(self._content)
-        yield from sub_header("Open tasks")
-        yield from raw_line_iter(self.open_tasks)
+        yield from chain(
+            sub_header("Closed tasks"),
+            raw_line_iter(self.closed_tasks),
+            raw_line_iter(self._content),
+            sub_header("Open tasks"),
+            raw_line_iter(self.open_tasks),
+        )
 
     @property
     def raw_lines(self) -> Iterator[str]:
