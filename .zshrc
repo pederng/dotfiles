@@ -2,7 +2,7 @@
 HISTFILE=~/.histfile
 HISTSIZE=100000
 SAVEHIST=10000
-setopt incappendhistory autocd extendedglob sharehistory
+setopt incappendhistory autocd extendedglob
 unsetopt beep nomatch notify
 bindkey -v
 # End of lines configured by zsh-newuser-install
