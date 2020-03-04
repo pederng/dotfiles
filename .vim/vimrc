@@ -16,9 +16,15 @@ call plug#begin('~/.vim/plugged')
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-rsi'
   Plug 'ntpeters/vim-better-whitespace'
+  Plug 'vim-scripts/ReplaceWithRegister'
+  Plug 'christoomey/vim-system-copy'
 
   " Text objects
   Plug 'kana/vim-textobj-user'
+  Plug 'kana/vim-textobj-indent'
+  Plug 'kana/vim-textobj-line'
+  Plug 'kana/vim-textobj-entire'
+  Plug 'michaeljsmith/vim-indent-object'
   Plug 'bps/vim-textobj-python'
 
   " Completion
@@ -52,7 +58,8 @@ call plug#begin('~/.vim/plugged')
   " Git
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-rhubarb'
-  Plug 'airblade/vim-gitgutter'
+  " Plug 'airblade/vim-gitgutter'
+  Plug 'mhinz/vim-signify'
 
   " Python
   Plug 'davidhalter/jedi-vim'
@@ -98,7 +105,7 @@ set autoread
 set shortmess+=I
 
 " Updatetime
-set updatetime=2000
+set updatetime=100
 
 " =============================================================================
 " Tabs
@@ -387,7 +394,7 @@ let g:lsp_diagnostics_enabled = 0
 " let g:asyncomplete_log_file = expand('~/.vim/asyncomplete.log')
 
 " =============================================================================
-" GitGutter
+" VCS signs
 " =============================================================================
 
 set signcolumn=yes
@@ -411,13 +418,6 @@ let g:jedi#completions_enabled = 0
 let g:tslime_normal_mapping = '<leader>t'
 let g:tslime_visual_mapping = '<leader>t'
 let g:tslime_vars_mapping = '<leader>T'
-
-" =============================================================================
-" expand-region
-" =============================================================================
-
-vmap v <Plug>(expand_region_expand)
-vmap <C-v> <Plug>(expand_region_shrink)
 
 " =============================================================================
 " Bufferline
