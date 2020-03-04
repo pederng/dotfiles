@@ -4,7 +4,7 @@ from __future__ import annotations
 import sys
 import subprocess
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import date
 from enum import Enum
 from itertools import chain
 from operator import attrgetter
@@ -15,13 +15,13 @@ from typing import Dict, List, Iterator, cast, Set, Iterable
 FMT = "%A %B %d %Y"
 BRK = "\n"
 HEADER = "# "
-OPEN_TASKS = "## Open tasks"
-CLOSED_TASKS = "## Closed tasks"
+OPEN_TASKS = "# Open tasks"
+CLOSED_TASKS = "# Closed tasks"
 TASK = "* TASK: "
 DONE = "(DONE)"
 CANCELLED = "(CANCELLED)"
 JOURNAL = Path("/home/peder/.notes/journal.md")
-
+SPECIAL_HEADERS = [OPEN_TASKS, CLOSED_TASKS]
 COMMANDS = ["tasks", "sync", "completion"]
 COMPLETION = f"""
 __journal_completions()
@@ -97,8 +97,12 @@ class Task(Line):
         return hash(self.content)
 
 
-def sub_header(content: str) -> Iterator[str]:
-    yield f"## {content}{BRK}"
+def header(content: str) -> str:
+    return f"# {content}"
+
+
+def header_iter(content: str) -> Iterator[str]:
+    yield header(content) + BRK
     yield BRK
 
 
@@ -123,7 +127,7 @@ class Journal:
         self._headers: List[Header] = []
 
     def _add(self, line: str) -> None:
-        if line in [OPEN_TASKS, CLOSED_TASKS]:
+        if line in SPECIAL_HEADERS:
             return
         if is_task(line):
             task = Task(line)
@@ -137,12 +141,11 @@ class Journal:
             line_ = Line(line)
         return self._content.append(line_)
 
-    def _add_latest_header(self) -> None:
-        header = f"{HEADER}{datetime.now().strftime(FMT)}"
-        size = len(self._content)
-        if header in self._headers:
+    def _add_date_header(self) -> None:
+        date_header = "".join(header(date.today().strftime(FMT)))
+        if date_header in self._headers:
             return
-        self._add(header)
+        self._add(date_header)
         self._add("")
 
     @classmethod
@@ -150,16 +153,16 @@ class Journal:
         journal = cls()
         for line in JOURNAL.read_text().split("\n"):
             journal._add(line)
-        journal._add_latest_header()
+        journal._add_date_header()
         return journal
 
     @property
     def _raw_lines(self) -> Iterator[str]:
         yield from chain(
-            sub_header("Closed tasks"),
+            header_iter("Closed tasks"),
             raw_line_iter(self.closed_tasks),
             raw_line_iter(self._content),
-            sub_header("Open tasks"),
+            header_iter("Open tasks"),
             raw_line_iter(self.open_tasks),
         )
 
