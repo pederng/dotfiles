@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash -
 
 ndir=${NOTES_DIR-$HOME/.notes}
 cmd=$1
