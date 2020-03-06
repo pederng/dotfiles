@@ -123,7 +123,7 @@ def raw_line_iter(lines: Iterable[Line]) -> Iterator[str]:
 class Journal:
     def __init__(self) -> None:
         self._content: List[Line] = []
-        self._tasks: Set[Task] = set()
+        self._tasks: List[Task] = []
         self._headers: List[Header] = []
 
     def _add(self, line: str) -> None:
@@ -133,7 +133,7 @@ class Journal:
             task = Task(line)
             if task in self._tasks:
                 self._tasks.remove(task)
-            return self._tasks.add(task)
+            return self._tasks.append(task)
         if line.startswith(HEADER):
             line_: Line = Header(line)
             self._headers.append(cast(Header, line_))
