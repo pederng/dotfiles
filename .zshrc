@@ -29,13 +29,10 @@ setopt NO_HUP
 stty -ixon
 
 # Path
-# typeset -U path
+typeset -U path
 export GOPATH=~/workspace/go
-export rubypath=$(ruby -rrubygems -e "puts Gem.user_dir")
 export cabalpath=~/.cabal
-export npmpath=~/.npm-packages
-path=(~/.local/bin $GOPATH/bin $rubypath/bin $cabalpath/bin $npmpath/bin $path)
-source $HOME/.cargo/env
+path=($path ~/.local/bin $GOPATH/bin $cabalpath/bin)
 
 # Tab completion for cd ..
 

@@ -24,9 +24,6 @@ alias lz='ll -rS'                   # sort by size
 alias lt='ll -rt'                   # sort by date
 alias lm='la | more'
 
-# git
-alias gitl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'"
-
 alias gpgreset="gpg-connect-agent updatestartuptty /bye"
 
 alias dc="docker-compose"
