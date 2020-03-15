@@ -5,13 +5,14 @@ import sys
 import subprocess
 from collections import defaultdict
 from dataclasses import dataclass, field
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from enum import Enum
+from functools import partial
 from itertools import chain
 from operator import attrgetter
 from pathlib import Path
 from pprint import pprint
-from typing import Dict, List, Iterator, cast, Set, Iterable, Union, Optional
+from typing import Dict, List, Iterator, cast, Set, Iterable, Union, Optional, Tuple
 
 FMT = "%A %B %d %Y"
 BRK = "\n"
@@ -21,9 +22,13 @@ CLOSED_TASKS = "# Closed tasks"
 TASK = "* TASK: "
 DONE = "(DONE)"
 CANCELLED = "(CANCELLED)"
+ENDC = "\033[0m"
+GREEN = "\033[92m"
+BLUE = "\033[94m"
+RED = "\033[91m"
 JOURNAL = Path("/home/peder/.notes/journal.md")
 SPECIAL_HEADERS = [OPEN_TASKS, CLOSED_TASKS]
-COMMANDS = ["tasks", "sync", "completion", "week", "grep"]
+COMMANDS = ["tasks", "sync", "completion", "week", "dates", "grep"]
 COMPLETION = f"""
 __journal_completions()
 {{
@@ -132,7 +137,7 @@ class Journal:
         self._content: List[Line] = []
         self._tasks: List[Task] = []
         self._headers: List[Header] = []
-        self._days: Dict[date, List[Line]] = defaultdict(list)
+        self._dates: Dict[date, List[Line]] = defaultdict(list)
 
     def _add(self, line: Union[Line, Task], date: Optional[date] = None) -> None:
         if isinstance(line, Task):
@@ -142,7 +147,7 @@ class Journal:
         if isinstance(line, Header):
             self._headers.append(line)
         elif date and line.raw:
-            self._days[date].append(line)
+            self._dates[date].append(line)
         return self._content.append(line)
 
     def _read(self, lines: Iterator[str]) -> None:
@@ -195,6 +200,11 @@ class Journal:
             yield task
 
     @property
+    def dates(self) -> Iterator[Tuple[date, List[str]]]:
+        for date_, lines in self._dates.items():
+            yield date_, list(map(attrgetter("raw"), lines))
+
+    @property
     def open_tasks(self) -> Iterator[Task]:
         yield from filter(attrgetter("is_open"), self.tasks)
 
@@ -221,6 +231,75 @@ def list_tasks(tags: List[str]) -> None:
         print(task.raw)
 
 
+def colored(color: str, line: str) -> str:
+    return f"{color}{line}{ENDC}"
+
+
+def green(line: str) -> str:
+    return colored(GREEN, line)
+
+
+def blue(line: str) -> str:
+    return colored(BLUE, line)
+
+
+def highlight(pattern: str, color: str, line: str):
+    return line.replace(pattern, colored(color, pattern))
+
+
+QUERY_FMT = "%Y-%m-%d"
+
+
+@dataclass
+class DateQuery:
+    start: Optional[date] = None
+    end: Optional[date] = None
+
+    @classmethod
+    def from_args(cls, args: List[str]) -> DateQuery:
+        if not args:
+            return cls()
+        start = datetime.strptime(args[0], QUERY_FMT).date()
+        if len(args) == 1:
+            return cls(start)
+        end = datetime.strptime(args[1], QUERY_FMT).date()
+        return cls(start, end)
+
+    @classmethod
+    def current_week(cls) -> DateQuery:
+        today = date.today()
+        monday = today - timedelta(days=today.weekday())
+        sunday = today + timedelta(days=6 - today.weekday())
+        return cls(monday, sunday)
+
+
+def print_date(date_: date, lines: Iterable[str]) -> None:
+    print(blue(date_.strftime(FMT)))
+    print("")
+    for line in lines:
+        print(line)
+    print("")
+    print(green("-" * 100))
+    print("")
+
+
+def list_dates(query: DateQuery) -> None:
+    print("")
+    for date_, lines in Journal.read().dates:
+        if query.start and date_ < query.start:
+            continue
+        if query.end and date_ > query.end:
+            continue
+        print_date(date_, lines)
+
+
+def grep(query: str) -> None:
+    for date_, lines in Journal.read().dates:
+        if not any(query in l for l in lines):
+            continue
+        print_date(date_, map(partial(highlight, query, RED), lines))
+
+
 def default() -> None:
     journal = Journal.read()
     write(journal)
@@ -238,5 +317,12 @@ if __name__ == "__main__":
         list_tasks(sys.argv[2:])
     elif cmd == "sync":
         subprocess.run(["notes", "sync"])
+    elif cmd == "week":
+        list_dates(DateQuery.current_week())
+    elif cmd == "dates":
+        list_dates(DateQuery.from_args(sys.argv[2:]))
+    elif cmd == "grep":
+        assert len(sys.argv) > 2, "Missing grep query"
+        grep(sys.argv[2])
     elif cmd == "completion":
         print(COMPLETION)
