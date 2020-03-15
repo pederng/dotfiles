@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import sys
 import subprocess
+import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
@@ -14,6 +15,8 @@ from pathlib import Path
 from pprint import pprint
 from typing import Dict, List, Iterator, cast, Set, Iterable, Union, Optional, Tuple
 
+from highlight import Color, colored, highlight_lines
+
 FMT = "%A %B %d %Y"
 BRK = "\n"
 HEADER = "# "
@@ -22,10 +25,6 @@ CLOSED_TASKS = "# Closed tasks"
 TASK = "* TASK: "
 DONE = "(DONE)"
 CANCELLED = "(CANCELLED)"
-ENDC = "\033[0m"
-GREEN = "\033[92m"
-BLUE = "\033[94m"
-RED = "\033[91m"
 JOURNAL = Path("/home/peder/.notes/journal.md")
 SPECIAL_HEADERS = [OPEN_TASKS, CLOSED_TASKS]
 COMMANDS = ["tasks", "sync", "completion", "week", "dates", "grep"]
@@ -231,22 +230,6 @@ def list_tasks(tags: List[str]) -> None:
         print(task.raw)
 
 
-def colored(color: str, line: str) -> str:
-    return f"{color}{line}{ENDC}"
-
-
-def green(line: str) -> str:
-    return colored(GREEN, line)
-
-
-def blue(line: str) -> str:
-    return colored(BLUE, line)
-
-
-def highlight(pattern: str, color: str, line: str):
-    return line.replace(pattern, colored(color, pattern))
-
-
 QUERY_FMT = "%Y-%m-%d"
 
 
@@ -273,6 +256,14 @@ class DateQuery:
         return cls(monday, sunday)
 
 
+def blue(line: str) -> str:
+    return colored(Color.BLUE, line)
+
+
+def green(line: str) -> str:
+    return colored(Color.GREEN, line)
+
+
 def print_date(date_: date, lines: Iterable[str]) -> None:
     print(blue(date_.strftime(FMT)))
     print("")
@@ -297,7 +288,7 @@ def grep(query: str) -> None:
     for date_, lines in Journal.read().dates:
         if not any(query in l for l in lines):
             continue
-        print_date(date_, map(partial(highlight, query, RED), lines))
+        print_date(date_, highlight_lines(query, Color.RED, lines))
 
 
 def default() -> None:
