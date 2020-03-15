@@ -29,10 +29,7 @@ setopt NO_HUP
 stty -ixon
 
 # Path
-typeset -U path
 export GOPATH=~/workspace/go
-export cabalpath=~/.cabal
-path=($path ~/.local/bin $GOPATH/bin $cabalpath/bin)
 
 # Tab completion for cd ..
 
