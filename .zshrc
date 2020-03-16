@@ -30,6 +30,8 @@ stty -ixon
 
 # Path
 export GOPATH=~/workspace/go
+path=($path $GOPATH/bin)
+
 
 # Tab completion for cd ..
 
