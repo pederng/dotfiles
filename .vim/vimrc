@@ -520,6 +520,12 @@ let g:vim_markdown_new_list_item_indent = 0
 autocmd FileType markdown setlocal formatoptions=tqr
 
 " =============================================================================
+" DB
+" =============================================================================
+
+command SQL enew | setlocal buftype=nofile | setlocal ft=pgsql
+
+" =============================================================================
 " Machine specific config
 " =============================================================================
 
