@@ -1,0 +1,27 @@
+#!/bin/bash -e
+
+zettel_dir=~/.notes/zettels
+CMD=$1
+shift
+
+mkzettel() {
+  title="$*"
+  title_in_filename="$(echo "$title" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')"
+  file="$zettel_dir/$(date +%Y-%m-%dT%H:%M)-$title_in_filename.md"
+(
+cat <<CONTENT
+# $title
+
+
+
+## Links
+CONTENT
+) > "$file"
+echo "$file"
+}
+
+case $CMD in
+  new)
+    vim "$(mkzettel "$*")" +3
+    ;;
+esac
