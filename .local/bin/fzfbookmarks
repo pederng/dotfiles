@@ -1,0 +1,2 @@
+#!/bin/bash -e
+buku -p -f 4 | fzfmenu | awk '{print $1}' | buku -o > /dev/null 2>&1
