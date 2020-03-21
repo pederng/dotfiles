@@ -1,16 +1,22 @@
 #!/bin/bash -e
 
-zettel_dir=~/.notes/zettels
+zettel_dir=${ZETTEL_DIR-$HOME/.notes/zettel}
 CMD=$1
 shift
+
+COMMANDS=(
+  new edit filter link ls ls-tags ls-with-tag completion
+)
 
 mkzettel() {
   title="$*"
   title_in_filename="$(echo "$title" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')"
-  file="$zettel_dir/$(date +%Y-%m-%dT%H:%M)-$title_in_filename.md"
+  id=$(date +'%Y%m%d%H%M')
+  date=$(date +'%A %B %d %Y %H:%M')
+  file="$zettel_dir/$id-$title_in_filename.md"
 (
 cat <<CONTENT
-# $title
+# $title $date
 
 
 
@@ -20,8 +26,78 @@ CONTENT
 echo "$file"
 }
 
+tagify='s/^\([^:]\)/:\1/;s/\([^:]\)$/\1:/'
+
 case $CMD in
-  new)
-    vim "$(mkzettel "$*")" +3
+  ls-with-tag|filter-with-tag)
+    test -z "$1" && (echo No tag provived; exit 1)
     ;;
 esac
+
+get_zettel() {
+  zettel="$1"
+  test -z "$zettel" && zettel=$($0 filter "$2")
+  echo "$zettel"
+}
+
+
+case $CMD in
+  new)
+    vim "$(mkzettel "$*")" +2
+    ;;
+  edit)
+    zettel="$(get_zettel "$1")"
+    vim "$zettel_dir/$zettel"
+    ;;
+  filter)
+    excluded="$1"
+    $0 ls | grep -v "^$excluded$" | fzf --preview="bat --style=numbers --color=always $zettel_dir/{} "
+    ;;
+  link)
+    first="$(get_zettel "$1")"
+    second="$(get_zettel "$2" "$first")"
+    test "$first" = "$second" && (echo "Cannot link to itself"; exit 1)
+    grep "$first" "$zettel_dir/$second" && (echo "Already linked"; exit 1)
+    echo "[$first]" >> "$zettel_dir/$second"
+    echo "[$second]" >> "$zettel_dir/$first"
+    ;;
+  ls)
+    find $zettel_dir -type f | xargs -n 1 basename | sort -n
+    ;;
+  ls-tags)
+    grep -hoRE '\:[a-z]*\:' "$zettel_dir" | sort | uniq | sed 's/://g'
+    ;;
+  ls-with-tag)
+    grep -Rl "$(echo "$1"|sed "$tagify")" "$zettel_dir" | xargs -n 1 basename | sort -n
+    ;;
+  completion)
+cat << EOF
+__zettel_completions()
+{
+  if (( COMP_CWORD > 1 )); then
+    local first="\${COMP_WORDS[1]}"
+    case "\${first}" in
+      edit|link)
+        COMPREPLY=( \$(compgen -G "$($0 ls)" "\${COMP_KEY}") )
+        ;;
+      ls-with-tag)
+        COMPREPLY=( \$(compgen -G "$($0 ls-tags)" "\${COMP_KEY}") )
+        ;;
+    esac
+  else
+    COMPREPLY=( \$(compgen -W "${COMMANDS[*]}" "\${COMP_KEY}") )
+  fi
+}
+complete -F __zettel_completions zettel
+EOF
+    ;;
+esac
+
+
+#TODO
+# Search zettels by content ?
+# List zettels with no links, to be curated
+# Command to link zettels "zettel link 1 4". Should add links to both
+# Revise current completion. Completing tags might not be that useful
+#  It is probably better to complete filenames
+# Revise headers?
