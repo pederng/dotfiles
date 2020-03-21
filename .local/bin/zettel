@@ -5,7 +5,7 @@ CMD=$1
 shift
 
 COMMANDS=(
-  new edit grep ls filter sync link unlinked ls-tags ls-with-tag completion
+  new edit grep ls filter sync link unlinked tags ls-with-tag completion
 )
 
 mkzettel() {
@@ -80,7 +80,7 @@ case $CMD in
   unlinked)
     grep -REL '\[[a-zA-Z .]*\]' "$zettel_dir" | xargs bat
     ;;
-  ls-tags)
+  tags)
     grep -hoRE '\:[a-z]*\:' "$zettel_dir" | sort | uniq | sed 's/://g'
     ;;
   ls-with-tag)
@@ -97,7 +97,7 @@ __zettel_completions()
         COMPREPLY=( \$(compgen -G "$($0 ls)" "\${COMP_KEY}") )
         ;;
       ls-with-tag)
-        COMPREPLY=( \$(compgen -G "$($0 ls-tags)" "\${COMP_KEY}") )
+        COMPREPLY=( \$(compgen -G "$($0 tags)" "\${COMP_KEY}") )
         ;;
     esac
   else
