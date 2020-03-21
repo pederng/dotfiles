@@ -5,7 +5,7 @@ CMD=$1
 shift
 
 COMMANDS=(
-  new edit filter link ls ls-tags ls-with-tag completion
+  new edit grep ls filter link unlinked ls-tags ls-with-tag completion
 )
 
 mkzettel() {
@@ -16,9 +16,9 @@ mkzettel() {
   file="$zettel_dir/$id-$title_in_filename.md"
 (
 cat <<CONTENT
-# $title $date
-
-
+# $title
+*$date*
+>
 
 ## Links
 CONTENT
@@ -40,14 +40,27 @@ get_zettel() {
   echo "$zettel"
 }
 
+get_desc() {
+  head -n1 "$zettel_dir/$1" | sed 's/^# //'
+}
+
+mklink() {
+  echo "[$(get_desc "$1")]($1)"
+}
 
 case $CMD in
   new)
-    vim "$(mkzettel "$*")" +2
+    vim "$(mkzettel "$*")" +3
     ;;
   edit)
     zettel="$(get_zettel "$1")"
     vim "$zettel_dir/$zettel"
+    ;;
+  grep)
+    grep -Rl "$1" "$zettel_dir" | xargs bat
+    ;;
+  ls)
+    find "$zettel_dir" -type f | xargs -n 1 basename | sort -n
     ;;
   filter)
     excluded="$1"
@@ -58,11 +71,11 @@ case $CMD in
     second="$(get_zettel "$2" "$first")"
     test "$first" = "$second" && (echo "Cannot link to itself"; exit 1)
     grep "$first" "$zettel_dir/$second" && (echo "Already linked"; exit 1)
-    echo "[$first]" >> "$zettel_dir/$second"
-    echo "[$second]" >> "$zettel_dir/$first"
+    mklink "$first" >> "$zettel_dir/$second"
+    mklink "$second" >> "$zettel_dir/$first"
     ;;
-  ls)
-    find $zettel_dir -type f | xargs -n 1 basename | sort -n
+  unlinked)
+    grep -REL '\[[a-zA-Z .]*\]' "$zettel_dir" | xargs bat
     ;;
   ls-tags)
     grep -hoRE '\:[a-z]*\:' "$zettel_dir" | sort | uniq | sed 's/://g'
@@ -95,9 +108,4 @@ esac
 
 
 #TODO
-# Search zettels by content ?
-# List zettels with no links, to be curated
-# Command to link zettels "zettel link 1 4". Should add links to both
-# Revise current completion. Completing tags might not be that useful
-#  It is probably better to complete filenames
-# Revise headers?
+# Rename command?
