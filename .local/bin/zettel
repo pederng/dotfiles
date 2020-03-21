@@ -5,7 +5,7 @@ CMD=$1
 shift
 
 COMMANDS=(
-  new edit grep ls filter link unlinked ls-tags ls-with-tag completion
+  new edit grep ls filter sync link unlinked ls-tags ls-with-tag completion
 )
 
 mkzettel() {
@@ -65,6 +65,9 @@ case $CMD in
   filter)
     excluded="$1"
     $0 ls | grep -v "^$excluded$" | fzf --preview="bat --style=numbers --color=always $zettel_dir/{} "
+    ;;
+  sync)
+    notes sync
     ;;
   link)
     first="$(get_zettel "$1")"
