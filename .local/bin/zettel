@@ -52,7 +52,7 @@ case $CMD in
     grep -Rl "$1" "$zettel_dir" | xargs bat
     ;;
   ls)
-    find "$zettel_dir" -type f | xargs -n 1 basename | sort -n
+    fd . "$zettel_dir" | xargs -n1 basename | sort -n
     ;;
   filter)
     excluded="$1"
