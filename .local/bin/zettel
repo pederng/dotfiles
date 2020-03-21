@@ -5,7 +5,7 @@ CMD=$1
 shift
 
 COMMANDS=(
-  new edit grep ls filter sync link unlinked tags ls-with-tag completion
+  new edit grep ls filter sync link unlinked tags completion
 )
 
 mkzettel() {
@@ -25,14 +25,6 @@ CONTENT
 ) > "$file"
 echo "$file"
 }
-
-tagify='s/^\([^:]\)/:\1/;s/\([^:]\)$/\1:/'
-
-case $CMD in
-  ls-with-tag|filter-with-tag)
-    test -z "$1" && (echo No tag provived; exit 1)
-    ;;
-esac
 
 get_zettel() {
   zettel="$1"
@@ -83,9 +75,6 @@ case $CMD in
   tags)
     grep -hoRE '\:[a-z]*\:' "$zettel_dir" | sort | uniq | sed 's/://g'
     ;;
-  ls-with-tag)
-    grep -Rl "$(echo "$1"|sed "$tagify")" "$zettel_dir" | xargs -n 1 basename | sort -n
-    ;;
   completion)
 cat << EOF
 __zettel_completions()
@@ -95,9 +84,6 @@ __zettel_completions()
     case "\${first}" in
       edit|link)
         COMPREPLY=( \$(compgen -G "$($0 ls)" "\${COMP_KEY}") )
-        ;;
-      ls-with-tag)
-        COMPREPLY=( \$(compgen -G "$($0 tags)" "\${COMP_KEY}") )
         ;;
     esac
   else
@@ -112,3 +98,5 @@ esac
 
 #TODO
 # Rename command?
+# What should the default command be?
+
