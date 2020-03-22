@@ -7,7 +7,7 @@ test -z "$1" && $0 edit
 shift
 
 COMMANDS=(
-  new edit grep cat ls filter sync link unlinked tags completion
+  new edit grep show ls filter sync link unlinked tags completion
 )
 
 mkzettel() {
@@ -54,12 +54,12 @@ case $CMD in
     zettel="$(get_zettel "$1")"
     vim "$zettel_dir/$zettel"
     ;;
-  cat)
-    zettel="$(get_zettel "$1")"
-    bat "$zettel_dir/$zettel"
-    ;;
   grep)
     grep -Rl "$1" "$zettel_dir" | xargs bat
+    ;;
+  show)
+    zettel="$(get_zettel "$1")"
+    bat "$zettel_dir/$zettel"
     ;;
   ls)
     fd . "$zettel_dir" | xargs -n1 basename | sort -n
@@ -75,7 +75,7 @@ case $CMD in
     first="$(get_zettel "$1")"
     second="$(get_zettel "$2" "$first")"
     test "$first" = "$second" && (echo "Cannot link to itself"; exit 1)
-    grep "$first" "$zettel_dir/$second" && (echo "Already linked"; exit 1)
+    grep "$first" "$zettel_dir/$second" >/dev/null && (echo "Already linked"; exit 1)
     mklink "$first" >> "$zettel_dir/$second"
     mklink "$second" >> "$zettel_dir/$first"
     ;;
@@ -92,7 +92,7 @@ __zettel_completions()
   if (( COMP_CWORD > 1 )); then
     local first="\${COMP_WORDS[1]}"
     case "\${first}" in
-      edit|cat|link)
+      edit|show|link)
         COMPREPLY=( \$(compgen -G "$($0 ls)" "\${COMP_KEY}") )
         ;;
     esac
@@ -108,4 +108,8 @@ esac
 
 #TODO
 # Rename command?
+# grep-filter commnand
+# Use ripgrep (batgrep?) to color grep matches
+# List tags with member notes 'tag-members'?
+# Enforce setting title on new zettel, maybe prompt if missing.
 # Ensure unique zettelid
