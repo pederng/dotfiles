@@ -113,3 +113,5 @@ esac
 # List tags with member notes 'tag-members'?
 # Enforce setting title on new zettel, maybe prompt if missing.
 # Ensure unique zettelid
+# Render html
+# Render links using graphviz

@@ -1,0 +1,9 @@
+auto-reload yes
+
+
+color background white default
+color listnormal white default
+color listfocus white black standout
+color info blue default standout
+color listfocus_unread white black standout
+color listnormal_unread white default
