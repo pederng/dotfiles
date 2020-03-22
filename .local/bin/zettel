@@ -67,8 +67,12 @@ _grep() {
 
 case $CMD in
   new)
-    test -z "$@" && (echo "No title provided"; exit 1)
-    vim "$(mkzettel "$*")" +5
+    title="$*"
+    if [ -z "$title" ]; then
+      echo "Enter title"
+      read -r title
+    fi
+    vim "$(mkzettel "$title")" +5
     ;;
   edit)
     zettel="$(get_zettel "$1")"
@@ -138,7 +142,6 @@ esac
 #TODO
 # Rename command?
 # Use ripgrep (batgrep?) to color grep matches
-# Enforce setting title on new zettel, maybe prompt if missing.
 # Ensure unique zettelid
 # Render html
 # Render links using graphviz
