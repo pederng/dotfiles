@@ -2,10 +2,12 @@
 
 zettel_dir=${ZETTEL_DIR-$HOME/.notes/zettel}
 CMD=$1
+
+test -z "$1" && $0 edit
 shift
 
 COMMANDS=(
-  new edit grep ls filter sync link unlinked tags completion
+  new edit grep cat ls filter sync link unlinked tags completion
 )
 
 mkzettel() {
@@ -48,6 +50,10 @@ case $CMD in
     zettel="$(get_zettel "$1")"
     vim "$zettel_dir/$zettel"
     ;;
+  cat)
+    zettel="$(get_zettel "$1")"
+    bat "$zettel_dir/$zettel"
+    ;;
   grep)
     grep -Rl "$1" "$zettel_dir" | xargs bat
     ;;
@@ -82,7 +88,7 @@ __zettel_completions()
   if (( COMP_CWORD > 1 )); then
     local first="\${COMP_WORDS[1]}"
     case "\${first}" in
-      edit|link)
+      edit|cat|link)
         COMPREPLY=( \$(compgen -G "$($0 ls)" "\${COMP_KEY}") )
         ;;
     esac
@@ -98,5 +104,4 @@ esac
 
 #TODO
 # Rename command?
-# What should the default command be?
-
+# Ensure unique zettelid
