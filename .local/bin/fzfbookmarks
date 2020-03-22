@@ -1,3 +1,3 @@
 #!/bin/bash -e
-page=$(buku -p -f 4 | fzfmenu | awk '{print $1}')
+page=$(buku -p -f 4 | grep -v '^waiting for input$' | fzfmenu | awk '{print $1}')
 buku -o "$page"
