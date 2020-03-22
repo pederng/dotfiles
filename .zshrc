@@ -160,7 +160,7 @@ export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 
 # Notes
 export NOTES_DIR=$HOME/.notes
-export ZETTEL_DIR=$NOTES_DIR/zettel
+export ZETTEL_DIR=$NOTES_DIR/zettelkasten
 
 #----Aliases-----
 source ~/.zsh/aliases
