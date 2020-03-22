@@ -1,14 +1,17 @@
 #!/bin/bash -e
 
-zettel_dir=${ZETTEL_DIR-$HOME/.notes/zettel}
+zettel_dir=${ZETTEL_DIR-$HOME/.notes/zettelkasten}
 CMD=$1
 
 test -z "$1" && $0 edit
 shift
 
 COMMANDS=(
-  new edit grep show ls filter sync link unlinked tags completion
+  new edit grep grep-filter show ls filter sync link unlinked tags tag-members completion
 )
+
+nc="\033[0m"
+green="\033[0;32m"
 
 mkzettel() {
   title="$*"
@@ -46,8 +49,25 @@ mklink() {
   echo "* [$(get_desc "$1")]($1)"
 }
 
+filter() {
+  grep -v "^$1$" | fzf --preview="bat --style=numbers --color=always $zettel_dir/{}"
+}
+
+strip_path() {
+  xargs -n1 basename
+}
+
+add_path() {
+  sed  "s:^:$zettel_dir/:"
+}
+
+_grep() {
+  grep -Rl "$1" "$zettel_dir"
+}
+
 case $CMD in
   new)
+    test -z "$@" && (echo "No title provided"; exit 1)
     vim "$(mkzettel "$*")" +5
     ;;
   edit)
@@ -55,18 +75,22 @@ case $CMD in
     vim "$zettel_dir/$zettel"
     ;;
   grep)
-    grep -Rl "$1" "$zettel_dir" | xargs bat
+    test -z "$1" && (echo "No search term provided" ; exit 1)
+    _grep "$@" | xargs bat
+    ;;
+  grep-filter)
+    test -z "$1" && (echo "No search term provided" ; exit 1)
+    _grep "$@" | strip_path | filter | add_path | xargs bat
     ;;
   show)
     zettel="$(get_zettel "$1")"
     bat "$zettel_dir/$zettel"
     ;;
   ls)
-    fd . "$zettel_dir" | xargs -n1 basename | sort -n
+    fd . "$zettel_dir" | strip_path | sort -n
     ;;
   filter)
-    excluded="$1"
-    $0 ls | grep -v "^$excluded$" | fzf --preview="bat --style=numbers --color=always $zettel_dir/{} "
+    $0 ls | filter "$@"
     ;;
   sync)
     notes sync
@@ -84,6 +108,11 @@ case $CMD in
     ;;
   tags)
     grep -hoRE '\:[a-z]*\:' "$zettel_dir" | sort | uniq | sed 's/://g'
+    ;;
+  tag-members)
+    grep -oRE '\:[a-z]*\:' "$zettel_dir" \
+      | awk -v green="$green" -v nc="$nc" -F : '{print green$3nc " " $1}' \
+      | sed "s:$zettel_dir/::" | sort | column -t
     ;;
   completion)
 cat << EOF
@@ -108,9 +137,7 @@ esac
 
 #TODO
 # Rename command?
-# grep-filter commnand
 # Use ripgrep (batgrep?) to color grep matches
-# List tags with member notes 'tag-members'?
 # Enforce setting title on new zettel, maybe prompt if missing.
 # Ensure unique zettelid
 # Render html
