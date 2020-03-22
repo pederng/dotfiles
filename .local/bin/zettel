@@ -19,10 +19,14 @@ mkzettel() {
 (
 cat <<CONTENT
 # $title
-*$date*
->
+<!-- id: $id -->
+<!-- date: $date -->
 
-## Links
+
+
+##### Tags
+##### References
+##### Links
 CONTENT
 ) > "$file"
 echo "$file"
@@ -39,12 +43,12 @@ get_desc() {
 }
 
 mklink() {
-  echo "[$(get_desc "$1")]($1)"
+  echo "* [$(get_desc "$1")]($1)"
 }
 
 case $CMD in
   new)
-    vim "$(mkzettel "$*")" +3
+    vim "$(mkzettel "$*")" +5
     ;;
   edit)
     zettel="$(get_zettel "$1")"
