@@ -3,31 +3,20 @@ from __future__ import annotations
 
 import sys
 import subprocess
-import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
-from enum import Enum
-from functools import partial
-from itertools import chain
 from operator import attrgetter
 from pathlib import Path
-from pprint import pprint
-from typing import Dict, List, Iterator, cast, Set, Iterable, Union, Optional, Tuple
+from typing import Dict, List, Iterator, Iterable, Optional, Tuple
 
 from highlight import Color, colored, highlight_lines
 
 FMT = "%A %B %d %Y"
 BRK = "\n"
 HEADER = "# "
-OPEN_TASKS = "# Open tasks"
-CLOSED_TASKS = "# Closed tasks"
-TASK = "* TASK: "
-DONE = "(DONE)"
-CANCELLED = "(CANCELLED)"
 JOURNAL = Path("/home/peder/.notes/journal.md")
-SPECIAL_HEADERS = [OPEN_TASKS, CLOSED_TASKS]
-COMMANDS = ["tasks", "sync", "completion", "week", "dates", "grep"]
+COMMANDS = ["sync", "completion", "week", "dates", "grep"]
 COMPLETION = f"""
 __journal_completions()
 {{
@@ -35,20 +24,6 @@ __journal_completions()
 }}
 complete -F __journal_completions journal
 """
-
-
-def is_task(line: str) -> bool:
-    return line.startswith(TASK)
-
-
-def is_tag(word: str) -> bool:
-    return word.startswith(":") and word.endswith(":")
-
-
-class TaskState(Enum):
-    OPEN = "open"
-    DONE = "done"
-    CANCELLED = "cancelled"
 
 
 @dataclass
@@ -75,46 +50,8 @@ class Header(Line):
         return self.raw == other
 
 
-@dataclass()
-class Task(Line):
-    content: str = field(init=False)
-    tags: List[str] = field(init=False)
-    state: TaskState = field(init=False)
-
-    def __post_init__(self) -> None:
-        self.state = TaskState.OPEN
-        _, _, stripped = self.raw.partition(TASK)
-        stripped, done, _ = stripped.partition(DONE)
-        stripped, cancelled, _ = stripped.partition(CANCELLED)
-        assert not (done and cancelled)
-        if done:
-            self.state = TaskState.DONE
-        if cancelled:
-            self.state = TaskState.CANCELLED
-        self.tags = list(map(lambda t: t.strip(":"), filter(is_tag, stripped.split())))
-        for tag in self.tags:
-            stripped = stripped.replace(tag, "")
-        self.content = stripped.strip()
-
-    @property
-    def is_open(self) -> bool:
-        return self.state == TaskState.OPEN
-
-    @property
-    def is_closed(self) -> bool:
-        return not self.is_open
-
-    def __hash__(self) -> int:
-        return hash(self.content)
-
-
 def header(content: str) -> str:
     return f"# {content}"
-
-
-def header_iter(content: str) -> Iterator[str]:
-    yield header(content) + BRK
-    yield BRK
 
 
 def skip_consecutive_empty_lines(lines: Iterator[str]) -> Iterator[str]:
@@ -134,15 +71,10 @@ def raw_line_iter(lines: Iterable[Line]) -> Iterator[str]:
 class Journal:
     def __init__(self) -> None:
         self._content: List[Line] = []
-        self._tasks: List[Task] = []
         self._headers: List[Header] = []
         self._dates: Dict[date, List[Line]] = defaultdict(list)
 
-    def _add(self, line: Union[Line, Task], date: Optional[date] = None) -> None:
-        if isinstance(line, Task):
-            if line in self._tasks:
-                self._tasks.remove(line)
-            return self._tasks.append(line)
+    def _add(self, line: Line, date: Optional[date] = None) -> None:
         if isinstance(line, Header):
             self._headers.append(line)
         elif date and line.raw:
@@ -152,12 +84,8 @@ class Journal:
     def _read(self, lines: Iterator[str]) -> None:
         current_date = None
         for line in lines:
-            if line in SPECIAL_HEADERS:
-                continue
             line_: Line
-            if is_task(line):
-                line_ = Task(line)
-            elif line.startswith(HEADER):
+            if line.startswith(HEADER):
                 line_ = Header(line)
                 current_date = line_.date
             else:
@@ -181,35 +109,16 @@ class Journal:
 
     @property
     def _raw_lines(self) -> Iterator[str]:
-        yield from chain(
-            header_iter("Closed tasks"),
-            raw_line_iter(self.closed_tasks),
-            raw_line_iter(self._content),
-            header_iter("Open tasks"),
-            raw_line_iter(self.open_tasks),
-        )
+        yield from raw_line_iter(self._content)
 
     @property
     def raw_lines(self) -> Iterator[str]:
         yield from skip_consecutive_empty_lines(self._raw_lines)
 
     @property
-    def tasks(self) -> Iterator[Task]:
-        for task in self._tasks:
-            yield task
-
-    @property
     def dates(self) -> Iterator[Tuple[date, List[str]]]:
         for date_, lines in self._dates.items():
             yield date_, list(map(attrgetter("raw"), lines))
-
-    @property
-    def open_tasks(self) -> Iterator[Task]:
-        yield from filter(attrgetter("is_open"), self.tasks)
-
-    @property
-    def closed_tasks(self) -> Iterator[Task]:
-        yield from filter(attrgetter("is_closed"), self.tasks)
 
 
 def edit() -> None:
@@ -220,14 +129,6 @@ def write(journal: Journal) -> None:
     with JOURNAL.open("w") as f:
         for line in journal.raw_lines:
             f.write(line)
-
-
-def list_tasks(tags: List[str]) -> None:
-    tasks: List[Task] = []
-    for task in Journal.read().open_tasks:
-        if tags and not any(t in task.tags for t in tags):
-            continue
-        print(task.raw)
 
 
 QUERY_FMT = "%Y-%m-%d"
@@ -304,8 +205,6 @@ if __name__ == "__main__":
     cmd = sys.argv[1]
     if cmd not in COMMANDS:
         raise RuntimeError(f"Unknown command {cmd}")
-    if cmd == "tasks":
-        list_tasks(sys.argv[2:])
     elif cmd == "sync":
         subprocess.run(["downsync_notes"])
         subprocess.run(["upsync_notes"])
