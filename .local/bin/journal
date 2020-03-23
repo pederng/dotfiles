@@ -307,7 +307,8 @@ if __name__ == "__main__":
     if cmd == "tasks":
         list_tasks(sys.argv[2:])
     elif cmd == "sync":
-        subprocess.run(["notes", "sync"])
+        subprocess.run(["downsync_notes"])
+        subprocess.run(["upsync_notes"])
     elif cmd == "week":
         list_dates(DateQuery.current_week())
     elif cmd == "dates":

@@ -7,7 +7,7 @@ test -z "$1" && $0 edit
 shift
 
 COMMANDS=(
-  new edit grep grep-filter show ls filter sync link unlinked tags tag-members completion
+  new edit grep grep-filter show ls filter sync link unlinked tags index completion
 )
 
 nc="\033[0m"
@@ -17,6 +17,10 @@ mkzettel() {
   title="$*"
   title_in_filename="$(echo "$title" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')"
   id=$(date +'%Y%m%d%H%M')
+  if grep -qR "$id" "$zettel_dir"; then
+    id=$((id + 1))
+  fi
+  grep -qR "$id" "$zettel_dir" && return 1
   date=$(date +'%A %B %d %Y %H:%M')
   file="$zettel_dir/$id-$title_in_filename.md"
 (
@@ -72,7 +76,8 @@ case $CMD in
       echo "Enter title"
       read -r title
     fi
-    vim "$(mkzettel "$title")" +5
+    fname="$(mkzettel "$title" || exit 1)"
+    vim "$fname" +5
     ;;
   edit)
     zettel="$(get_zettel "$1")"
@@ -97,13 +102,14 @@ case $CMD in
     $0 ls | filter "$@"
     ;;
   sync)
-    notes sync
+    downsync_notes
+    upsync_notes
     ;;
   link)
     first="$(get_zettel "$1")"
     second="$(get_zettel "$2" "$first")"
     test "$first" = "$second" && (echo "Cannot link to itself"; exit 1)
-    grep "$first" "$zettel_dir/$second" >/dev/null && (echo "Already linked"; exit 1)
+    grep -q "$first" "$zettel_dir/$second" && (echo "Already linked"; exit 1)
     mklink "$first" >> "$zettel_dir/$second"
     mklink "$second" >> "$zettel_dir/$first"
     ;;
@@ -113,7 +119,7 @@ case $CMD in
   tags)
     grep -hoRE '\:[a-z]*\:' "$zettel_dir" | sort | uniq | sed 's/://g'
     ;;
-  tag-members)
+  index)
     grep -oRE '\:[a-z]*\:' "$zettel_dir" \
       | awk -v green="$green" -v nc="$nc" -F : '{print green$3nc " " $1}' \
       | sed "s:$zettel_dir/::" | sort | column -t
@@ -142,6 +148,7 @@ esac
 #TODO
 # Rename command?
 # Use ripgrep (batgrep?) to color grep matches
-# Ensure unique zettelid
 # Render html
 # Render links using graphviz
+# Add color highlights to zettelid, for easier visual scanning.
+#   Something like year in red, month in green, day in blue and time in yellow.

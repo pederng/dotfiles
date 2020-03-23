@@ -7,16 +7,6 @@ COMMANDS=(
 )
 shift
 
-function downsync_notes() {
-  git --git-dir="$ndir"/.git --work-tree="$ndir" pull
-}
-
-function upsync_notes() {
-  git --git-dir="$ndir"/.git --work-tree="$ndir"  add .
-  git --git-dir="$ndir"/.git --work-tree="$ndir"  commit --author="Autocommiter <>" -m "Autocommit"
-  git --git-dir="$ndir"/.git --work-tree="$ndir"  push
-}
-
 find_md() {
   find "$ndir" -iname '*.md' | awk -F / '{print $NF}'
 }
