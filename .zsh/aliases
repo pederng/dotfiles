@@ -37,5 +37,3 @@ alias mutt='neomutt'
 
 # dotfile storage config
 alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-
-alias tasks='journal tasks'

@@ -150,7 +150,6 @@ eval "$(pipenv --completion)"
 # Stack completion
 eval "$(stack --bash-completion-script stack)"
 
-eval "$(notes completion)"
 eval "$(journal completion)"
 eval "$(zettel completion)"
 
