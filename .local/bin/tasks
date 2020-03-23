@@ -1,0 +1,5 @@
+#!/bin/bash
+taskfile=$NOTES_DIR/tasks.md
+downsync_notes
+vim "$taskfile"
+upsync_notes
