@@ -77,11 +77,11 @@ case $CMD in
       read -r title
     fi
     fname="$(mkzettel "$title" || exit 1)"
-    vim "$fname" +5
+    vim +5 -c 'cd %:p:h'  "$fname"
     ;;
   edit)
     zettel="$(get_zettel "$1")"
-    vim "$zettel_dir/$zettel"
+    vim -c 'cd %:p:h' "$zettel_dir/$zettel"
     ;;
   grep)
     test -z "$1" && (echo "No search term provided" ; exit 1)
