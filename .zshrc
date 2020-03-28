@@ -145,10 +145,10 @@ source ~/.zsh/plugins/z.sh
 alias j=z
 
 # pipenv completion
-eval "$(pipenv --completion)"
+command -v pipenv >/dev/null && eval "$(pipenv --completion)"
 
 # Stack completion
-eval "$(stack --bash-completion-script stack)"
+command -v stack >/dev/null && eval "$(stack --bash-completion-script stack)"
 
 eval "$(journal completion)"
 eval "$(zettel completion)"
