@@ -96,6 +96,7 @@ class Journal:
         date_header = "".join(header(date.today().strftime(FMT)))
         if date_header in self._headers:
             return
+        self._add(Line(""))
         self._add(Header(date_header))
         self._add(Line(""))
 
