@@ -1,5 +1,5 @@
 #!/bin/sh
 
-NOTES_DIR=~/.notes ~/.local/bin/downsync_notes
-NOTES_DIR=~/.notes ~/.local/bin/tasks
-NOTES_DIR=~/.notes ~/.local/bin/upsync_notes
+NOTES_DIR=~/.notes sh ~/.local/bin/downsync_notes
+NOTES_DIR=~/.notes sh ~/.local/bin/tasks
+NOTES_DIR=~/.notes sh ~/.local/bin/upsync_notes
