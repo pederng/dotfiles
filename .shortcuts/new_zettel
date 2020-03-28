@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ZETTEL_DIR=~/.notes/zettelkasten sh ~/.local/bin/zettel new
