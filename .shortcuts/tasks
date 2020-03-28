@@ -1,3 +1,7 @@
-#!/usr/bin/zsh
+#!/bin/sh
 
-tasks
+NOTES_DIR=~/.notes
+
+./.local/bin/downsync_notes
+./.local/bin/tasks
+./.local/bin/upsync_notes
