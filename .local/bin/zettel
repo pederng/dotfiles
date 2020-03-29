@@ -32,8 +32,11 @@ cat <<CONTENT
 
 
 ##### Tags
+
 ##### References
+
 ##### Links
+
 CONTENT
 ) > "$file"
 echo "$file"
