@@ -1,5 +1,5 @@
-#!/bin/bash
+#!/bin/sh
 
 NOTES_DIR=~/.notes bash ~/.local/bin/downsync_notes
-ZETTEL_DIR=~/.notes/zettelkasten bash ~/.local/bin/zettel new
+NOTES_DIR=~/.notes python ~/.local/bin/journal
 NOTES_DIR=~/.notes bash ~/.local/bin/upsync_notes

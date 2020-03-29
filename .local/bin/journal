@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import sys
 import subprocess
+import os
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
@@ -15,7 +16,7 @@ from highlight import Color, colored, highlight_lines
 FMT = "%A %B %d %Y"
 BRK = "\n"
 HEADER = "# "
-JOURNAL = Path("/home/peder/.notes/journal.md")
+JOURNAL = Path(f"{os.environ.get('NOTES_DIR')}/journal.md")
 COMMANDS = ["sync", "completion", "week", "dates", "grep"]
 COMPLETION = f"""
 __journal_completions()
