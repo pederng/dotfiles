@@ -84,12 +84,13 @@ conf() {
         ssh)         vim ~/.ssh/config ;;
         emacs)       vim ~/.emacs.d/init.el ;;
         starship)    vim ~/.config/starship.toml ;;
+        xresources)  vim ~/.Xresources && xrdb ~/.Xresources;;
         *)           echo "Unknown application: $1" ;;
     esac
 }
 
 function _complete_conf {
-  reply=('functions' 'aliases' 'zsh' 'zsh-local' 'vim' 'vim-local' 'emacs' 'mutt' 'xmonad' 'alacritty' 'qutebrowser' 'tmux' 'ssh' 'starship')
+  reply=('functions' 'aliases' 'zsh' 'zsh-local' 'vim' 'vim-local' 'emacs' 'mutt' 'xmonad' 'alacritty' 'qutebrowser' 'tmux' 'ssh' 'starship' 'xresources')
 }
 compctl -K _complete_conf conf
 
