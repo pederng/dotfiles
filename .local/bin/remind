@@ -5,4 +5,4 @@ next_event="$(gcalcli agenda --nostarted --nodeclined --military --tsv | head -1
 time="$(echo "$next_event" | cut -f2)"
 description="$(echo "$next_event" | cut -f5-)"
 
-gcalcli remind 10 "dunstify -u low -t 5000 'Upcoming event' '$time: $description'"
+gcalcli remind 5 "dunstify -u low -t 5000 'Upcoming event' '$time: $description'"
