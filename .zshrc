@@ -84,7 +84,7 @@ conf() {
         ssh)         vim ~/.ssh/config ;;
         emacs)       vim ~/.emacs.d/init.el ;;
         starship)    vim ~/.config/starship.toml ;;
-        xresources)  vim ~/.Xresources && xrdb ~/.Xresources;;
+        xresources)  vim $XDG_CONFIG_HOME/X11/xresources && xrdb -merge $XDG_CONFIG_HOME/X11/xresources;;
         *)           echo "Unknown application: $1" ;;
     esac
 }
