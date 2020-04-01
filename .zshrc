@@ -109,6 +109,7 @@ source ~/.local/bin/virtualenvwrapper.sh
 # Base16 Shell
 BASE16_SHELL=$HOME/.config/base16-shell/
 [ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
+export BASE16_SHELL_HOOKS=$XDG_CONFIG_HOME/base16-hooks
 
 # export python lib path
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib:/usr/local/lib
