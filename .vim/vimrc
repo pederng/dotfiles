@@ -47,7 +47,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'mgee/lightline-bufferline'
   Plug 'maximbaz/lightline-ale'
   Plug 'daviesjamie/vim-base16-lightline'
-  Plug 'chriskempson/base16-vim'
+  Plug 'pedernot/base16-vim'
 
   " Search
   Plug 'junegunn/fzf.vim'
