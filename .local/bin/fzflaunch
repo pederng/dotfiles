@@ -1,2 +1,2 @@
 #!/bin/bash -e
-dmenu_path | fzfmenu --header "launch" +m | ${SHELL:-"/bin/sh"} &
+dmenu_path | fzfmenu --prompt \"run\> \" +m | ${SHELL:-"/bin/sh"} &
