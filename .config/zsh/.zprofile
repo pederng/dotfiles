@@ -32,3 +32,8 @@ export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
 export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
 export XAUTHORITY="$XDG_RUNTIME_DIR"/Xauthority
+export XINITRC="$XDG_CONFIG_HOME"/X11/xinitrc
+export GNUPGHOME="$XDG_DATA_HOME"/gnupg
+
+# Custom python startup script
+export PYTHONSTARTUP="$XDG_CONFIG_HOME"/python/startup.py

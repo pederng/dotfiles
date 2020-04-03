@@ -35,5 +35,9 @@ alias https='http --default-scheme=https'
 alias emacs="emacs -nw"
 alias mutt='neomutt'
 
+alias startx="startx $XINITRC"
+alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
+alias gcalcli="gcalcli --config-folder=$XDG_CONFIG_HOME/gcalcli"
+
 # dotfile storage config
 alias dotfiles='git --git-dir=$XDG_DATA_HOME/dotfiles/ --work-tree=$HOME'

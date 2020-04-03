@@ -1,7 +1,7 @@
 [general]
 ui = ttyui
 accounts = PederGalteland
-pythonfile=~/.mutt/offlineimap.py
+pythonfile=~/.config/mutt/offlineimap.py
 fsync = False
 
 [Account PederGalteland]
@@ -11,7 +11,7 @@ postsynchook = notmuch new
 
 [Repository PederGalteland-Local]
 type = Maildir
-localfolders = ~/.mail/gmail
+localfolders = ~/.local/share/mail/gmail
 nametrans = lambda folder: {'drafts':    '[Gmail]/Drafts',
 														'sent':      '[Gmail]/Sent Mail',
 														'spam':      '[Gmail]/Spam',

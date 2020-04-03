@@ -63,30 +63,28 @@ zshrc=$ZDOTDIR/.zshrc
 conf() {
     case $1 in
         pacman)      svim /etc/pacman.conf ;;
-        tmux)        vim ~/.tmux.conf ;;
-        mutt)        vim ~/.muttrc ;;
+        tmux)        vim $XDG_CONFIG_HOME/tmux/tmux.conf ;;
+        mutt)        vim $XDG_CONFIG_HOME/mutt/muttrc ;;
         vim)         vim $XDG_CONFIG_HOME/vim/vimrc ;;
         vim-local)   vim $XDG_CONFIG_HOME/vim/machine_specific_vimrc ;;
         xinit)       vim ~/.xinitrc ;;
-        zathura)     vim ~/.config/zathura/zathurarc ;;
+        zathura)     vim $XDG_CONFIG_HOME/zathura/zathurarc ;;
         zsh)         vim $zshrc && source $zshrc ;;
+        zprofile)    vim $ZDOTDIR/.zprofile ;;
         zsh-local)   vim $ZDOTDIR/machine_specific && source $zshrc ;;
         aliases)     vim $ZDOTDIR/aliases && source $zshrc ;;
         functions)   vim $ZDOTDIR/functions && source $zshrc ;;
-        xmonad)      vim ~/.xmonad/xmonad.hs && xmonad --recompile && xmonad --restart ;;
-        git)         vim ~/.gitconfig ;;
-        alacritty)   vim ~/.config/alacritty/alacritty.yml ;;
-        qutebrowser) vim ~/.config/qutebrowser/config.py ;;
+        git)         vim $XDG_CONFIG_HOME/git/config ;;
+        qutebrowser) vim $XDG_CONFIG_HOME/qutebrowser/config.py ;;
         ssh)         vim ~/.ssh/config ;;
-        emacs)       vim ~/.emacs.d/init.el ;;
-        starship)    vim ~/.config/starship.toml ;;
+        starship)    vim $XDG_CONFIG_HOME/starship.toml ;;
         xresources)  vim $XDG_CONFIG_HOME/X11/xresources && xrdb -merge $XDG_CONFIG_HOME/X11/xresources;;
         *)           echo "Unknown application: $1" ;;
     esac
 }
 
 function _complete_conf {
-  reply=('functions' 'aliases' 'zsh' 'zsh-local' 'vim' 'vim-local' 'emacs' 'mutt' 'xmonad' 'alacritty' 'qutebrowser' 'tmux' 'ssh' 'starship' 'xresources')
+  reply=('functions' 'aliases' 'zsh' 'zprofile' 'zsh-local' 'vim' 'vim-local' 'mutt' 'qutebrowser' 'tmux' 'ssh' 'starship' 'xresources')
 }
 compctl -K _complete_conf conf
 
@@ -113,7 +111,7 @@ source $ZDOTDIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 
 # Fuzzy completion
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f $XDG_CONFIG_HOME/fzf/fzf.zsh ] && source $XDG_CONFIG_HOME/fzf/fzf.zsh
 export FZF_DEFAULT_OPTS="--multi"
 export FZF_DEFAULT_COMMAND='fd --type f'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -163,3 +161,5 @@ source $ZDOTDIR/functions
 
 #----Machine-specific----
 source $ZDOTDIR/machine_specific
+
+[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh

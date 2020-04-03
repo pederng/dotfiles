@@ -10,7 +10,7 @@ set ssl_force_tls = yes
 set smtp_url = 'smtps://peder.galteland@telenordigital.com@smtp.gmail.com:465/'
 set smtp_pass = `pass gmailmutt`
 
-set folder = "~/.mail"
+set folder = "~/.local/share/mail"
 mailboxes +gmail/INBOX \
           +gmail/drafts \
           +gmail/sent \
@@ -24,9 +24,9 @@ mailboxes +gmail/INBOX \
 set spoolfile        = "+gmail/INBOX"
 set record           = "+gmail/sent"
 set postponed        = "+gmail/drafts"
-set header_cache     = "~/.mutt/cache/headers"
-set message_cachedir = "~/.mutt/cache/bodies"
-set certificate_file = "~/.mutt/certificates"
+set header_cache     = "~/.cache/mutt/headers"
+set message_cachedir = "~/.cache/mutt/bodies"
+set certificate_file = "~/.local/share/mutt/certificates"
 set move = no
 set delete
 unset confirmappend
