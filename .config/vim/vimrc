@@ -1,11 +1,22 @@
 " =============================================================================
+" Conform to XDG spec
+" =============================================================================
+set undodir=$XDG_DATA_HOME/vim/undo
+set directory=$XDG_DATA_HOME/vim/swap
+set backupdir=$XDG_DATA_HOME/vim/backup
+set viewdir=$XDG_DATA_HOME/vim/view
+set viminfo+='1000,n$XDG_DATA_HOME/vim/viminfo
+set runtimepath=$XDG_CONFIG_HOME/vim,$VIMRUNTIME,$XDG_CONFIG_HOME/vim/after
+
+" =============================================================================
 " Load plugins
 " =============================================================================
-if empty(glob('~/.vim/autoload/plug.vim'))
-  execute '!curl -fLo ~/.vim/autoload/plug.vim https://raw.github.com/junegunn/vim-plug/master/plug.vim'
+
+if empty(glob('$XDG_CONFIG_HOME/vim/autoload/plug.vim'))
+  execute '!curl -fLo $XDG_CONFIG_HOME/vim/autoload/plug.vim https://raw.github.com/junegunn/vim-plug/master/plug.vim'
 endif
 
-call plug#begin('~/.vim/plugged')
+call plug#begin('$XDG_CONFIG_HOME/vim/plugged')
 
   " General Utils
   Plug 'terryma/vim-smooth-scroll'
@@ -527,6 +538,6 @@ command SQL enew | setlocal buftype=nofile | setlocal ft=pgsql
 " Machine specific config
 " =============================================================================
 
-if filereadable(expand('~/.vim/machine_specific_vimrc'))
-	source ~/.vim/machine_specific_vimrc
+if filereadable(expand('$XDG_CONFIG_HOME/vim/machine_specific_vimrc'))
+	source $XDG_CONFIG_HOME/vim/machine_specific_vimrc
 endif

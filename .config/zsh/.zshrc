@@ -65,8 +65,8 @@ conf() {
         pacman)      svim /etc/pacman.conf ;;
         tmux)        vim ~/.tmux.conf ;;
         mutt)        vim ~/.muttrc ;;
-        vim)         vim ~/.vim/vimrc ;;
-        vim-local)   vim ~/.vim/machine_specific_vimrc ;;
+        vim)         vim $XDG_CONFIG_HOME/vim/vimrc ;;
+        vim-local)   vim $XDG_CONFIG_HOME/vim/machine_specific_vimrc ;;
         xinit)       vim ~/.xinitrc ;;
         zathura)     vim ~/.config/zathura/zathurarc ;;
         zsh)         vim $zshrc && source $zshrc ;;
