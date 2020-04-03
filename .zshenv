@@ -1,2 +1,1 @@
-typeset -U path
-path=(~/.local/bin $GOPATH/bin ~/.cabal/bin, $path)
+export ZDOTDIR=$XDG_CONFIG_HOME/zsh

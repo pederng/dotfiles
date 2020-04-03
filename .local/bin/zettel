@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-zettel_dir=${ZETTEL_DIR-$HOME/.notes/zettelkasten}
+zettel_dir=${ZETTEL_DIR-$XDG_DATA_HOME/notes/zettelkasten}
 CMD=$1
 
 test -z "$1" && $0 edit

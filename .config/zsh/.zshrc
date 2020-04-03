@@ -1,5 +1,5 @@
 # Lines configured by zsh-newuser-install
-HISTFILE=~/.histfile
+HISTFILE=$XDG_DATA_HOME/zsh/histfile
 HISTSIZE=100000
 SAVEHIST=10000
 setopt incappendhistory autocd extendedglob
@@ -11,13 +11,13 @@ bindkey -v
 setopt prompt_subst
 
 zstyle ':completion:*' completer _complete _ignored
-zstyle :compinstall filename '/home/peder/.zshrc'
+zstyle :compinstall filename "$ZDOTDIR/.zshrc"
 
 
-fpath=(~/.zsh/completions $fpath)
-fpath=(~/.zfunc $fpath)
+fpath=($ZDOTDIR/completions $fpath)
+fpath=($ZDOTDIR/zfunc $fpath)
 autoload -Uz compinit
-compinit
+compinit -d $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION
 
 autoload -U bashcompinit
 bashcompinit
@@ -27,11 +27,6 @@ setopt NO_HUP
 
 # Disable c-s hanging of terminal
 stty -ixon
-
-# Path
-export GOPATH=~/workspace/go
-path=($path $GOPATH/bin)
-
 
 # Tab completion for cd ..
 
@@ -63,6 +58,7 @@ eval "$(starship init zsh)"
 # Visual mode fixes
 export KEYTIMEOUT=1
 
+zshrc=$ZDOTDIR/.zshrc
 #Configurations
 conf() {
     case $1 in
@@ -73,10 +69,10 @@ conf() {
         vim-local)   vim ~/.vim/machine_specific_vimrc ;;
         xinit)       vim ~/.xinitrc ;;
         zathura)     vim ~/.config/zathura/zathurarc ;;
-        zsh)         vim ~/.zshrc && source ~/.zshrc ;;
-        zsh-local)   vim ~/.zsh/machine_specific && source ~/.zshrc ;;
-        aliases)     vim ~/.zsh/aliases && source ~/.zshrc ;;
-        functions)   vim ~/.zsh/functions && source ~/.zshrc ;;
+        zsh)         vim $zshrc && source $zshrc ;;
+        zsh-local)   vim $ZDOTDIR/machine_specific && source $zshrc ;;
+        aliases)     vim $ZDOTDIR/aliases && source $zshrc ;;
+        functions)   vim $ZDOTDIR/functions && source $zshrc ;;
         xmonad)      vim ~/.xmonad/xmonad.hs && xmonad --recompile && xmonad --restart ;;
         git)         vim ~/.gitconfig ;;
         alacritty)   vim ~/.config/alacritty/alacritty.yml ;;
@@ -94,15 +90,9 @@ function _complete_conf {
 }
 compctl -K _complete_conf conf
 
-# Export default programs
-export EDITOR="vim"
-export BROWSER="qutebrowser"
-
-# XDG
-export XDG_CONFIG_HOME=$HOME/.config
 
 # Python virtualenv
-export WORKON_HOME=~/.virtualenvs
+export WORKON_HOME=$XDG_DATA_HOME/virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 source ~/.local/bin/virtualenvwrapper.sh
 
@@ -116,10 +106,10 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib:/usr/local/lib
 
 
 #Syntax highlighting
-if [ ! -f ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
-  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting
+if [ ! -f $ZDOTDIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZDOTDIR/zsh-syntax-highlighting
 fi
-source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $ZDOTDIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 
 # Fuzzy completion
@@ -134,7 +124,6 @@ export KEYTIMEOUT=10
 bindkey -M viins 'jk' vi-cmd-mode
 
 
-# pip zsh completion start
 function _pip_completion {
   local words cword
   read -Ac words
@@ -144,10 +133,13 @@ function _pip_completion {
              PIP_AUTO_COMPLETE=1 $words[1] ) )
 }
 compctl -K _pip_completion pip
-# pip zsh completion end
 
-source ~/.zsh/plugins/z.sh
+source $ZDOTDIR/plugins/z.sh
 alias j=z
+
+# Notes
+export NOTES_DIR=$XDG_DATA_HOME/notes
+export ZETTEL_DIR=$NOTES_DIR/zettelkasten
 
 # pipenv completion
 command -v pipenv >/dev/null && eval "$(pipenv --completion)"
@@ -162,15 +154,12 @@ eval "$(zettel completion)"
 export GPG_TTY="$(tty)"
 export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 
-# Notes
-export NOTES_DIR=$HOME/.notes
-export ZETTEL_DIR=$NOTES_DIR/zettelkasten
 
 #----Aliases-----
-source ~/.zsh/aliases
+source $ZDOTDIR/aliases
 
 #----Functions----
-source ~/.zsh/functions
+source $ZDOTDIR/functions
 
 #----Machine-specific----
-source ~/.zsh/machine_specific
+source $ZDOTDIR/machine_specific
