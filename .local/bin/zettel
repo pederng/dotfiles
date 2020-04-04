@@ -71,6 +71,13 @@ _grep() {
   grep -Rl "$1" "$zettel_dir" | sort -n
 }
 
+sort_line() {
+  while read -r first second
+  do
+    [[ "$first" < "$second" ]] && echo "$first" "$second" || echo "$second" "$first"
+  done
+}
+
 case $CMD in
   new)
     title="$*"
@@ -116,7 +123,15 @@ case $CMD in
     mklink "$second" >> "$zettel_dir/$first"
     ;;
   unlinked)
-    grep -REL '\[[a-zA-Z .]*\]' "$zettel_dir" | xargs bat
+    grep -REL '\[[a-zA-Z .]*\]' "$zettel_dir"
+    ;;
+  links)
+    grep -oRE '[0-9]{12}-[a-z\-]*' "$zettel_dir" \
+      | sed 's:^.*/::;s:\.md::' \
+      | awk -F ':' '{print $1 " " $2}' \
+      | sort_line \
+      | sort \
+      | uniq
     ;;
   tags)
     grep -hoRE '\:[a-z]*\:' "$zettel_dir" | sort | uniq | sed 's/://g'
