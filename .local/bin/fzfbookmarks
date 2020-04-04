@@ -1,3 +1,3 @@
 #!/bin/bash -e
-page=$(buku -p -f 5 | grep -v '^waiting for input$' | fzfmenu -m --prompt \"select url\> \" | awk '{print $1}')
-buku -o "$page"
+page=$(buku -p -f 4 | awk -F '\t' '{print $3 " " $4 " " $2}' | fzfmenu | awk '{print $3}')
+xdg-open "$page"
