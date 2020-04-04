@@ -1,7 +1,8 @@
 [general]
 ui = ttyui
 accounts = PederGalteland
-pythonfile=~/.config/mutt/offlineimap.py
+pythonfile=$XDG_CONFIG_HOME/mutt/offlineimap.py
+metadata=$XDG_DATA_HOME/offlineimap
 fsync = False
 
 [Account PederGalteland]
