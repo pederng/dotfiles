@@ -7,7 +7,7 @@ test -z "$1" && $0 edit
 shift
 
 COMMANDS=(
-  new edit grep grep-filter show ls filter sync link unlinked tags index completion
+  new edit grep grep-filter show ls filter sync link links unlinked tags index completion
 )
 
 nc="\033[0m"
@@ -123,7 +123,7 @@ case $CMD in
     mklink "$second" >> "$zettel_dir/$first"
     ;;
   unlinked)
-    grep -REL '\[[a-zA-Z .]*\]' "$zettel_dir"
+    grep -REL '[0-9]{12}-[a-z\-]*' "$zettel_dir" \
     ;;
   links)
     grep -oRE '[0-9]{12}-[a-z\-]*' "$zettel_dir" \
