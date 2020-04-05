@@ -25,3 +25,7 @@ color listnormal_unread blue default
 color listfocus_unread yellow default bold
 color info red black bold
 color article cyan default
+
+browser xdg-open
+macro , open-in-browser
+macro v set browser "setsid mpv"; open-in-browser ; set browser xdg-open
