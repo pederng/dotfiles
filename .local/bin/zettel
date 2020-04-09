@@ -23,8 +23,8 @@ mkzettel() {
   grep -qR "$id" "$zettel_dir" && return 1
   date=$(date +'%A %B %d %Y %H:%M')
   file="$zettel_dir/$id-$title_in_filename.md"
-(
-cat <<CONTENT
+  (
+    cat <<CONTENT
 # $title
 <!-- id: $id -->
 <!-- date: $date -->
@@ -37,8 +37,8 @@ cat <<CONTENT
 
 ##### Links
 CONTENT
-) > "$file"
-echo "$file"
+  ) >"$file"
+  echo "$file"
 }
 
 get_zettel() {
@@ -64,7 +64,7 @@ strip_path() {
 }
 
 add_path() {
-  sed  "s:^:$zettel_dir/:"
+  sed "s:^:$zettel_dir/:"
 }
 
 _grep() {
@@ -72,77 +72,88 @@ _grep() {
 }
 
 sort_line() {
-  while read -r first second
-  do
+  while read -r first second; do
     [[ "$first" < "$second" ]] && echo "$first" "$second" || echo "$second" "$first"
   done
 }
 
 case $CMD in
-  new)
-    title="$*"
-    if [ -z "$title" ]; then
-      echo "Enter title"
-      read -r title
-    fi
-    fname="$(mkzettel "$title" || exit 1)"
-    vim +5 -c 'cd %:p:h'  "$fname"
-    ;;
-  edit)
-    zettel="$(get_zettel "$1")"
-    vim -c 'cd %:p:h' "$zettel_dir/$zettel"
-    ;;
-  grep)
-    test -z "$1" && (echo "No search term provided" ; exit 1)
-    _grep "$@" | xargs bat
-    ;;
-  grep-filter)
-    test -z "$1" && (echo "No search term provided" ; exit 1)
-    _grep "$@" | strip_path | filter | add_path | xargs bat
-    ;;
-  show)
-    zettel="$(get_zettel "$1")"
-    bat "$zettel_dir/$zettel"
-    ;;
-  ls)
-    fd . "$zettel_dir" | strip_path | sort -n
-    ;;
-  filter)
-    $0 ls | filter "$@"
-    ;;
-  sync)
-    downsync_notes
-    upsync_notes
-    ;;
-  link)
-    first="$(get_zettel "$1")"
-    second="$(get_zettel "$2" "$first")"
-    test "$first" = "$second" && (echo "Cannot link to itself"; exit 1)
-    grep -q "$first" "$zettel_dir/$second" && (echo "Already linked"; exit 1)
-    mklink "$first" >> "$zettel_dir/$second"
-    mklink "$second" >> "$zettel_dir/$first"
-    ;;
-  unlinked)
-    grep -REL '[0-9]{12}-[a-z\-]*' "$zettel_dir" \
-    ;;
-  links)
-    grep -oRE '[0-9]{12}-[a-z\-]*' "$zettel_dir" \
-      | sed 's:^.*/::;s:\.md::' \
-      | awk -F ':' '{print $1 " " $2}' \
-      | sort_line \
-      | sort \
-      | uniq
-    ;;
-  tags)
-    grep -hoRE '\:[a-z]*\:' "$zettel_dir" | sort | uniq | sed 's/://g'
-    ;;
-  index)
-    grep -oRE '\:[a-z]*\:' "$zettel_dir" \
-      | awk -v green="$green" -v nc="$nc" -F : '{print green$3nc " " $1}' \
-      | sed "s:$zettel_dir/::" | sort | column -t
-    ;;
-  completion)
-cat << EOF
+new)
+  title="$*"
+  if [ -z "$title" ]; then
+    echo "Enter title"
+    read -r title
+  fi
+  fname="$(mkzettel "$title" || exit 1)"
+  vim +5 -c 'cd %:p:h' "$fname"
+  ;;
+edit)
+  zettel="$(get_zettel "$1")"
+  vim -c 'cd %:p:h' "$zettel_dir/$zettel"
+  ;;
+grep)
+  test -z "$1" && (
+    echo "No search term provided"
+    exit 1
+  )
+  _grep "$@" | xargs bat
+  ;;
+grep-filter)
+  test -z "$1" && (
+    echo "No search term provided"
+    exit 1
+  )
+  _grep "$@" | strip_path | filter | add_path | xargs bat
+  ;;
+show)
+  zettel="$(get_zettel "$1")"
+  bat "$zettel_dir/$zettel"
+  ;;
+ls)
+  fd . "$zettel_dir" | strip_path | sort -n
+  ;;
+filter)
+  $0 ls | filter "$@"
+  ;;
+sync)
+  downsync_notes
+  upsync_notes
+  ;;
+link)
+  first="$(get_zettel "$1")"
+  second="$(get_zettel "$2" "$first")"
+  test "$first" = "$second" && (
+    echo "Cannot link to itself"
+    exit 1
+  )
+  grep -q "$first" "$zettel_dir/$second" && (
+    echo "Already linked"
+    exit 1
+  )
+  mklink "$first" >>"$zettel_dir/$second"
+  mklink "$second" >>"$zettel_dir/$first"
+  ;;
+unlinked)
+  grep -REL '[0-9]{12}-[a-z\-]*' "$zettel_dir"
+  ;;
+links)
+  grep -oRE '[0-9]{12}-[a-z\-]*' "$zettel_dir" |
+    sed 's:^.*/::;s:\.md::' |
+    awk -F ':' '{print $1 " " $2}' |
+    sort_line |
+    sort |
+    uniq
+  ;;
+tags)
+  grep -hoRE '\:[a-z]*\:' "$zettel_dir" | sort | uniq | sed 's/://g'
+  ;;
+index)
+  grep -oRE '\:[a-z]*\:' "$zettel_dir" |
+    awk -v green="$green" -v nc="$nc" -F : '{print green$3nc " " $1}' |
+    sed "s:$zettel_dir/::" | sort | column -t
+  ;;
+completion)
+  cat <<EOF
 __zettel_completions()
 {
   if (( COMP_CWORD > 1 )); then
@@ -158,9 +169,8 @@ __zettel_completions()
 }
 complete -F __zettel_completions zettel
 EOF
-    ;;
+  ;;
 esac
-
 
 #TODO
 # Rename command?
