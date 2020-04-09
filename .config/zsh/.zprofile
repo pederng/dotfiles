@@ -7,6 +7,8 @@ export PATH="$XDG_DATA_HOME/cargo/bin:$PATH"
 export PATH="$XDG_DATA_HOME/poetry/bin:$PATH"
 export GOPATH=~/workspace/go
 export PATH="$GOPATH/bin:$PATH"
+export PATH="$XDG_DATA_HOME/gem/bin:$PATH"
+export PATH="$XDG_DATA_HOME/npm/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 
 # Overrides for applications not respecting XDG dirs
@@ -34,6 +36,8 @@ export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
 export XAUTHORITY="$XDG_RUNTIME_DIR"/Xauthority
 export XINITRC="$XDG_CONFIG_HOME"/X11/xinitrc
 export GNUPGHOME="$XDG_DATA_HOME"/gnupg
+export GEM_HOME="$XDG_DATA_HOME"/gem
+export GEM_SPEC_CACHE="$XDG_CACHE_HOME"/gem
 
 # Custom python startup script
 export PYTHONSTARTUP="$XDG_CONFIG_HOME"/python/startup.py
