@@ -50,7 +50,7 @@ function ftpane() {
 
 function v() {
   local files
-  files=$(grep '^>' ~/.viminfo | cut -c3- |
+  files=$(grep '^>' $XDG_DATA_HOME/vim/viminfo | cut -c3- |
   while read line; do
     echo "$line"
   done | fzf-tmux -d -m -q "$*" -1) && vim ${files//\~/$HOME}
