@@ -236,7 +236,7 @@ set tags=./tags;/
 " =============================================================================
 " fzf
 " =============================================================================
-set rtp+=~/.fzf
+set rtp+=~/.local/share/fzf
 
 nnoremap <leader>ff :Files<cr>
 nnoremap <leader>fa :GFiles<cr>
@@ -377,6 +377,14 @@ au User lsp_setup call lsp#register_server({
 		\ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
 		\ 'whitelist': ['typescript', 'typescript.tsx'],
 		\ })
+endif
+
+if executable('bash-language-server')
+	au User lsp_setup call lsp#register_server({
+				\ 'name': 'bash-language-server',
+				\ 'cmd': {server_info->[&shell, &shellcmdflag, 'bash-language-server start']},
+				\ 'whitelist': ['sh'],
+				\ })
 endif
 
 imap <c-l> <Plug>(asyncomplete_force_refresh)
