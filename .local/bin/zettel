@@ -148,6 +148,8 @@ tags)
   grep -hoRE '\:[a-z]*\:' "$zettel_dir" | sort | uniq | sed 's/://g'
   ;;
 index)
+  [ "$1" = '-nc' ] && green=''
+  [ "$1" = '-nc' ] && nc=''
   grep -oRE '\:[a-z]*\:' "$zettel_dir" |
     awk -v green="$green" -v nc="$nc" -F : '{print green$3nc " " $1}' |
     sed "s:$zettel_dir/::" | sort | column -t
