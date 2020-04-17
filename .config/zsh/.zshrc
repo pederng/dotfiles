@@ -1,13 +1,10 @@
-# Lines configured by zsh-newuser-install
 HISTFILE=$XDG_DATA_HOME/zsh/histfile
 HISTSIZE=100000
 SAVEHIST=10000
 setopt incappendhistory autocd extendedglob
 unsetopt beep nomatch notify
 bindkey -v
-# End of lines configured by zsh-newuser-install
 
-# The following lines were added by compinstall
 setopt prompt_subst
 
 zstyle ':completion:*' completer _complete _ignored
@@ -21,7 +18,6 @@ compinit -d $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION
 
 autoload -U bashcompinit
 bashcompinit
-# End of lines added by compinstall
 
 setopt NO_HUP
 
@@ -147,10 +143,6 @@ command -v stack >/dev/null && eval "$(stack --bash-completion-script stack)"
 
 eval "$(journal completion)"
 eval "$(zettel completion)"
-
-
-export GPG_TTY="$(tty)"
-export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 
 
 #----Aliases-----
