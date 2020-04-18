@@ -1,0 +1,50 @@
+#!/bin/bash -e
+
+CMD=$1
+
+test -z "$1" && $0 open
+test -z "$1" && exit 0
+shift
+
+COMMANDS=(
+  open delete add completion
+)
+
+get_page() {
+  buku -t reading-list -f 4 | awk -F '\t' '{print $1 "\t" $3 "\t" $2}' \
+      | column -t -s "$(printf '\t')" -o "$(printf '\t')" | fzf
+}
+
+get_idx() {
+  awk -F '\t' '{print $1}'
+}
+
+get_url() {
+  awk -F '\t' '{print $3}'
+}
+
+case $CMD in
+open)
+  url=$(get_page | get_url)
+  [ -z "$url" ] && exit 0
+  xdg-open "$url"
+  ;;
+add)
+  test -z "$1" && (echo Input needed; exit 1)
+  buku -a "$@" reading-list
+  ;;
+delete)
+  idx=$(get_page | get_idx)
+  [ -z "$idx" ] && exit 0
+  buku -d "$idx"
+  ;;
+completion)
+  cat <<EOF
+__reading-list_completions()
+{
+  COMPREPLY=( \$(compgen -W "${COMMANDS[*]}" "\${COMP_KEY}") )
+}
+complete -F __reading-list_completions reading-list
+EOF
+  ;;
+esac
