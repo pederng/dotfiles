@@ -1,3 +1,6 @@
 #!/bin/sh
 
+PATH=/usr/bin:~/.local/share/fzf/bin/fzf
+NOTES_DIR=~/.local/share/notes bash ~/.local/bin/downsync_notes
 bash ~/.local/bin/reading-list open
+NOTES_DIR=~/.local/share/notes bash ~/.local/bin/upsync_notes

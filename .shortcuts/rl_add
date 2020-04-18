@@ -3,4 +3,9 @@
 echo "Enter url"
 read -r url
 
-bash ~/.local/bin/reading-list add "$url"
+PATH="$HOME/.local/bin:$HOME/.local/share/fzf/bin/fzf:$PATH"
+export NOTES_DIR="$HOME/.local/share/notes"
+
+downsync_notes
+reading-list add "$url"
+upsync_notes
