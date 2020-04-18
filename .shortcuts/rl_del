@@ -1,0 +1,3 @@
+#!/bin/sh
+
+bash ~/.local/bin/reading-list delete

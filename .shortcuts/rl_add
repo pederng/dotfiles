@@ -1,0 +1,6 @@
+#!/bin/sh
+
+echo "Enter url"
+read -r url
+
+bash ~/.local/bin/reading-list add "$url"
