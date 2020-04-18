@@ -1,5 +1,5 @@
 #!/bin/bash
 
-NOTES_DIR=~/.notes bash ~/.local/bin/downsync_notes
-ZETTEL_DIR=~/.notes/zettelkasten bash ~/.local/bin/zettel new
-NOTES_DIR=~/.notes bash ~/.local/bin/upsync_notes
+NOTES_DIR=~/.local/share/notes bash ~/.local/bin/downsync_notes
+ZETTEL_DIR=~/.local/share/notes/zettelkasten bash ~/.local/bin/zettel new
+NOTES_DIR=~/.local/share/notes bash ~/.local/bin/upsync_notes
