@@ -262,7 +262,7 @@ command! -bang -nargs=* Rg call fzf#vim#grep(g:rg_command .shellescape(<q-args>)
 let g:tex_flavour = 'latex'
 
 " yaml colors
-au BufNewFile,BufRead *.yaml,*.yml so ~/.vim/colors/yaml.vim
+au BufNewFile,BufRead *.yaml,*.yml so ~/.config/vim/colors/yaml.vim
 
 " =============================================================================
 " Smooth scroll
