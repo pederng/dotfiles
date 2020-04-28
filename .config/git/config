@@ -1,0 +1,43 @@
+[core]
+	excludesfile = ~/.config/git/ignore
+	pager = delta
+[interactive]
+  diffFilter = delta --color-only
+[user]
+	email = peder.galteland@telenordigital.com
+	name = Peder Notto Galteland
+	signingkey = 4980821A221FE5B1
+[alias]
+	a = add
+	b = branch
+	co = checkout
+	c = commit
+	ss = status -sb
+	s = status
+  graph = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+  mergelog = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --merges
+  amend = commit --amend -C HEAD
+  listfiles = diff-tree --no-commit-id --name-only -r
+  stash-all = stash save --include-untracked
+  files = !git diff --name-only $(git merge-base HEAD master)
+  stat = !git diff --stat $(git merge-base HEAD master)
+  review = !vim -p $(git files) +\"tabdo Gdiff master\" +\"let g:gitgutter_diff_base = 'master'\"
+  reviewone = !vim -p +\"tabdo Gdiff master\" +\"let g:gitgutter_diff_base = 'master'\"
+  compare = diff master...HEAD
+[push]
+	default = current
+[commit]
+  gpgsign = true
+[status]
+  showUntrackedFiles = all
+[remote "origin"]
+	prune = true
+[merge]
+	tool = vimdiff
+	conflictstyle = diff3
+[mergetool]
+	keepBackup = false
+[web]
+	browser = qb
+[browser "qb"]
+	cmd = qutebrowser
