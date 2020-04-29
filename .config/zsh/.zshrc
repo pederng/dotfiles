@@ -33,13 +33,13 @@ zstyle ':completion:*' special-dirs true
 bindkey '^p' up-history
 bindkey '^n' down-history
 bindkey '^?' backward-delete-char
-bindkey '^h' backward-delete-char
 bindkey '^d' delete-char
 bindkey '^[d' delete-word
-bindkey '^k' kill-line
-bindkey '^j' accept-line
+# bindkey '^h' backward-delete-char
+# bindkey '^k' kill-line
+# bindkey '^j' accept-line
+# bindkey '^l' clear-screen
 bindkey '^y' yank
-bindkey '^l' clear-screen
 bindkey '^w' backward-kill-word
 bindkey '^b' backward-char
 bindkey '^[b' backward-word
@@ -143,6 +143,7 @@ command -v stack >/dev/null && eval "$(stack --bash-completion-script stack)"
 
 eval "$(journal completion)"
 eval "$(zettel completion)"
+eval "$(reading-list completion)"
 
 
 #----Aliases-----
