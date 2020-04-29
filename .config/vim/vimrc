@@ -29,6 +29,7 @@ call plug#begin('$XDG_CONFIG_HOME/vim/plugged')
   Plug 'ntpeters/vim-better-whitespace'
   Plug 'vim-scripts/ReplaceWithRegister'
   Plug 'christoomey/vim-system-copy'
+  Plug 'christoomey/vim-tmux-navigator'
 
   " Text objects
   Plug 'kana/vim-textobj-user'
