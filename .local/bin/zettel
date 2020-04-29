@@ -1,13 +1,15 @@
 #!/bin/bash -e
 
 zettel_dir=${ZETTEL_DIR-$XDG_DATA_HOME/notes/zettelkasten}
+notes_dir=${NOTES_DIR-$XDG_DATA_HOME/notes}
 CMD=$1
 
 test -z "$1" && $0 edit
+test -z "$1" && exit 0
 shift
 
 COMMANDS=(
-  new edit grep grep-filter show ls filter sync link links unlinked tags index completion
+  new edit grep grep-filter show ls filter sync link links unlinked tags index inbox completion
 )
 
 nc="\033[0m"
@@ -77,6 +79,10 @@ sort_line() {
   done
 }
 
+_vim() {
+  vim -c 'cd %:p:h' "$@"
+}
+
 case $CMD in
 new)
   title="$*"
@@ -85,11 +91,11 @@ new)
     read -r title
   fi
   fname="$(mkzettel "$title" || exit 1)"
-  vim +5 -c 'cd %:p:h' "$fname"
+  _vim -c +5 "$fname"
   ;;
 edit)
   zettel="$(get_zettel "$1")"
-  vim -c 'cd %:p:h' "$zettel_dir/$zettel"
+  _vim "$zettel_dir/$zettel"
   ;;
 grep)
   test -z "$1" && (
@@ -154,6 +160,9 @@ index)
     awk -v green="$green" -v nc="$nc" -F : '{print green$3nc " " $1}' |
     sed "s:$zettel_dir/::" | sort | column -t
   ;;
+inbox)
+  _vim "$notes_dir/inbox.md"
+  ;;
 completion)
   cat <<EOF
 __zettel_completions()
@@ -175,9 +184,6 @@ EOF
 esac
 
 #TODO
-# Rename command?
 # Use ripgrep (batgrep?) to color grep matches
-# Render html
-# Render links using graphviz
 # Add color highlights to zettelid, for easier visual scanning.
 #   Something like year in red, month in green, day in blue and time in yellow.
