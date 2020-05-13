@@ -63,7 +63,6 @@ conf() {
         mutt)        vim $XDG_CONFIG_HOME/mutt/muttrc ;;
         vim)         vim $XDG_CONFIG_HOME/vim/vimrc ;;
         vim-local)   vim $XDG_CONFIG_HOME/vim/machine_specific_vimrc ;;
-        xinit)       vim ~/.xinitrc ;;
         zathura)     vim $XDG_CONFIG_HOME/zathura/zathurarc ;;
         zsh)         vim $zshrc && source $zshrc ;;
         zprofile)    vim $ZDOTDIR/.zprofile ;;
@@ -75,12 +74,13 @@ conf() {
         ssh)         vim ~/.ssh/config ;;
         starship)    vim $XDG_CONFIG_HOME/starship.toml ;;
         xresources)  vim $XDG_CONFIG_HOME/X11/xresources && xrdb -merge $XDG_CONFIG_HOME/X11/xresources;;
+        xinit)       vim $XDG_CONFIG_HOME/X11/xinitrc;;
         *)           echo "Unknown application: $1" ;;
     esac
 }
 
 function _complete_conf {
-  reply=('functions' 'aliases' 'zsh' 'zprofile' 'zsh-local' 'vim' 'vim-local' 'mutt' 'qutebrowser' 'tmux' 'ssh' 'starship' 'xresources')
+  reply=('functions' 'aliases' 'zsh' 'zprofile' 'zsh-local' 'vim' 'vim-local' 'mutt' 'qutebrowser' 'tmux' 'ssh' 'starship' 'xresources' 'xinit')
 }
 compctl -K _complete_conf conf
 
