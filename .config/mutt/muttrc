@@ -11,15 +11,15 @@ set smtp_url = 'smtps://peder.galteland@telenordigital.com@smtp.gmail.com:465/'
 set smtp_pass = `pass gmailmutt`
 
 set folder = "~/.local/share/mail"
-mailboxes +gmail/INBOX \
-          +gmail/drafts \
-          +gmail/sent \
-          +gmail/github.capture-backend \
-          +gmail/github.scripture \
-          +gmail/github.search \
-          +gmail/Jira \
-          +gmail/Bedriftsidrettslaget \
-          +gmail/Workplace
+mailboxes +gmail-td/inbox \
+          +gmail-td/drafts \
+          +gmail-td/sent \
+          +gmail-td/github/capture-backend \
+          +gmail-td/github/scripture \
+          +gmail-td/github/search \
+          +gmail-td/Jira
+          # +gmail-td/Bedriftsidrettslaget \
+          # +gmail-td/Workplace
 
 set spoolfile        = "+gmail/INBOX"
 set record           = "+gmail/sent"
