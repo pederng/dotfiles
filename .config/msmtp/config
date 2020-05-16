@@ -1,0 +1,32 @@
+# Set default values for all following accounts.
+defaults
+auth           on
+tls            on
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
+logfile        ~/.cache/msmtp.log
+
+# work gmail
+account        gmail-td
+host           smtp.gmail.com
+port           587
+from           peder.galteland@telenordigital.com
+user           peder.galteland@telenordigital.com
+passwordeval   "pass gmailmutt"
+
+# personal gmail
+account        gmail-personal
+host           smtp.gmail.com
+port           587
+from           pederng@gmail.com
+user           pederng@gmail.com
+passwordeval   "pass gmailmutt-personal"
+
+# purelymail
+account        purelymail
+host           smtp.purelymail.com
+port           587
+from           peder.notto@galte.land
+user           peder.notto@galte.land
+passwordeval   "pass purelymail"
+
+account default : gmail-td
