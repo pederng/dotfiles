@@ -1,163 +1,68 @@
 set realname = "Peder Notto Galteland
-set from = "peder.galteland@telenordigital.com"
 set use_from = yes
 set envelope_from = yes
-
-# Ensure TLS is enforced
-set ssl_starttls = yes
-set ssl_force_tls = yes
-
-set smtp_url = 'smtps://peder.galteland@telenordigital.com@smtp.gmail.com:465/'
-set smtp_pass = `pass gmailmutt`
-
-set folder = "~/.local/share/mail"
-mailboxes +gmail-td/inbox \
-          +gmail-td/drafts \
-          +gmail-td/sent \
-          +gmail-td/github/capture-backend \
-          +gmail-td/github/scripture \
-          +gmail-td/github/search \
-          +gmail-td/Jira
-          # +gmail-td/Bedriftsidrettslaget \
-          # +gmail-td/Workplace
-
-set spoolfile        = "+gmail/INBOX"
-set record           = "+gmail/sent"
-set postponed        = "+gmail/drafts"
-set header_cache     = "~/.cache/mutt/headers"
-set message_cachedir = "~/.cache/mutt/bodies"
-set certificate_file = "~/.local/share/mutt/certificates"
+set sendmail = /usr/bin/msmtp
 set move = no
 set delete
 unset confirmappend
 set quit
-
-# sidebar
-# set sidebar_delim   = '  │'
-set sidebar_visible = yes
-set sidebar_width   = 32
-color sidebar_new color221 color233
-
-# Needed to get and display mail (imap-fetch-mail)
 set editor = "vim"
 set charset = "utf-8"
 set record = ""
-
-# Viewing
+set quote_regexp = "^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"
 set sort = threads
 set sort_aux = last-date-received
-
 set date_format = "%m/%d"
 set index_format = "[%Z]  %D  %-20.20F  %s"
 set uncollapse_jump
 set sort_re
 set reply_regexp = "^(([Rr][Ee]?(\[[0-9]+\])?: *)?(\[[^]]+\] *)?)*"
-
-# Bindings
-bind index - collapse-all
-bind index,pager \` next-unread
-bind index <space> collapse-thread
-bind index,pager J sidebar-next
-bind index,pager K sidebar-prev
-bind index,pager O sidebar-open
-bind attach,index g first-entry
-bind attach,index G last-entry
-bind index R group-reply
-
-macro index \Cr "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" "mark all messages as read"
-macro index,pager o "<shell-escape>offlineimap<enter>"
-macro index,pager \cb "<pipe-message> urlscan<Enter>" "call urlscan to extract URLs out of a message"
-macro attach,compose \cb "<pipe-entry> urlscan<Enter>" "call urlscan to extract URLs out of a message"
-# 'L' performs a notmuch query, showing only the results
-macro index L "<enter-command>unset wait_key<enter><shell-escape>read -p 'notmuch query: ' x; echo \$x >~/.cache/mutt_terms<enter><limit>~i \"\`notmuch search --output=messages \$(cat ~/.cache/mutt_terms) | head -n 600 | perl -le '@a=<>;chomp@a;s/\^id:// for@a;$,=\"|\";print@a'\`\"<enter>" "show only messages matching a notmuch pattern"
-# 'a' shows all messages again (supersedes default <alias> binding)
-macro index a "<limit>all\n" "show all messages (undo limit)"
-# macro index <F8> \
-# 					"<enter-command>unset wait_key<enter><shell-escape>~/bin/mutt-notmuch --prompt search<enter><change-folder-readonly>~/.cache/mutt_results<enter>" \
-# 					"search mail (using notmuch)"
-# macro index <F9> \
-#           "<enter-command>unset wait_key<enter><pipe-message>~/bin/mutt-notmuch thread<enter><change-folder-readonly>~/.cache/mutt_results<enter><enter-command>set wait_key<enter>" \
-#           "search and reconstruct owning thread (using notmuch)"
-
-# Pager View Options ---------------------------------
-set pager_index_lines = 50 # number of index lines to show
+set pager_index_lines = 30 # number of index lines to show
 set pager_context = 3      # number of context lines to show
 set pager_stop             # don't go to next message automatically
 set menu_scroll            # scroll in menus
 set tilde                  # show tildes like in vim
 unset markers              # no ugly plus signs
+set mailcap_path = ~/.config/mutt/mailcap
+set sleep_time = 0
 
-set quote_regexp = "^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"
+set header_cache     = "~/.cache/mutt/headers"
+set message_cachedir = "~/.cache/mutt/bodies"
+set certificate_file = "~/.local/share/mutt/certificates"
+
 alternative_order text/plain text/enriched text/html
+auto_view text/html
 
-# Pager Key Bindings ---------------------------------
-bind pager g top
-bind pager G bottom
-bind pager p previous-subthread
-bind pager n next-subthread
-
-bind pager R  group-reply
-
-# View attachments properly.
-bind attach <return> view-mailcap
-
-# pgp
-set pgp_use_gpg_agent = yes
-set pgp_sign_as = 221FE5B1
-set pgp_timeout = 3600
-set crypt_autosign = yes
-set crypt_replyencrypt = yes
-
-# Gruvbox
-# basic colors ---------------------------------------------------------
-#     name        foreground  background  pattern
-color normal      color20     color0
-color error       color1      color0
-color tilde       color20     color0
-color message     color20     color0
-color markers     color1      color0
-color attachment  color8      color0
-color search      color2      color0
-color status      color8      color18
-color indicator   color7      color19
-color tree        color19     color0                  # arrow in threads
-
-color index       color20     color0       "~A"       # all messages
-color index       color1      color0       "~F"       # flagged messages
-color index       color20     color0       "~v~(!~N)" # collapsed thread with no unread
-color index       color4      color0       "~U"       # unread messages
-color index       color4      color0       "~v~(~N)"  # collapsed thread with some unread
-color index       color1      color0       "~v~(~F)"  # collapsed thread with some flagged
-color index       color0      color1       "~D"       # deleted messages
-
-# header
-color hdrdefault  color20     color18
-color header      color20     color18      "^"
-color header      color7      color18      "^(From)"
-color header      color7      color18      "^(Subject)"
-
-# body
-color normal      color7      color0
-color underline   color7      color0
-color bold        color7      color0
-color signature   color20     color0
-
-color quoted      color3      color0
-color quoted1     color2      color0
-color quoted2     color5      color0
-color quoted3     color6      color0
-color quoted4     color4      color0
-
-# pgp
-color body        color2      color0       "(Good signature)"
-color body        color2      color0       "^gpg: Good signature .*"
-color body        color20     color0       "^gpg: "
-color body        color1      color0       "(BAD signature)"
-color body        color1      color1       "^gpg: BAD signature from.*"
-
-# body url
-color body        color4      color0       "([a-z][a-z0-9+-]*://(((([a-z0-9_.!~*'();:&=+$,-]|%[0-9a-f][0-9a-f])*@)?((([a-z0-9]([a-z0-9-]*[a-z0-9])?)\\.)*([a-z]([a-z0-9-]*[a-z0-9])?)\\.?|[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+)(:[0-9]+)?)|([a-z0-9_.!~*'()$,;:@&=+-]|%[0-9a-f][0-9a-f])+)(/([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*(;([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*)*(/([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*(;([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*)*)*)?(\\?([a-z0-9_.!~*'();/?:@&=+$,-]|%[0-9a-f][0-9a-f])*)?(#([a-z0-9_.!~*'();/?:@&=+$,-]|%[0-9a-f][0-9a-f])*)?|(www|ftp)\\.(([a-z0-9]([a-z0-9-]*[a-z0-9])?)\\.)*([a-z]([a-z0-9-]*[a-z0-9])?)\\.?(:[0-9]+)?(/([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*(;([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*)*(/([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*(;([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*)*)*)?(\\?([-a-z0-9_.!~*'();/?:@&=+$,]|%[0-9a-f][0-9a-f])*)?(#([-a-z0-9_.!~*'();/?:@&=+$,]|%[0-9a-f][0-9a-f])*)?)[^].,:;!)? \t\r\n<>\"]"
-# body email
-color body        color4      color0       "((@(([0-9a-z-]+\\.)*[0-9a-z-]+\\.?|#[0-9]+|\\[[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\]),)*@(([0-9a-z-]+\\.)*[0-9a-z-]+\\.?|#[0-9]+|\\[[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\]):)?[0-9a-z_.+%$-]+@(([0-9a-z-]+\\.)*[0-9a-z-]+\\.?|#[0-9]+|\\[[0-2]?[0-9]?[0-9]\\.[0-2]?[0-9]?[0-9]\\.[0-2]?[0-9]?[0-9]\\.[0-2]?[0-9]?[0-9]\\])"
-
+source ~/.config/mutt/bindings
+source ~/.config/mutt/colors
+source ~/.config/mutt/sidebar
 source ~/.config/mutt/gpg.rc
+
+# set folder = "~/.local/share/mail"
+# mailboxes +gmail-td/inbox \
+#           +gmail-td/drafts \
+#           +gmail-td/sent \
+#           +gmail-td/github/capture-backend \
+#           +gmail-td/github/scripture \
+#           +gmail-td/github/search \
+#           +gmail-td/Jira \
+#           +gmail-personal/inbox \
+#           +gmail-personal/drafts \
+#           +gmail-personal/sent \
+#           +purelymail/inbox \
+#           +purelymail/drafts \
+#           +purelymail/sent
+#           # +gmail-td/Bedriftsidrettslaget \
+#           # +gmail-td/Workplace
+
+# Accounts
+folder-hook 'gmail-td' 'source ~/.config/mutt/gmail-td'
+folder-hook 'gmail-personal' 'source ~/.config/mutt/gmail-personal'
+folder-hook 'purelymail' 'source ~/.config/mutt/purelymail'
+
+macro index,pager 1 "<change-folder> =../gmail-td/inbox<enter>"
+macro index,pager 2 "<change-folder> =../gmail-personal/inbox<enter>"
+macro index,pager 3 "<change-folder> =../purelymail/inbox<enter>"
+
+# Default account
+source ~/.config/mutt/gmail-td

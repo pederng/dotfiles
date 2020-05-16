@@ -1,0 +1,15 @@
+# vim: ft=muttrc
+
+set from = "peder.notto@galte.land"
+
+set folder = "~/.local/share/mail/purelymail"
+unmailboxes *
+mailboxes +inbox \
+          +drafts \
+          +sent \
+
+set spoolfile        = "+inbox"
+set record           = "+sent"
+set postponed        = "+drafts"
+
+color status magenta color18
