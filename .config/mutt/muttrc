@@ -38,23 +38,6 @@ source ~/.config/mutt/colors
 source ~/.config/mutt/sidebar
 source ~/.config/mutt/gpg.rc
 
-# set folder = "~/.local/share/mail"
-# mailboxes +gmail-td/inbox \
-#           +gmail-td/drafts \
-#           +gmail-td/sent \
-#           +gmail-td/github/capture-backend \
-#           +gmail-td/github/scripture \
-#           +gmail-td/github/search \
-#           +gmail-td/Jira \
-#           +gmail-personal/inbox \
-#           +gmail-personal/drafts \
-#           +gmail-personal/sent \
-#           +purelymail/inbox \
-#           +purelymail/drafts \
-#           +purelymail/sent
-#           # +gmail-td/Bedriftsidrettslaget \
-#           # +gmail-td/Workplace
-
 # Accounts
 folder-hook 'gmail-td' 'source ~/.config/mutt/gmail-td'
 folder-hook 'gmail-personal' 'source ~/.config/mutt/gmail-personal'

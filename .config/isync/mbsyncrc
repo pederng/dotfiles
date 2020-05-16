@@ -18,8 +18,6 @@ Channel sync-purelymail-default
 Master :purelymail-remote:
 Slave :purelymail-local:
 Patterns "INBOX"
-# Create Both
-# SyncState *
 
 Channel sync-purelymail-sent
 Master :purelymail-remote:Sent
@@ -28,13 +26,19 @@ Create Slave
 
 Channel sync-purelymail-drafts
 Master :purelymail-remote:Drafts
-Slave :purelymail-local:"drafts"
+Slave :purelymail-local:drafts
+Create Slave
+
+Channel sync-purelymail-archive
+Master :purelymail-remote:Trash
+Slave :purelymail-local:archive
 Create Slave
 
 Group purelymail
 Channel sync-purelymail-default
 Channel sync-purelymail-sent
 Channel sync-purelymail-drafts
+Channel sync-purelymail-archive
 
 
 #---------- Personal Gmail -------------#
@@ -56,7 +60,6 @@ Inbox ~/.local/share/mail/gmail-personal/inbox
 Channel sync-gmail-personal-default
 Master :gmail-personal-remote:
 Slave :gmail-personal-local:
-# Select some mailboxes to sync
 Patterns "INBOX"
 
 Channel sync-gmail-personal-sent
@@ -69,10 +72,16 @@ Master :gmail-personal-remote:"[Gmail]/Drafts"
 Slave :gmail-personal-local:drafts
 Create Slave
 
+Channel sync-gmail-personal-archive
+Master :gmail-personal-remote:"[Gmail]/All Mail"
+Slave :gmail-personal-local:archive
+Create Slave
+
 Group gmail-personal
 Channel sync-gmail-personal-default
 Channel sync-gmail-personal-sent
 Channel sync-gmail-personal-drafts
+Channel sync-gmail-personal-archive
 
 #---------- TD Gmail -------------#
 IMAPAccount gmail-td
@@ -107,10 +116,17 @@ Master :gmail-td-remote:"[Gmail]/Drafts"
 Slave :gmail-td-local:drafts
 Create Slave
 
+Channel sync-gmail-td-archive
+Master :gmail-td-remote:"[Gmail]/All Mail"
+Slave :gmail-td-local:archive
+Create Slave
+
+
 Group gmail-td
 Channel sync-gmail-td-default
 Channel sync-gmail-td-sent
 Channel sync-gmail-td-drafts
+Channel sync-gmail-td-archive
 
 ##---------- TSL Gmail -------------#
 #IMAPAccount gmail-tsl
@@ -145,7 +161,13 @@ Channel sync-gmail-td-drafts
 #Slave :gmail-tsl-local:drafts
 #Create Slave
 
+# Channel sync-gmail-tsl-archive
+# Master :gmail-tsl-remote:"[Gmail]/All Mail"
+# Slave :gmail-tsl-local:archive
+# Create Slave
+
 #Group gmail-tsl
 #Channel sync-gmail-tsl-default
 #Channel sync-gmail-tsl-sent
 #Channel sync-gmail-tsl-drafts
+#Channel sync-gmail-tsl-archive

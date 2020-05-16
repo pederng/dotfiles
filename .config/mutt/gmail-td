@@ -11,6 +11,7 @@ mailboxes +inbox \
           +github/scripture \
           +github/search \
           +Jira \
+          +archive
           # +Bedriftsidrettslaget \
           # +Workplace
 
