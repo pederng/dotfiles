@@ -39,12 +39,6 @@ call plug#begin('$XDG_CONFIG_HOME/vim/plugged')
   Plug 'michaeljsmith/vim-indent-object'
   Plug 'bps/vim-textobj-python'
 
-  " Completion
-  Plug 'prabirshrestha/async.vim'
-  Plug 'prabirshrestha/vim-lsp'
-  Plug 'prabirshrestha/asyncomplete.vim'
-  Plug 'prabirshrestha/asyncomplete-lsp.vim'
-
   " Tags
   Plug 'ludovicchabant/vim-gutentags'
 
@@ -279,15 +273,16 @@ noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 24, 4)<CR>
 " =============================================================================
 
 let g:ale_linters = {
-      \ 'python': ['pylint', 'mypy', 'flake8'],
-      \ 'javascript': ['standard'],
-      \ 'go': ['golint'],
-      \ 'typescript': ['tslint', 'tsserver'],
-      \ 'haskell': ['hie'],
-      \ 'vim': ['vint'],
-      \ 'rust': ['rls', 'cargo'],
+      \ 'sh': ['language_server', 'shellcheck'],
       \ 'c': ['clang'],
       \ 'dart': ['dartanalyzer'],
+      \ 'go': ['golint'],
+      \ 'haskell': ['hie'],
+      \ 'javascript': ['standard'],
+      \ 'python': ['pylint', 'mypy', 'flake8', 'pyls'],
+      \ 'rust': ['rls', 'cargo'],
+      \ 'typescript': ['tslint', 'tsserver'],
+      \ 'vim': ['vint', 'vimls'],
       \}
 
 let g:ale_fixers = {
@@ -302,115 +297,23 @@ let g:ale_fixers = {
       \ 'css': ['prettier'],
       \}
 
-let g:ale_completion_enabled = 0
+let g:ale_completion_enabled = 1
 let g:ale_fix_on_save = 1
 let g:ale_python_black_options  = '-l 100'
 
 let g:ale_rust_cargo_use_clippy = 1
 
+let g:ale_hover_to_popup = 1
+let g:ale_set_balloons = 1
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_sign_column_always = 1
 let g:ale_type_map = {'flake8': {'ES': 'WS', 'E': 'W'}}
 
-" =============================================================================
-" Autocomplete
-" =============================================================================
-
-let g:asyncomplete_remove_duplicates = 1
-let g:asyncomplete_smart_completion = 1
-let g:asyncomplete_auto_popup = 1
-
-if executable('pyls')
-au User lsp_setup call lsp#register_server({
-		\ 'name': 'pyls',
-		\ 'cmd': {server_info->['pyls']},
-		\ 'whitelist': ['python'],
-		\ })
-endif
-
-if executable('rls')
-		au User lsp_setup call lsp#register_server({
-				\ 'name': 'rls',
-				\ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
-        \ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
-				\ 'whitelist': ['rust'],
-				\ })
-endif
-
-if executable('hie')
-au User lsp_setup call lsp#register_server({
-		\ 'name': 'hie',
-		\ 'cmd': {server_info->['hie-wrapper', '--lsp']},
-		\ 'whitelist': ['haskell'],
-		\ })
-endif
-
-if executable('clangd')
-au User lsp_setup call lsp#register_server({
-		\ 'name': 'clangd',
-		\ 'cmd': {server_info->['clangd']},
-		\ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
-		\ })
-endif
-
-if executable('dart_language_server')
-au User lsp_setup call lsp#register_server({
-		\ 'name': 'dart_language_server',
-		\ 'cmd': {server_info->['dart_language_server']},
-		\ 'whitelist': ['dart'],
-		\ })
-endif
-
-if executable('gopls')
-au User lsp_setup call lsp#register_server({
-		\ 'name': 'gopls',
-		\ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
-		\ 'whitelist': ['go'],
-		\ })
-endif
-
-if executable('typescript-language-server')
-au User lsp_setup call lsp#register_server({
-		\ 'name': 'typescript-language-server',
-		\ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
-		\ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
-		\ 'whitelist': ['typescript', 'typescript.tsx'],
-		\ })
-endif
-
-if executable('bash-language-server')
-	au User lsp_setup call lsp#register_server({
-				\ 'name': 'bash-language-server',
-				\ 'cmd': {server_info->[&shell, &shellcmdflag, 'bash-language-server start']},
-				\ 'whitelist': ['sh'],
-				\ })
-endif
-
-imap <c-l> <Plug>(asyncomplete_force_refresh)
-nmap d<c-]> :LspDefinition<CR>
-nmap <c-y> :LspHover<CR>
-nmap r<c-]> :LspReferences<CR><CR>
-
-function! s:check_back_space() abort
- let col = col('.') - 1
- return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
-
-inoremap <silent><expr> <TAB>
-  \ pumvisible() ? "\<C-n>" :
-  \ <SID>check_back_space() ? "\<TAB>" :
-  \ asyncomplete#force_refresh()
-
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
-
-let g:lsp_diagnostics_enabled = 0
-
-" let g:lsp_log_verbose = 1
-" let g:lsp_log_file = expand('~/.vim/vim-lsp.log')
-" let g:asyncomplete_log_file = expand('~/.vim/asyncomplete.log')
+nmap d<c-]> :ALEGoToDefinition<CR>
+nmap r<c-]> :ALEFindReferences<CR>
+nmap <c-y> :ALEHover<CR>
 
 " =============================================================================
 " VCS signs
