@@ -10,7 +10,7 @@ mailboxes +inbox \
           +github/capture-backend \
           +github/scripture \
           +github/search \
-          +Jira \
+          +jira \
           +archive
           # +Bedriftsidrettslaget \
           # +Workplace
