@@ -47,7 +47,7 @@ call plug#begin('$XDG_CONFIG_HOME/vim/plugged')
 
   " Syntax/linting/completion
   Plug 'w0rp/ale'
-  Plug 'ervandew/supertab'
+  Plug 'prabirshrestha/asyncomplete.vim'
 
   " Appearance
   Plug 'itchyny/lightline.vim'
@@ -311,25 +311,43 @@ let g:ale_fixers = {
       \ 'css': ['prettier'],
       \}
 
-let g:ale_completion_enabled = 1
+let g:ale_completion_enabled = 0
 let g:ale_fix_on_save = 1
 let g:ale_python_black_options  = '-l 100'
 
 let g:ale_rust_cargo_use_clippy = 1
 
 let g:ale_hover_to_popup = 1
-let g:ale_set_balloons = 1
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_sign_column_always = 1
 let g:ale_type_map = {'flake8': {'ES': 'WS', 'E': 'W'}}
 
-let g:SuperTabDefaultCompletionType = "<c-n>"
-
+nmap d<c-]> :ALEGoToDefinition<CR>
 nmap gd :ALEGoToDefinition<CR>
 nmap gR :ALEFindReferences<CR>
 nmap <c-y> :ALEHover<CR>
+
+let g:asyncomplete_remove_duplicates = 1
+let g:asyncomplete_smart_completion = 1
+let g:asyncomplete_auto_popup = 1
+imap <c-l> <Plug>(asyncomplete_force_refresh)
+
+function! s:check_back_space() abort
+ let col = col('.') - 1
+ return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <TAB>
+  \ pumvisible() ? "\<C-n>" :
+  \ <SID>check_back_space() ? "\<TAB>" :
+  \ asyncomplete#force_refresh()
+
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ale#get_source_options({ 'priority': 10  }))
 
 " =============================================================================
 " VCS signs
