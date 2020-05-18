@@ -45,8 +45,9 @@ call plug#begin('$XDG_CONFIG_HOME/vim/plugged')
   " DB
   Plug 'tpope/vim-dadbod'
 
-  " Syntax/linting
+  " Syntax/linting/completion
   Plug 'w0rp/ale'
+  Plug 'ervandew/supertab'
 
   " Appearance
   Plug 'itchyny/lightline.vim'
@@ -269,7 +270,7 @@ noremap <silent> <c-b> :call smooth_scroll#up(&scroll*2, 22, 4)<CR>
 noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 24, 4)<CR>
 
 " =============================================================================
-" Ale (async linting)
+" Ale (async linting and completion)
 " =============================================================================
 function! BashLangServProjRoot(buffer)
 	let l:git_path = ale#path#FindNearestDirectory(a:buffer, '.git')
@@ -324,8 +325,10 @@ let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_sign_column_always = 1
 let g:ale_type_map = {'flake8': {'ES': 'WS', 'E': 'W'}}
 
-nmap d<c-]> :ALEGoToDefinition<CR>
-nmap r<c-]> :ALEFindReferences<CR>
+let g:SuperTabDefaultCompletionType = "<c-n>"
+
+nmap gd :ALEGoToDefinition<CR>
+nmap gR :ALEFindReferences<CR>
 nmap <c-y> :ALEHover<CR>
 
 " =============================================================================
