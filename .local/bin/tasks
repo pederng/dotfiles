@@ -1,3 +1,9 @@
 #!/bin/bash
 taskfile=$NOTES_DIR/tasks.md
-vim "$taskfile"
+task="$*"
+
+if [ -z "$task" ]; then
+  vim "$taskfile"
+else
+  echo "* $task" >> "$taskfile"
+fi
