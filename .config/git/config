@@ -1,8 +1,8 @@
 [core]
-	excludesfile = ~/.config/git/ignore
-	pager = delta
+  excludesfile = ~/.config/git/ignore
+  pager = delta --theme='Monokai Extended'
 [interactive]
-  diffFilter = delta --color-only
+  diffFilter = delta --color-only --theme='Monokai Extended'
 [user]
 	email = peder.galteland@telenordigital.com
 	name = Peder Notto Galteland
