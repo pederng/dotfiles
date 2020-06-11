@@ -58,6 +58,7 @@ call plug#begin('$XDG_CONFIG_HOME/vim/plugged')
 
   " Search
   Plug 'junegunn/fzf.vim'
+  Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}
 
   " File system
   Plug 'tpope/vim-vinegar'
