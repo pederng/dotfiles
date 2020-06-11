@@ -41,6 +41,7 @@ call plug#begin('$XDG_CONFIG_HOME/vim/plugged')
 
   " Tags
   Plug 'ludovicchabant/vim-gutentags'
+  Plug 'liuchengxu/vista.vim'
 
   " DB
   Plug 'tpope/vim-dadbod'
