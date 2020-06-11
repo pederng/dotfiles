@@ -294,7 +294,7 @@ let g:ale_linters = {
       \ 'haskell': ['hie'],
       \ 'javascript': ['standard'],
       \ 'python': ['pylint', 'mypy', 'flake8', 'pyls'],
-      \ 'rust': ['rls', 'cargo'],
+      \ 'rust': ['analyzer', 'cargo'],
       \ 'typescript': ['tslint', 'tsserver'],
       \ 'vim': ['vint', 'vimls'],
       \}
