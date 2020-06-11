@@ -19,4 +19,4 @@ set spoolfile        = "+inbox"
 set record           = "+sent"
 set postponed        = "+drafts"
 
-color status color8 color18
+color status color6 color18
