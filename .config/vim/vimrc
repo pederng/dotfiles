@@ -58,7 +58,6 @@ call plug#begin('$XDG_CONFIG_HOME/vim/plugged')
   Plug 'pedernot/base16-vim'
 
   " Search
-  Plug 'junegunn/fzf.vim'
   Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}
 
   " File system
@@ -232,25 +231,11 @@ map <f12> :! ctags -R .<cr>
 set tags=./tags;/
 
 " =============================================================================
-" fzf
+" Clap
 " =============================================================================
-set rtp+=~/.local/share/fzf
 
-nnoremap <leader>ff :Files<cr>
-nnoremap <leader>fa :GFiles<cr>
-nnoremap <leader>fb :Buffer<cr>
-nnoremap <leader>fo :BTags<cr>
-nnoremap <leader>ft :Tags<cr>
-nnoremap <leader>fh :History<cr>
-nnoremap <leader>fm :Marks<cr>
-nnoremap <leader>fc :BCommits<cr>
-nnoremap <leader>fC :Commits<cr>
-nnoremap <leader>fg :Rg<cr>
-let g:rg_command = '
-  \ rg --column --line-number --no-heading --fixed-strings --ignore-case --follow --color "always"
-  \ -g "*.{js,php,md,styl,jade,html,config,py,cpp,c,go,hs,rb,conf,rs}" '
-
-command! -bang -nargs=* Rg call fzf#vim#grep(g:rg_command .shellescape(<q-args>), 1, <bang>0)
+let g:clap_layout = {'relative': 'editor'}
+nnoremap <C-p> :Clap<cr>
 
 " =============================================================================
 " Filetypes and syntax
