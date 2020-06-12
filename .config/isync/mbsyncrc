@@ -127,45 +127,45 @@ Channel sync-gmail-td-sent
 Channel sync-gmail-td-drafts
 Channel sync-gmail-td-archive
 
-#---------- TSL Gmail -------------#
-IMAPAccount gmail-tsl
-Host imap.gmail.com
-User peder.galteland@softwarelab.no
-PassCmd "pass gmailmutt-tsl"
-SSLType IMAPS
-CertificateFile /etc/ssl/certs/ca-certificates.crt
+##---------- TSL Gmail -------------#
+#IMAPAccount gmail-tsl
+#Host imap.gmail.com
+#User peder.galteland@softwarelab.no
+#PassCmd "pass gmailmutt-tsl"
+#SSLType IMAPS
+#CertificateFile /etc/ssl/certs/ca-certificates.crt
 
-IMAPStore gmail-tsl-remote
-Account gmail-tsl
+#IMAPStore gmail-tsl-remote
+#Account gmail-tsl
 
-MaildirStore gmail-tsl-local
-Subfolders Verbatim
-Path ~/.local/share/mail/gmail-tsl/
-Inbox ~/.local/share/mail/gmail-tsl/inbox
+#MaildirStore gmail-tsl-local
+#Subfolders Verbatim
+#Path ~/.local/share/mail/gmail-tsl/
+#Inbox ~/.local/share/mail/gmail-tsl/inbox
 
-Channel sync-gmail-tsl-default
-Master :gmail-tsl-remote:
-Slave :gmail-tsl-local:
-Patterns "INBOX"
-Create Slave
+#Channel sync-gmail-tsl-default
+#Master :gmail-tsl-remote:
+#Slave :gmail-tsl-local:
+#Patterns "INBOX"
+#Create Slave
 
-Channel sync-gmail-tsl-sent
-Master :gmail-tsl-remote:"[Gmail]/Sent Mail"
-Slave :gmail-tsl-local:sent
-Create Slave
+#Channel sync-gmail-tsl-sent
+#Master :gmail-tsl-remote:"[Gmail]/Sent Mail"
+#Slave :gmail-tsl-local:sent
+#Create Slave
 
-Channel sync-gmail-tsl-drafts
-Master :gmail-tsl-remote:"[Gmail]/Drafts"
-Slave :gmail-tsl-local:drafts
-Create Slave
+#Channel sync-gmail-tsl-drafts
+#Master :gmail-tsl-remote:"[Gmail]/Drafts"
+#Slave :gmail-tsl-local:drafts
+#Create Slave
 
-Channel sync-gmail-tsl-archive
-Master :gmail-tsl-remote:"[Gmail]/All Mail"
-Slave :gmail-tsl-local:archive
-Create Slave
+#Channel sync-gmail-tsl-archive
+#Master :gmail-tsl-remote:"[Gmail]/All Mail"
+#Slave :gmail-tsl-local:archive
+#Create Slave
 
-Group gmail-tsl
-Channel sync-gmail-tsl-default
-Channel sync-gmail-tsl-sent
-Channel sync-gmail-tsl-drafts
-Channel sync-gmail-tsl-archive
+#Group gmail-tsl
+#Channel sync-gmail-tsl-default
+#Channel sync-gmail-tsl-sent
+#Channel sync-gmail-tsl-drafts
+#Channel sync-gmail-tsl-archive
