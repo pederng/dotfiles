@@ -33,6 +33,8 @@ set certificate_file = "~/.local/share/mutt/certificates"
 alternative_order text/plain text/enriched text/html
 auto_view text/html
 
+set query_command = "abook --mutt-query '%s'"
+
 source ~/.config/mutt/bindings
 source ~/.config/mutt/colors
 source ~/.config/mutt/sidebar
