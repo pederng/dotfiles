@@ -238,9 +238,11 @@ let g:clap_layout = {'relative': 'editor'}
 nnoremap <C-p> :Clap<cr>
 nnoremap <C-p><C-p> :Clap<cr>
 nnoremap <C-p><C-t> :Clap proj_tags<cr>
+nnoremap <C-p><C-o> :Clap tags<cr>
 nnoremap <C-p><C-f> :Clap git_files<cr>
 nnoremap <C-p><C-g> :Clap grep2<cr>
 nnoremap <C-p><C-h> :Clap history<cr>
+nnoremap <C-p><C-b> :Clap buffers<cr>
 
 " =============================================================================
 " Filetypes and syntax
