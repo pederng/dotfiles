@@ -33,7 +33,7 @@ set certificate_file = "~/.local/share/mutt/certificates"
 alternative_order text/plain text/enriched text/html
 auto_view text/html
 
-set query_command = "abook --mutt-query '%s'"
+set query_command = "abook --config ~/.config/abook/abookrc --datafile ~/.local/share/notes/addressbook --mutt-query '%s'"
 
 source ~/.config/mutt/bindings
 source ~/.config/mutt/colors
