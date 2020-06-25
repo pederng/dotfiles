@@ -83,89 +83,46 @@ Channel sync-gmail-personal-sent
 Channel sync-gmail-personal-drafts
 Channel sync-gmail-personal-archive
 
-#---------- TD Gmail -------------#
-IMAPAccount gmail-td
+#---------- TSL Gmail -------------#
+IMAPAccount gmail-tsl
 Host imap.gmail.com
-User peder.galteland@telenordigital.com
-PassCmd "pass gmailmutt"
+User peder.galteland@softwarelab.no
+AuthMechs XOAUTH2
+PassCmd "pass gmailmutt-tsl"
 SSLType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
-IMAPStore gmail-td-remote
-Account gmail-td
+IMAPStore gmail-tsl-remote
+Account gmail-tsl
 
-MaildirStore gmail-td-local
+MaildirStore gmail-tsl-local
 Subfolders Verbatim
-Path ~/.local/share/mail/gmail-td/
-Inbox ~/.local/share/mail/gmail-td/inbox
+Path ~/.local/share/mail/gmail-tsl/
+Inbox ~/.local/share/mail/gmail-tsl/inbox
 
-Channel sync-gmail-td-default
-Master :gmail-td-remote:
-Slave :gmail-td-local:
-Patterns "INBOX" "github*" "jira"
+Channel sync-gmail-tsl-default
+Master :gmail-tsl-remote:
+Slave :gmail-tsl-local:
+Patterns "INBOX"
 Create Slave
 
-Channel sync-gmail-td-sent
-Master :gmail-td-remote:"[Gmail]/Sent Mail"
-Slave :gmail-td-local:sent
+Channel sync-gmail-tsl-sent
+Master :gmail-tsl-remote:"[Gmail]/Sent Mail"
+Slave :gmail-tsl-local:sent
 Create Slave
 
-Channel sync-gmail-td-drafts
-Master :gmail-td-remote:"[Gmail]/Drafts"
-Slave :gmail-td-local:drafts
+Channel sync-gmail-tsl-drafts
+Master :gmail-tsl-remote:"[Gmail]/Drafts"
+Slave :gmail-tsl-local:drafts
 Create Slave
 
-Channel sync-gmail-td-archive
-Master :gmail-td-remote:"[Gmail]/All Mail"
-Slave :gmail-td-local:archive
+Channel sync-gmail-tsl-archive
+Master :gmail-tsl-remote:"[Gmail]/All Mail"
+Slave :gmail-tsl-local:archive
 Create Slave
 
-
-Group gmail-td
-Channel sync-gmail-td-default
-Channel sync-gmail-td-sent
-Channel sync-gmail-td-drafts
-Channel sync-gmail-td-archive
-
-##---------- TSL Gmail -------------#
-#IMAPAccount gmail-tsl
-#Host imap.gmail.com
-#User peder.galteland@softwarelab.no
-#PassCmd "pass gmailmutt-tsl"
-#SSLType IMAPS
-#CertificateFile /etc/ssl/certs/ca-certificates.crt
-
-#IMAPStore gmail-tsl-remote
-#Account gmail-tsl
-
-#MaildirStore gmail-tsl-local
-#Subfolders Verbatim
-#Path ~/.local/share/mail/gmail-tsl/
-#Inbox ~/.local/share/mail/gmail-tsl/inbox
-
-#Channel sync-gmail-tsl-default
-#Master :gmail-tsl-remote:
-#Slave :gmail-tsl-local:
-#Patterns "INBOX"
-#Create Slave
-
-#Channel sync-gmail-tsl-sent
-#Master :gmail-tsl-remote:"[Gmail]/Sent Mail"
-#Slave :gmail-tsl-local:sent
-#Create Slave
-
-#Channel sync-gmail-tsl-drafts
-#Master :gmail-tsl-remote:"[Gmail]/Drafts"
-#Slave :gmail-tsl-local:drafts
-#Create Slave
-
-#Channel sync-gmail-tsl-archive
-#Master :gmail-tsl-remote:"[Gmail]/All Mail"
-#Slave :gmail-tsl-local:archive
-#Create Slave
-
-#Group gmail-tsl
-#Channel sync-gmail-tsl-default
-#Channel sync-gmail-tsl-sent
-#Channel sync-gmail-tsl-drafts
-#Channel sync-gmail-tsl-archive
+Group gmail-tsl
+Channel sync-gmail-tsl-default
+Channel sync-gmail-tsl-sent
+Channel sync-gmail-tsl-drafts
+Channel sync-gmail-tsl-archive
