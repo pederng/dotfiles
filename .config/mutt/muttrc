@@ -41,13 +41,15 @@ source ~/.config/mutt/sidebar
 source ~/.config/mutt/gpg.rc
 
 # Accounts
-folder-hook 'gmail-td' 'source ~/.config/mutt/gmail-td'
+folder-hook 'gmail-tsl' 'source ~/.config/mutt/gmail-tsl'
 folder-hook 'purelymail' 'source ~/.config/mutt/purelymail'
 folder-hook 'gmail-personal' 'source ~/.config/mutt/gmail-personal'
+folder-hook 'gmail-td' 'source ~/.config/mutt/gmail-td'
 
-macro index,pager 1 "<change-folder> =../gmail-td/inbox<enter>"
+macro index,pager 1 "<change-folder> =../gmail-tsl/inbox<enter>"
 macro index,pager 2 "<change-folder> =../purelymail/inbox<enter>"
 macro index,pager 3 "<change-folder> =../gmail-personal/inbox<enter>"
+macro index,pager 4 "<change-folder> =../gmail-td/inbox<enter>"
 
 # Default account
-source ~/.config/mutt/gmail-td
+source ~/.config/mutt/gmail-tsl
