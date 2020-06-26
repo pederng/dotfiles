@@ -19,7 +19,8 @@ host           smtp.gmail.com
 port           587
 from           peder.galteland@softwarelab.no
 user           peder.galteland@softwarelab.no
-passwordeval   "pass gmailmutt-tsl"
+auth           oauthbearer
+passwordeval   "fetch_token tsl"
 
 # personal gmail
 account        gmail-personal
@@ -27,7 +28,8 @@ host           smtp.gmail.com
 port           587
 from           pederng@gmail.com
 user           pederng@gmail.com
-passwordeval   "pass gmailmutt-personal"
+auth           oauthbearer
+passwordeval   "fetch_token personal"
 
 # purelymail
 account        purelymail
