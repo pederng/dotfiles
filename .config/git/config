@@ -24,6 +24,7 @@
   review = !vim -p $(git files) +\"tabdo Gdiff master\" +\"let g:gitgutter_diff_base = 'master'\"
   reviewone = !vim -p +\"tabdo Gdiff master\" +\"let g:gitgutter_diff_base = 'master'\"
   compare = diff master...HEAD
+  stat = !git diff --stat $(git merge-base HEAD master)
 [push]
 	default = current
 [commit]
