@@ -1,0 +1,22 @@
+# vim: ft=muttrc
+
+set from = "peder.galteland@softwarelab.no"
+
+set folder = "~/.local/share/mail/gmail-tsl"
+unmailboxes *
+mailboxes +inbox \
+          +drafts \
+          +sent \
+          +github/capture-backend \
+          +github/scripture \
+          +github/search \
+          +jira \
+          +archive
+          # +Bedriftsidrettslaget \
+          # +Workplace
+
+set spoolfile        = "+inbox"
+set record           = "+sent"
+set postponed        = "+drafts"
+
+color status color6 color18
