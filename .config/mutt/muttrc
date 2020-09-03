@@ -1,4 +1,4 @@
-set realname = "Peder Notto Galteland
+set realname = "Peder Notto Galteland"
 set use_from = yes
 set envelope_from = yes
 set sendmail = /usr/bin/msmtp
