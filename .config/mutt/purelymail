@@ -14,3 +14,4 @@ set record           = "+sent"
 set postponed        = "+drafts"
 
 color status magenta color18
+macro index,pager \cs "<shell-escape>mbsync -V -c ~/.config/isync/mbsyncrc purelymail<enter>"

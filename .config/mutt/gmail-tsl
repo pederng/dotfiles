@@ -20,3 +20,4 @@ set record           = "+sent"
 set postponed        = "+drafts"
 
 color status color6 color18
+macro index,pager \cs "<shell-escape>mbsync -V -c ~/.config/isync/mbsyncrc gmail-tsl<enter>"
