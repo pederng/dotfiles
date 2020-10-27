@@ -46,3 +46,5 @@ alias abook="abook --config "$XDG_CONFIG_HOME"/abook/abookrc --datafile "$XDG_DA
 
 # dotfile storage config
 alias dotfiles='/usr/bin/git --git-dir=$XDG_DATA_HOME/dotfiles/ --work-tree=$HOME'
+
+alias org="emacs -nw $XDG_DATA_HOME/notes/notes.org"
