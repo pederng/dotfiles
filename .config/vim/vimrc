@@ -179,6 +179,9 @@ map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
 set noswapfile
 " set clipboard=unnamedplus
 
+" :W or is to easy to type by accident
+command W w
+
 " =============================================================================
 " Movement
 " =============================================================================
@@ -311,6 +314,7 @@ let g:ale_sign_column_always = 1
 let g:ale_type_map = {'flake8': {'ES': 'WS', 'E': 'W'}}
 
 nmap d<c-]> :ALEGoToDefinition<CR>
+nmap r<c-]> :ALEFindReferences<CR>
 nmap gd :ALEGoToDefinition<CR>
 nmap gR :ALEFindReferences<CR>
 nmap <c-y> :ALEHover<CR>

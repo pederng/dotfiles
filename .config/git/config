@@ -3,6 +3,7 @@
   pager = delta --theme='Monokai Extended'
 [interactive]
   diffFilter = delta --color-only --theme='Monokai Extended'
+	colorMoved = default
 [user]
 	email = peder.galteland@softwarelab.no
 	name = Peder Notto Galteland
