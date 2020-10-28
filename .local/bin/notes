@@ -1,0 +1,3 @@
+#!/bin/sh
+
+vim ~/.local/share/notes/inbox.md -c "Clap grep2"
