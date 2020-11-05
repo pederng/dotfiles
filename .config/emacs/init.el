@@ -20,10 +20,17 @@
  ;; If there is more than one, they won't work right.
  
 
+(setq evil-want-C-i-jump nil
+      evil-search-module 'evil-search
+      evil-want-C-u-scroll t
+      evil-want-C-w-in-emacs-state t)
+
 (require 'evil)
 (require 'key-chord)
 (require 'evil-surround)
 (require 'evil-org)
+(require 'powerline)
+(powerline-center-evil-theme)
 
 (tool-bar-mode -1)
 (menu-bar-mode -1)
@@ -37,9 +44,8 @@
 (evil-org-set-key-theme '(navigation insert textobjects additional calendar))
 (require 'evil-org-agenda)
 (evil-org-agenda-set-keys)
-(setq evil-want-C-i-jump nil)
 (with-eval-after-load 'evil
   (evil-define-key 'normal outline-mode-map (kbd "<tab>") #'org-cycle)
-        (evil-define-key 'normal outline-mode-map (kbd "TAB") #'org-cycle))
+  (evil-define-key 'normal outline-mode-map (kbd "TAB") #'org-cycle))
 
 (load-theme 'base16-harmonic-dark t)
