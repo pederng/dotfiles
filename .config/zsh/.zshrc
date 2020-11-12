@@ -74,7 +74,7 @@ conf() {
         qutebrowser) vim $XDG_CONFIG_HOME/qutebrowser/config.py ;;
         ssh)         vim ~/.ssh/config ;;
         starship)    vim $XDG_CONFIG_HOME/starship.toml ;;
-        xresources)  vim $XDG_CONFIG_HOME/X11/xresources && xrdb -merge $XDG_CONFIG_HOME/X11/xresources;;
+        xresources)  vim $XDG_CONFIG_HOME/X11/xresources && xrdb -merge $XDG_CONFIG_HOME/X11/xresources && xrdb -merge $XDG_CONFIG_HOME/X11/xcolors;;
         xinit)       vim $XDG_CONFIG_HOME/X11/xinitrc;;
         *)           echo "Unknown application: $1" ;;
     esac
