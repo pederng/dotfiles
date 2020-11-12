@@ -1,8 +1,0 @@
-#!/bin/zsh
-
-echo "Enter url"
-read -r url
-
-downsync_notes
-reading-list add "$url"
-upsync_notes

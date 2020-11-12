@@ -1,5 +1,0 @@
-#!/bin/sh
-
-NOTES_DIR=~/.local/share/notes bash ~/.local/bin/downsync_notes
-bash ~/.local/bin/reading-list delete
-NOTES_DIR=~/.local/share/notes bash ~/.local/bin/upsync_notes

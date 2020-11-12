@@ -1,5 +1,0 @@
-#!/bin/sh
-
-NOTES_DIR=~/.local/share/notes bash ~/.local/bin/downsync_notes
-NOTES_DIR=~/.local/share/notes python ~/.local/bin/journal
-NOTES_DIR=~/.local/share/notes bash ~/.local/bin/upsync_notes
