@@ -144,7 +144,6 @@ command -v stack >/dev/null && eval "$(stack --bash-completion-script stack)"
 
 eval "$(journal completion)"
 eval "$(zettel completion)"
-eval "$(reading-list completion)"
 
 
 #----Aliases-----
