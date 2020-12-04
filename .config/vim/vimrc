@@ -126,14 +126,27 @@ set expandtab
 " set smartindent
 set autoindent
 
+
+" =============================================================================
+" Leader
+" =============================================================================
+
+nnoremap <space> <Nop>
+let mapleader = "\<space>"
+
+
 " =============================================================================
 " Search
 " =============================================================================
 
 set incsearch
+set hlsearch
 set ignorecase
 set smartcase
 set showmatch
+nnoremap <leader>h :nohlsearch<CR><C-L>
+autocmd InsertEnter * :setlocal nohlsearch
+autocmd InsertLeave * :setlocal hlsearch
 
 " =============================================================================
 " Wildmode
@@ -167,11 +180,6 @@ nnoremap <F2> :call NumberToggle()<cr>
 "Run dot-command in normal if in visual
 vnoremap . :norm.<CR>
 inoremap jk <ESC>
-
-"Remap leader to space
-nnoremap <space> <Nop>
-let mapleader = "\<space>"
-
 noremap Q <NOP>
 " Handy pasting from clipboard
 map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
@@ -279,7 +287,7 @@ let g:ale_linters = {
       \ 'sh': ['bashls', 'shellcheck'],
       \ 'c': ['clang'],
       \ 'dart': ['dartanalyzer'],
-      \ 'go': ['golint'],
+      \ 'go': ['golint', 'gopls'],
       \ 'haskell': ['hie'],
       \ 'javascript': ['standard'],
       \ 'python': ['pylint', 'mypy', 'flake8', 'pyls'],
@@ -352,7 +360,7 @@ set signcolumn=yes
 let g:jedi#goto_command = ''
 let g:jedi#goto_assignments_command = ''
 let g:jedi#goto_definitions_command = ''
-let g:jedi#documentation_command = '<leader>gK'
+let g:jedi#documentation_command = ''
 let g:jedi#usages_command = ''
 let g:jedi#rename_command = '<leader>gr'
 let g:jedi#completions_enabled = 0
