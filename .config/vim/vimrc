@@ -59,6 +59,7 @@ call plug#begin('$XDG_CONFIG_HOME/vim/plugged')
   Plug 'ryanoasis/vim-devicons'
 
   " Search
+  Plug 'voldikss/vim-floaterm'
   Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}
 
   " File system
@@ -126,14 +127,27 @@ set expandtab
 " set smartindent
 set autoindent
 
+
+" =============================================================================
+" Leader
+" =============================================================================
+
+nnoremap <space> <Nop>
+let mapleader = "\<space>"
+
+
 " =============================================================================
 " Search
 " =============================================================================
 
 set incsearch
+set hlsearch
 set ignorecase
 set smartcase
 set showmatch
+nnoremap <leader>h :nohlsearch<CR><C-L>
+autocmd InsertEnter * :setlocal nohlsearch
+autocmd InsertLeave * :setlocal hlsearch
 
 " =============================================================================
 " Wildmode
@@ -167,11 +181,6 @@ nnoremap <F2> :call NumberToggle()<cr>
 "Run dot-command in normal if in visual
 vnoremap . :norm.<CR>
 inoremap jk <ESC>
-
-"Remap leader to space
-nnoremap <space> <Nop>
-let mapleader = "\<space>"
-
 noremap Q <NOP>
 " Handy pasting from clipboard
 map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
@@ -279,10 +288,10 @@ let g:ale_linters = {
       \ 'sh': ['bashls', 'shellcheck'],
       \ 'c': ['clang'],
       \ 'dart': ['dartanalyzer'],
-      \ 'go': ['golint'],
+      \ 'go': ['golint', 'gopls'],
       \ 'haskell': ['hie'],
       \ 'javascript': ['standard'],
-      \ 'python': ['pylint', 'mypy', 'flake8', 'pyls'],
+      \ 'python': ['pyls', 'mypy'],
       \ 'rust': ['analyzer', 'cargo'],
       \ 'typescript': ['tslint', 'tsserver'],
       \ 'vim': ['vint', 'vimls'],
@@ -317,6 +326,7 @@ nmap d<c-]> :ALEGoToDefinition<CR>
 nmap r<c-]> :ALEFindReferences<CR>
 nmap gd :ALEGoToDefinition<CR>
 nmap gR :ALEFindReferences<CR>
+nmap <leader>gR :ALERename<CR>
 nmap <c-y> :ALEHover<CR>
 
 let g:asyncomplete_remove_duplicates = 1
@@ -352,7 +362,7 @@ set signcolumn=yes
 let g:jedi#goto_command = ''
 let g:jedi#goto_assignments_command = ''
 let g:jedi#goto_definitions_command = ''
-let g:jedi#documentation_command = '<leader>gK'
+let g:jedi#documentation_command = ''
 let g:jedi#usages_command = ''
 let g:jedi#rename_command = '<leader>gr'
 let g:jedi#completions_enabled = 0
@@ -361,9 +371,9 @@ let g:jedi#completions_enabled = 0
 " Tslime (lisps)
 " =============================================================================
 
-let g:tslime_normal_mapping = '<leader>t'
-let g:tslime_visual_mapping = '<leader>t'
-let g:tslime_vars_mapping = '<leader>T'
+" let g:tslime_normal_mapping = '<leader>t'
+" let g:tslime_visual_mapping = '<leader>t'
+" let g:tslime_vars_mapping = '<leader>T'
 
 " =============================================================================
 " Bufferline
@@ -464,6 +474,13 @@ autocmd FileType markdown setlocal spell formatoptions=tqr
 " =============================================================================
 
 command SQL enew | setlocal buftype=nofile | setlocal ft=pgsql
+
+" =============================================================================
+" Floaterm
+" =============================================================================
+
+nnoremap <silent> <leader>t :FloatermToggle<CR>
+tnoremap <silent> <leader>t <C-\><C-n>:FloatermToggle<CR>
 
 " =============================================================================
 " Machine specific config
