@@ -59,6 +59,7 @@ call plug#begin('$XDG_CONFIG_HOME/vim/plugged')
   Plug 'ryanoasis/vim-devicons'
 
   " Search
+  Plug 'voldikss/vim-floaterm'
   Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}
 
   " File system
@@ -290,7 +291,7 @@ let g:ale_linters = {
       \ 'go': ['golint', 'gopls'],
       \ 'haskell': ['hie'],
       \ 'javascript': ['standard'],
-      \ 'python': ['pylint', 'mypy', 'flake8', 'pyls'],
+      \ 'python': ['pyls', 'mypy'],
       \ 'rust': ['analyzer', 'cargo'],
       \ 'typescript': ['tslint', 'tsserver'],
       \ 'vim': ['vint', 'vimls'],
@@ -325,6 +326,7 @@ nmap d<c-]> :ALEGoToDefinition<CR>
 nmap r<c-]> :ALEFindReferences<CR>
 nmap gd :ALEGoToDefinition<CR>
 nmap gR :ALEFindReferences<CR>
+nmap <leader>gR :ALERename<CR>
 nmap <c-y> :ALEHover<CR>
 
 let g:asyncomplete_remove_duplicates = 1
@@ -369,9 +371,9 @@ let g:jedi#completions_enabled = 0
 " Tslime (lisps)
 " =============================================================================
 
-let g:tslime_normal_mapping = '<leader>t'
-let g:tslime_visual_mapping = '<leader>t'
-let g:tslime_vars_mapping = '<leader>T'
+" let g:tslime_normal_mapping = '<leader>t'
+" let g:tslime_visual_mapping = '<leader>t'
+" let g:tslime_vars_mapping = '<leader>T'
 
 " =============================================================================
 " Bufferline
@@ -472,6 +474,13 @@ autocmd FileType markdown setlocal spell formatoptions=tqr
 " =============================================================================
 
 command SQL enew | setlocal buftype=nofile | setlocal ft=pgsql
+
+" =============================================================================
+" Floaterm
+" =============================================================================
+
+nnoremap <silent> <leader>t :FloatermToggle<CR>
+tnoremap <silent> <leader>t <C-\><C-n>:FloatermToggle<CR>
 
 " =============================================================================
 " Machine specific config
