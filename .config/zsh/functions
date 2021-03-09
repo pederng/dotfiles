@@ -179,3 +179,13 @@ function _tmux_update_env {
         # update current shell to parent tmux shell (useful for new SSH connections, x forwarding, etc)
         eval $(tmux show-environment -s | grep 'DISPLAY\|SSH_CONNECTION\|SSH_AUTH_SOCK')
     }
+
+function gssh() {
+  echo "Killing remote agent"
+  cat <<'EOF' | command ssh -T "$@" bash
+    set -e
+    timeout -k 2 1 gpgconf --kil gpg-agent || true
+EOF
+  echo "Connecting"
+  ssh "$@"
+}
