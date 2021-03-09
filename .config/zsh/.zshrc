@@ -1,10 +1,6 @@
 HISTFILE=$XDG_DATA_HOME/zsh/histfile
 HISTSIZE=100000
 SAVEHIST=10000
-
-source $ZDOTDIR/aliases
-source $ZDOTDIR/functions
-
 setopt incappendhistory autocd extendedglob
 unsetopt beep nomatch notify
 bindkey -v
@@ -149,11 +145,12 @@ command -v stack >/dev/null && eval "$(stack --bash-completion-script stack)"
 eval "$(journal completion)"
 eval "$(zettel completion)"
 
-function preexec() {
-    _tmux_update_env
-    _update_agents
-}
 
+#----Aliases-----
+source $ZDOTDIR/aliases
+
+#----Functions----
+source $ZDOTDIR/functions
 
 #----Machine-specific----
 source $ZDOTDIR/machine_specific
