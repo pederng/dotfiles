@@ -29,25 +29,6 @@ function tw() {
     tmux switch-client -t "$target"
 }
 
-function ftpane() {
-  local panes current_window current_pane target target_window target_pane
-  panes=$(tmux list-panes -s -F '#I:#P - #{pane_current_path} #{pane_current_command}')
-  current_pane=$(tmux display-message -p '#I:#P')
-  current_window=$(tmux display-message -p '#I')
-
-  target=$(echo "$panes" | grep -v "$current_pane" | fzf +m --reverse) || return
-
-  target_window=$(echo $target | awk 'BEGIN{FS=":|-"} {print$1}')
-  target_pane=$(echo $target | awk 'BEGIN{FS=":|-"} {print$2}' | cut -c 1)
-
-  if [[ $current_window -eq $target_window ]]; then
-    tmux select-pane -t ${target_window}.${target_pane}
-  else
-    tmux select-pane -t ${target_window}.${target_pane} &&
-    tmux select-window -t $target_window
-  fi
-}
-
 function v() {
   local files
   files=$(grep '^>' $XDG_DATA_HOME/vim/viminfo | cut -c3- |
@@ -137,20 +118,6 @@ function fcs() {
   commit=$(echo "$commits" | fzf --tac +s +m -e --ansi --reverse) &&
   echo -n $(echo "$commit" | sed "s/ .*//")
 }
-
-unalias z 2> /dev/null
-function z() {
-	[ $# -gt 0 ] && _z "$*" && return
-	cd "$(_z -l 2>&1 | fzf --height 40% --reverse --inline-info +s --tac --query "$*" | sed 's/^[0-9,.]* *//')"
-}
-
-function _complete_nbs {
-  reply=('storage' 'cache' 'thumb' 'aws' 'key' 'logmon' 'all')
-}
-compctl -K _complete_nbs nbs_build
-compctl -K _complete_nbs nbs_clean
-compctl -K _complete_nbs nbs_rebuild
-
 
 function _update_agents {
     # take over SSH keychain (with gpg-agent soon) but only on local machine, not remote ssh machine

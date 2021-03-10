@@ -110,6 +110,10 @@ if [ ! -f $ZDOTDIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
 fi
 source $ZDOTDIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+# Jumping
+
+command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
+
 
 # Fuzzy completion
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
@@ -132,9 +136,6 @@ function _pip_completion {
              PIP_AUTO_COMPLETE=1 $words[1] ) )
 }
 compctl -K _pip_completion pip
-
-source $ZDOTDIR/plugins/z.sh
-alias j=z
 
 # Notes
 export NOTES_DIR=$XDG_DATA_HOME/notes
