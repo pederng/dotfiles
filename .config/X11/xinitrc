@@ -41,7 +41,7 @@ setxkbmap -layout us -variant altgr-intl -option ctrl:nocaps
 sh ~/.local/bin/fehbg
 test -f "$XDG_CONFIG_HOME"/xrandr_settings && "$XDG_CONFIG_HOME"/xrandr_settings
 xbindkeys -f "$XDG_CONFIG_HOME"/xbindkeys/config
-xset -s 600
+xset s 600
 xss-lock slock &
 dunst &
 unclutter &
