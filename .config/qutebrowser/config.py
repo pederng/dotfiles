@@ -49,5 +49,4 @@ c.url.searchengines = {
     "DEFAULT": "https://duck.com/?q={}",
     "ddg": "https://duck.com/?q={}",
     "ddgl": "https://lite.duckduckgo.com/lite?q={}",
-    "sx": "https://searx.privatenet.cf/?q={}",
 }
