@@ -15,24 +15,24 @@ Path ~/.local/share/mail/purelymail/
 Inbox ~/.local/share/mail/purelymail/inbox
 
 Channel sync-purelymail-default
-Master :purelymail-remote:
-Slave :purelymail-local:
+Far :purelymail-remote:
+Near :purelymail-local:
 Patterns "INBOX"
 
 Channel sync-purelymail-sent
-Master :purelymail-remote:Sent
-Slave :purelymail-local:sent
-Create Slave
+Far :purelymail-remote:Sent
+Near :purelymail-local:sent
+Create Near
 
 Channel sync-purelymail-drafts
-Master :purelymail-remote:Drafts
-Slave :purelymail-local:drafts
-Create Slave
+Far :purelymail-remote:Drafts
+Near :purelymail-local:drafts
+Create Near
 
 Channel sync-purelymail-archive
-Master :purelymail-remote:Trash
-Slave :purelymail-local:archive
-Create Slave
+Far :purelymail-remote:Trash
+Near :purelymail-local:archive
+Create Near
 
 Group purelymail
 Channel sync-purelymail-default
@@ -59,24 +59,24 @@ Path ~/.local/share/mail/gmail-personal/
 Inbox ~/.local/share/mail/gmail-personal/inbox
 
 Channel sync-gmail-personal-default
-Master :gmail-personal-remote:
-Slave :gmail-personal-local:
+Far :gmail-personal-remote:
+Near :gmail-personal-local:
 Patterns "INBOX"
 
 Channel sync-gmail-personal-sent
-Master :gmail-personal-remote:"[Gmail]/Sent Mail"
-Slave :gmail-personal-local:sent
-Create Slave
+Far :gmail-personal-remote:"[Gmail]/Sent Mail"
+Near :gmail-personal-local:sent
+Create Near
 
 Channel sync-gmail-personal-drafts
-Master :gmail-personal-remote:"[Gmail]/Drafts"
-Slave :gmail-personal-local:drafts
-Create Slave
+Far :gmail-personal-remote:"[Gmail]/Drafts"
+Near :gmail-personal-local:drafts
+Create Near
 
 Channel sync-gmail-personal-archive
-Master :gmail-personal-remote:"[Gmail]/All Mail"
-Slave :gmail-personal-local:archive
-Create Slave
+Far :gmail-personal-remote:"[Gmail]/All Mail"
+Near :gmail-personal-local:archive
+Create Near
 
 Group gmail-personal
 Channel sync-gmail-personal-default
@@ -102,25 +102,25 @@ Path ~/.local/share/mail/gmail-tsl/
 Inbox ~/.local/share/mail/gmail-tsl/inbox
 
 Channel sync-gmail-tsl-default
-Master :gmail-tsl-remote:
-Slave :gmail-tsl-local:
+Far :gmail-tsl-remote:
+Near :gmail-tsl-local:
 Patterns "INBOX" "github*" "jira"
-Create Slave
+Create Near
 
 Channel sync-gmail-tsl-sent
-Master :gmail-tsl-remote:"[Gmail]/Sent Mail"
-Slave :gmail-tsl-local:sent
-Create Slave
+Far :gmail-tsl-remote:"[Gmail]/Sent Mail"
+Near :gmail-tsl-local:sent
+Create Near
 
 Channel sync-gmail-tsl-drafts
-Master :gmail-tsl-remote:"[Gmail]/Drafts"
-Slave :gmail-tsl-local:drafts
-Create Slave
+Far :gmail-tsl-remote:"[Gmail]/Drafts"
+Near :gmail-tsl-local:drafts
+Create Near
 
 Channel sync-gmail-tsl-archive
-Master :gmail-tsl-remote:"[Gmail]/All Mail"
-Slave :gmail-tsl-local:archive
-Create Slave
+Far :gmail-tsl-remote:"[Gmail]/All Mail"
+Near :gmail-tsl-local:archive
+Create Near
 
 Group gmail-tsl
 Channel sync-gmail-tsl-default
