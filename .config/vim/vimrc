@@ -293,7 +293,7 @@ let g:ale_linters = {
       \ 'go': ['golint', 'gopls'],
       \ 'haskell': ['hie'],
       \ 'javascript': ['standard'],
-      \ 'python': ['pyls', 'mypy', 'pylint', 'bandit'],
+      \ 'python': ['pylsp', 'mypy', 'pylint', 'bandit'],
       \ 'rust': ['analyzer', 'cargo'],
       \ 'typescript': ['tslint', 'tsserver'],
       \ 'vim': ['vint', 'vimls'],
