@@ -190,8 +190,10 @@ map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
 set noswapfile
 " set clipboard=unnamedplus
 
-" :W or is to easy to type by accident
+" :W is to easy to type by accident
 command W w
+command Wq wq
+command WQ wq
 
 " =============================================================================
 " Movement
@@ -288,6 +290,7 @@ call ale#linter#Define('sh', {
 
 let g:ale_linters = {
       \ 'sh': ['bashls', 'shellcheck'],
+      \ 'sql': ['sqlfluff'],
       \ 'c': ['clang'],
       \ 'dart': ['dartanalyzer'],
       \ 'go': ['golint', 'gopls'],
