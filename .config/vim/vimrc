@@ -190,7 +190,7 @@ map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
 set noswapfile
 " set clipboard=unnamedplus
 
-" :W is to easy to type by accident
+" :W is too easy to type by accident
 command W w
 command Wq wq
 command WQ wq
