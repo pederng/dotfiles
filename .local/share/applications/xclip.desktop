@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=xclip
+Exec=xclipit %U
+Terminal=false
+NoDisplay=true
+MimeType=x-scheme-handler/mine-papirer
