@@ -13,3 +13,5 @@
 --exclude=*var/cache
 --exclude=*etc
 --exclude=*py3venv*
+--exclude=*venv_coffer*
+--exclude=*venv_capbak*
