@@ -305,7 +305,7 @@ let g:ale_linters = {
 let g:ale_fixers = {
       \ 'python': ['black'],
       \ 'haskell': ['brittany', 'stylish-haskell'],
-      \ 'rust': ['rustfmt'],
+      \ 'rust': ['rustfmt', 'trim_whitespace', 'remove_trailing_lines'],
       \ 'dart': [],
       \ 'go': ['gofmt'],
       \ 'javascript': ['prettier-standard'],
@@ -319,7 +319,12 @@ let g:ale_fix_on_save = 1
 let g:ale_python_black_options  = '-l 100'
 let g:ale_python_bandit_options  = '-s B101'
 
-let g:ale_rust_cargo_use_clippy = 1
+let g:ale_rust_analyzer_config = {
+			\ 'diagnostics': { 'disabled': ['unresolved-import'] },
+			\ 'cargo': { 'loadOutDirsFromCheck': v:true },
+			\ 'procMacro': { 'enable': v:true },
+			\ 'checkOnSave': { 'command': 'clippy', 'enable': v:true }
+			\ }
 
 
 let g:ale_hover_to_popup = 1
