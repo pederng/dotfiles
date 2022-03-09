@@ -15,9 +15,6 @@ get() {
     string:org.mpris.MediaPlayer2.Player string:"$1"
 }
 
-toggle() {
-  get PlaybackStatus | grep -q Playing && execute Pause || execute Play
-}
 
 case $CMD in
   play)
@@ -35,10 +32,7 @@ case $CMD in
   current)
     get Metadata
     ;;
-  toggle)
-    toggle
-    ;;
   *)
-    toggle
+    execute PlayPause
     ;;
 esac

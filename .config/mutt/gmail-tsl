@@ -10,6 +10,7 @@ mailboxes +inbox \
           +github/capture-backend \
           +github/scripture \
           +github/search \
+          +github/coffer-app \
           +jira \
           +archive
           # +Bedriftsidrettslaget \

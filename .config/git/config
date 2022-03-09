@@ -37,7 +37,7 @@
 	prune = true
 [merge]
 	tool = vimdiff
-	conflictstyle = diff3
+	conflictstyle = zdiff3
 [mergetool]
 	keepBackup = false
 [web]
@@ -46,3 +46,5 @@
 	cmd = qutebrowser
 [pull]
 	rebase = false
+[diff]
+	algorithm = histogram

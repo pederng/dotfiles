@@ -142,7 +142,7 @@ export NOTES_DIR=$XDG_DATA_HOME/notes
 export ZETTEL_DIR=$NOTES_DIR/zettelkasten
 
 # pipenv completion
-command -v pipenv >/dev/null && eval "$(pipenv --completion)"
+command -v pipenv >/dev/null && eval "$(_PIPENV_COMPLETE=zsh_source pipenv)"
 
 # Stack completion
 command -v stack >/dev/null && eval "$(stack --bash-completion-script stack)"
