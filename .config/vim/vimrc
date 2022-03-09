@@ -194,6 +194,7 @@ set noswapfile
 command W w
 command Wq wq
 command WQ wq
+command Wqa wqa
 
 " =============================================================================
 " Movement
