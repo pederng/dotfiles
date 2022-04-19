@@ -7,6 +7,9 @@ set backupdir=$XDG_DATA_HOME/vim/backup
 set viewdir=$XDG_DATA_HOME/vim/view
 set viminfo+='1000,n$XDG_DATA_HOME/vim/viminfo
 set runtimepath=$XDG_CONFIG_HOME/vim,$VIMRUNTIME,$XDG_CONFIG_HOME/vim/after
+if has('nvim')
+  set viminfo=!,<50,s10,h,'1000,n$XDG_DATA_HOME/nvim/shada/main.shada
+endif
 
 " =============================================================================
 " Load plugins
@@ -43,14 +46,11 @@ call plug#begin('$XDG_CONFIG_HOME/vim/plugged')
 
   " Tags
   Plug 'ludovicchabant/vim-gutentags'
-  Plug 'liuchengxu/vista.vim'
 
   " DB
   Plug 'tpope/vim-dadbod'
 
-  " Syntax/linting/completion
   Plug 'w0rp/ale'
-  Plug 'prabirshrestha/asyncomplete.vim'
 
   " Appearance
   Plug 'itchyny/lightline.vim'
@@ -62,7 +62,6 @@ call plug#begin('$XDG_CONFIG_HOME/vim/plugged')
 
   " Search
   Plug 'voldikss/vim-floaterm'
-  Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}
 
   " File system
   Plug 'tpope/vim-vinegar'
@@ -79,12 +78,33 @@ call plug#begin('$XDG_CONFIG_HOME/vim/plugged')
   Plug 'sheerun/vim-polyglot'
   Plug 'martinda/Jenkinsfile-vim-syntax'
   Plug 'nathangrigg/vim-beancount'
+  Plug 'jjo/vim-cue'
 
   " Lisps
   Plug 'wlangstroth/vim-racket'
   Plug 'bhurlow/vim-parinfer'
   Plug 'sjl/tslime.vim'
 
+  "Nvim plugins
+  if has('nvim')
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    Plug 'nvim-lua/plenary.nvim'
+		Plug 'nvim-telescope/telescope.nvim'
+		Plug 'kyazdani42/nvim-web-devicons'
+		Plug 'pwntester/octo.nvim'
+		Plug 'romgrk/nvim-treesitter-context'
+    Plug 'neovim/nvim-lspconfig'
+    Plug 'hrsh7th/cmp-nvim-lsp', { 'branch': 'main' }
+    Plug 'hrsh7th/cmp-buffer', { 'branch': 'main' }
+    Plug 'hrsh7th/cmp-path', { 'branch': 'main' }
+    Plug 'hrsh7th/cmp-cmdline', { 'branch': 'main' }
+    Plug 'hrsh7th/nvim-cmp', { 'branch': 'main' }
+    Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
+  else
+    Plug 'liuchengxu/vista.vim'
+    Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}
+    Plug 'prabirshrestha/asyncomplete.vim'
+  endif
 
 call plug#end()
 
@@ -243,15 +263,45 @@ set tags=./tags;/
 " Clap
 " =============================================================================
 
-let g:clap_layout = {'relative': 'editor'}
-nnoremap <C-p> :Clap<cr>
-nnoremap <C-p><C-p> :Clap<cr>
-nnoremap <C-p><C-t> :Clap proj_tags<cr>
-nnoremap <C-p><C-o> :Clap tags<cr>
-nnoremap <C-p><C-f> :Clap git_files<cr>
-nnoremap <C-p><C-g> :Clap grep2<cr>
-nnoremap <C-p><C-h> :Clap history<cr>
-nnoremap <C-p><C-b> :Clap buffers<cr>
+if !has('nvim')
+  let g:clap_layout = {'relative': 'editor'}
+  nnoremap <C-p> :Clap<cr>
+  nnoremap <C-p><C-p> :Clap<cr>
+  nnoremap <C-p><C-t> :Clap proj_tags<cr>
+  nnoremap <C-p><C-o> :Clap tags<cr>
+  nnoremap <C-p><C-f> :Clap git_files<cr>
+  nnoremap <C-p><C-g> :Clap grep2<cr>
+  nnoremap <C-p><C-h> :Clap history<cr>
+  nnoremap <C-p><C-b> :Clap buffers<cr>
+endif
+
+" =============================================================================
+" Telescope
+" =============================================================================
+if has('nvim')
+  nnoremap <C-p> :Telescope<cr>
+  nnoremap <C-p><C-p> :Telescope<cr>
+  nnoremap <C-p><C-t> :Telescope tags<cr>
+  nnoremap <C-p><C-o> :Telescope treesitter<cr>
+  nnoremap <C-p><C-f> :Telescope git_files<cr>
+  nnoremap <C-p><C-g> :Telescope live_grep<cr>
+  nnoremap <C-p><C-h> :Telescope oldfiles<cr>
+  nnoremap <C-p><C-b> :Telescope buffers<cr>
+lua << EOF
+  local actions = require("telescope.actions")
+  require("telescope").setup{
+  defaults = {
+    mappings = {
+      i = {
+        ["<esc>"] = actions.close,
+        ["<C-j>"] = "move_selection_next",
+        ["<C-k>"] = "move_selection_previous",
+      }
+    }
+  }
+}
+EOF
+endif
 
 " =============================================================================
 " Filetypes and syntax
@@ -297,7 +347,7 @@ let g:ale_linters = {
       \ 'go': ['golint', 'gopls'],
       \ 'haskell': ['hie'],
       \ 'javascript': ['standard'],
-      \ 'python': ['pylsp', 'mypy', 'pylint', 'bandit'],
+      \ 'python': ['mypy', 'pylint', 'bandit'],
       \ 'rust': ['analyzer', 'cargo'],
       \ 'typescript': ['tslint', 'tsserver'],
       \ 'vim': ['vint', 'vimls'],
@@ -335,32 +385,166 @@ let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_sign_column_always = 1
 let g:ale_type_map = {'flake8': {'ES': 'WS', 'E': 'W'}}
 
-nmap d<c-]> :ALEGoToDefinition<CR>
-nmap r<c-]> :ALEFindReferences<CR>
-nmap gd :ALEGoToDefinition<CR>
-nmap gR :ALEFindReferences<CR>
-nmap <leader>gR :ALERename<CR>
-nmap <c-y> :ALEHover<CR>
+if !has('nvim')
+  nmap d<c-]> :ALEGoToDefinition<CR>
+  nmap r<c-]> :ALEFindReferences<CR>
+  nmap gd :ALEGoToDefinition<CR>
+  nmap gR :ALEFindReferences<CR>
+  nmap <leader>rn :ALERename<CR>
+  nmap <c-y> :ALEHover<CR>
 
-let g:asyncomplete_remove_duplicates = 1
-let g:asyncomplete_smart_completion = 1
-let g:asyncomplete_auto_popup = 1
-imap <c-l> <Plug>(asyncomplete_force_refresh)
+  let g:asyncomplete_remove_duplicates = 1
+  let g:asyncomplete_smart_completion = 1
+  let g:asyncomplete_auto_popup = 1
+  imap <c-l> <Plug>(asyncomplete_force_refresh)
 
-function! s:check_back_space() abort
- let col = col('.') - 1
- return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
+  function! s:check_back_space() abort
+   let col = col('.') - 1
+   return !col || getline('.')[col - 1]  =~ '\s'
+  endfunction
 
-inoremap <silent><expr> <TAB>
-  \ pumvisible() ? "\<C-n>" :
-  \ <SID>check_back_space() ? "\<TAB>" :
-  \ asyncomplete#force_refresh()
+  inoremap <silent><expr> <TAB>
+    \ pumvisible() ? "\<C-n>" :
+    \ <SID>check_back_space() ? "\<TAB>" :
+    \ asyncomplete#force_refresh()
 
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
 
-au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ale#get_source_options({ 'priority': 10  }))
+  au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ale#get_source_options({ 'priority': 10  }))
+endif
+
+" =============================================================================
+" Nvim completion
+" =============================================================================
+
+if has('nvim')
+  set completeopt=menu,menuone,noselect
+
+
+lua <<EOF
+  -- LSP's
+  -- Mappings.
+  -- See `:help vim.diagnostic.*` for documentation on any of the below functions
+  local opts = { noremap=true, silent=true }
+  -- vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+  -- vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+  -- vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+  -- vim.api.nvim_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+
+  -- Use an on_attach function to only map the following keys
+  -- after the language server attaches to the current buffer
+  local on_attach = function(client, bufnr)
+    -- Enable completion triggered by <c-x><c-o>
+    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+    -- Mappings.
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'd<C-]>', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'r<C-]>', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-y>', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  end
+
+  -- Use a loop to conveniently call 'setup' on multiple servers and
+  -- map buffer local keybindings when the language server attaches
+  local servers = { 'pylsp' }
+  for _, lsp in pairs(servers) do
+    require('lspconfig')[lsp].setup {
+      on_attach = on_attach,
+      flags = {
+        -- This will be the default in neovim 0.7+
+        debounce_text_changes = 150,
+      }
+    }
+  end
+
+  -- Completion options
+  local has_words_before = function()
+    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+    return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('%s') == nil
+  end
+  local cmp = require'cmp'
+
+  cmp.setup({
+    mapping = {
+      ['<C-Space>'] = cmp.mapping.confirm {
+            behavior = cmp.ConfirmBehavior.Insert,
+            select = true,
+          },
+      ['<Tab>'] = function(fallback)
+          if not cmp.select_next_item() then
+            if vim.bo.buftype ~= 'prompt' and has_words_before() then
+              cmp.complete()
+            else
+              fallback()
+            end
+          end
+        end,
+      ['<S-Tab>'] = function(fallback)
+          if not cmp.select_prev_item() then
+            if vim.bo.buftype ~= 'prompt' and has_words_before() then
+              cmp.complete()
+            else
+              fallback()
+            end
+          end
+        end,
+      ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+      ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+      ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+      ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
+      ['<C-e>'] = cmp.mapping({
+        i = cmp.mapping.abort(),
+        c = cmp.mapping.close(),
+      }),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    },
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+    }, {
+      { name = 'buffer' },
+    })
+  })
+
+  -- Set configuration for specific filetype.
+  cmp.setup.filetype('gitcommit', {
+    sources = cmp.config.sources({
+      { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
+    }, {
+      { name = 'buffer' },
+    })
+  })
+
+  -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline('/', {
+    sources = {
+      { name = 'buffer' }
+    }
+  })
+
+  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline(':', {
+    sources = cmp.config.sources({
+      { name = 'path' }
+    }, {
+      { name = 'cmdline' }
+    })
+  })
+
+  -- Setup lspconfig.
+  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
+  require('lspconfig')['<YOUR_LSP_SERVER>'].setup {
+    capabilities = capabilities
+  }
+EOF
+endif
+
 
 " =============================================================================
 " VCS signs
@@ -465,12 +649,14 @@ endfunction
 " Vista
 " =============================================================================
 
-let g:vista#renderer#enable_icon = 1
-let g:vista_default_executive = 'ctags'
-let g:vista_executive_for = {
-  \ 'python': 'ale',
-  \ 'rust': 'ale',
-  \ }
+if has('nvim')
+  let g:vista#renderer#enable_icon = 1
+  let g:vista_default_executive = 'ctags'
+  let g:vista_executive_for = {
+    \ 'python': 'ale',
+    \ 'rust': 'ale',
+    \ }
+endif
 
 " =============================================================================
 " Markdown

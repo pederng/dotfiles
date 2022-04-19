@@ -66,6 +66,7 @@ conf() {
         tmux)        vim $XDG_CONFIG_HOME/tmux/tmux.conf ;;
         mutt)        vim $XDG_CONFIG_HOME/mutt/muttrc ;;
         vim)         vim $XDG_CONFIG_HOME/vim/vimrc ;;
+        nvim)        vim $XDG_CONFIG_HOME/nvim/init.vim ;;
         emacs)       emacs -nw $XDG_CONFIG_HOME/emacs/init.el ;;
         vim-local)   vim $XDG_CONFIG_HOME/vim/machine_specific_vimrc ;;
         zathura)     vim $XDG_CONFIG_HOME/zathura/zathurarc ;;
@@ -85,7 +86,7 @@ conf() {
 }
 
 function _complete_conf {
-  reply=('functions' 'aliases' 'zsh' 'zprofile' 'zsh-local' 'vim' 'emacs' 'vim-local' 'mutt' 'qutebrowser' 'tmux' 'ssh' 'starship' 'xresources' 'xinit')
+  reply=('functions' 'aliases' 'zsh' 'zprofile' 'zsh-local' 'vim' 'emacs' 'vim-local' 'mutt' 'qutebrowser' 'tmux' 'ssh' 'starship' 'xresources' 'xinit' 'nvim')
 }
 compctl -K _complete_conf conf
 
@@ -155,6 +156,7 @@ function preexec() {
     _update_agents
 }
 
+DO_NOT_TRACK=1
 
 #----Machine-specific----
 source $ZDOTDIR/machine_specific
