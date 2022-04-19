@@ -100,6 +100,7 @@ call plug#begin('$XDG_CONFIG_HOME/vim/plugged')
     Plug 'hrsh7th/cmp-cmdline', { 'branch': 'main' }
     Plug 'hrsh7th/nvim-cmp', { 'branch': 'main' }
     Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
+    Plug 'ellisonleao/glow.nvim', {'branch': 'main'}
   else
     Plug 'liuchengxu/vista.vim'
     Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}
