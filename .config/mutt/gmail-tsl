@@ -11,6 +11,9 @@ mailboxes +inbox \
           +github/scripture \
           +github/search \
           +github/coffer-app \
+          +github/support-web \
+          +github/cumulus \
+          +github/automation \
           +jira \
           +archive
           # +Bedriftsidrettslaget \
