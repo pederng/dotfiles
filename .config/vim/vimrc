@@ -50,12 +50,10 @@ call plug#begin('$XDG_CONFIG_HOME/vim/plugged')
   " DB
   Plug 'tpope/vim-dadbod'
 
-  Plug 'w0rp/ale'
 
   " Appearance
   Plug 'itchyny/lightline.vim'
   Plug 'mgee/lightline-bufferline'
-  Plug 'maximbaz/lightline-ale'
   Plug 'daviesjamie/vim-base16-lightline'
   Plug 'pedernot/base16-vim'
   Plug 'ryanoasis/vim-devicons'
@@ -91,6 +89,8 @@ call plug#begin('$XDG_CONFIG_HOME/vim/plugged')
     Plug 'nvim-lua/plenary.nvim'
 		Plug 'nvim-telescope/telescope.nvim'
 		Plug 'kyazdani42/nvim-web-devicons'
+    Plug 'folke/trouble.nvim', { 'branch': 'main' }
+    Plug 'folke/lsp-colors.nvim', { 'branch': 'main' }
 		Plug 'pwntester/octo.nvim'
 		Plug 'romgrk/nvim-treesitter-context'
     Plug 'neovim/nvim-lspconfig'
@@ -101,7 +101,11 @@ call plug#begin('$XDG_CONFIG_HOME/vim/plugged')
     Plug 'hrsh7th/nvim-cmp', { 'branch': 'main' }
     Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
     Plug 'ellisonleao/glow.nvim', {'branch': 'main'}
+    Plug 'stevearc/aerial.nvim'
+    Plug 'jose-elias-alvarez/null-ls.nvim', {'branch': 'main'}
   else
+    Plug 'w0rp/ale'
+    Plug 'maximbaz/lightline-ale'
     Plug 'liuchengxu/vista.vim'
     Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}
     Plug 'prabirshrestha/asyncomplete.vim'
@@ -288,6 +292,9 @@ if has('nvim')
   nnoremap <C-p><C-g> :Telescope live_grep<cr>
   nnoremap <C-p><C-h> :Telescope oldfiles<cr>
   nnoremap <C-p><C-b> :Telescope buffers<cr>
+  nnoremap r<C-]> :Telescope lsp_references<cr>
+  nnoremap gr :Telescope lsp_references<cr>
+
 lua << EOF
   local actions = require("telescope.actions")
   require("telescope").setup{
@@ -326,67 +333,67 @@ noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 24, 4)<CR>
 " =============================================================================
 " Ale (async linting and completion)
 " =============================================================================
-function! BashLangServProjRoot(buffer)
-	let l:git_path = ale#path#FindNearestDirectory(a:buffer, '.git')
-	let l:curr_dir = fnamemodify(bufname(a:buffer), ':h')
-	return !empty(l:git_path) ? fnamemodify(l:git_path, ':h:h') : l:curr_dir
-endfunction
-
-call ale#linter#Define('sh', {
-\   'name': 'bashls',
-\   'lsp': 'stdio',
-\   'executable': function('ale_linters#sh#language_server#GetExecutable'),
-\   'command': function('ale_linters#sh#language_server#GetCommand'),
-\   'project_root': function('BashLangServProjRoot'),
-\})
-
-let g:ale_linters = {
-      \ 'sh': ['bashls', 'shellcheck'],
-      \ 'sql': ['sqlfluff'],
-      \ 'c': ['clang'],
-      \ 'dart': ['dartanalyzer'],
-      \ 'go': ['golint', 'gopls'],
-      \ 'haskell': ['hie'],
-      \ 'javascript': ['standard'],
-      \ 'python': ['mypy', 'pylint', 'bandit'],
-      \ 'rust': ['analyzer', 'cargo'],
-      \ 'typescript': ['tslint', 'tsserver'],
-      \ 'vim': ['vint', 'vimls'],
-      \}
-
-let g:ale_fixers = {
-      \ 'python': ['black'],
-      \ 'haskell': ['brittany', 'stylish-haskell'],
-      \ 'rust': ['rustfmt', 'trim_whitespace', 'remove_trailing_lines'],
-      \ 'dart': [],
-      \ 'go': ['gofmt'],
-      \ 'javascript': ['prettier-standard'],
-      \ 'typescript': ['tslint'],
-      \ 'html': ['prettier'],
-      \ 'css': ['prettier'],
-      \}
-
-let g:ale_completion_enabled = 0
-let g:ale_fix_on_save = 1
-let g:ale_python_black_options  = '-l 100'
-let g:ale_python_bandit_options  = '-s B101'
-
-let g:ale_rust_analyzer_config = {
-			\ 'diagnostics': { 'disabled': ['unresolved-import'] },
-			\ 'cargo': { 'loadOutDirsFromCheck': v:true },
-			\ 'procMacro': { 'enable': v:true },
-			\ 'checkOnSave': { 'command': 'clippy', 'enable': v:true }
-			\ }
-
-
-let g:ale_hover_to_popup = 1
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_sign_column_always = 1
-let g:ale_type_map = {'flake8': {'ES': 'WS', 'E': 'W'}}
-
 if !has('nvim')
+  function! BashLangServProjRoot(buffer)
+    let l:git_path = ale#path#FindNearestDirectory(a:buffer, '.git')
+    let l:curr_dir = fnamemodify(bufname(a:buffer), ':h')
+    return !empty(l:git_path) ? fnamemodify(l:git_path, ':h:h') : l:curr_dir
+  endfunction
+
+  call ale#linter#Define('sh', {
+  \   'name': 'bashls',
+  \   'lsp': 'stdio',
+  \   'executable': function('ale_linters#sh#language_server#GetExecutable'),
+  \   'command': function('ale_linters#sh#language_server#GetCommand'),
+  \   'project_root': function('BashLangServProjRoot'),
+  \})
+
+  let g:ale_linters = {
+        \ 'sh': ['bashls', 'shellcheck'],
+        \ 'sql': ['sqlfluff'],
+        \ 'c': ['clang'],
+        \ 'dart': ['dartanalyzer'],
+        \ 'go': ['golint', 'gopls'],
+        \ 'haskell': ['hie'],
+        \ 'javascript': ['standard'],
+        \ 'python': ['mypy', 'pylint', 'bandit'],
+        \ 'rust': ['analyzer', 'cargo'],
+        \ 'typescript': ['tslint', 'tsserver'],
+        \ 'vim': ['vint', 'vimls'],
+        \}
+
+  let g:ale_fixers = {
+        \ 'python': ['black'],
+        \ 'haskell': ['brittany', 'stylish-haskell'],
+        \ 'rust': ['rustfmt', 'trim_whitespace', 'remove_trailing_lines'],
+        \ 'dart': [],
+        \ 'go': ['gofmt'],
+        \ 'javascript': ['prettier-standard'],
+        \ 'typescript': ['tslint'],
+        \ 'html': ['prettier'],
+        \ 'css': ['prettier'],
+        \}
+
+  let g:ale_completion_enabled = 0
+  let g:ale_fix_on_save = 1
+  let g:ale_python_black_options  = '-l 100'
+  let g:ale_python_bandit_options  = '-s B101'
+
+  let g:ale_rust_analyzer_config = {
+        \ 'diagnostics': { 'disabled': ['unresolved-import'] },
+        \ 'cargo': { 'loadOutDirsFromCheck': v:true },
+        \ 'procMacro': { 'enable': v:true },
+        \ 'checkOnSave': { 'command': 'clippy', 'enable': v:true }
+        \ }
+
+
+  let g:ale_hover_to_popup = 1
+  let g:ale_echo_msg_error_str = 'E'
+  let g:ale_echo_msg_warning_str = 'W'
+  let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+  let g:ale_sign_column_always = 1
+  let g:ale_type_map = {'flake8': {'ES': 'WS', 'E': 'W'}}
+
   nmap d<c-]> :ALEGoToDefinition<CR>
   nmap r<c-]> :ALEFindReferences<CR>
   nmap gd :ALEGoToDefinition<CR>
@@ -444,23 +451,21 @@ lua <<EOF
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'd<C-]>', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'r<C-]>', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'r<C-]>', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-y>', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   end
 
   -- Use a loop to conveniently call 'setup' on multiple servers and
   -- map buffer local keybindings when the language server attaches
-  local servers = { 'pylsp' }
+  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  local servers = { 'pyright' }
   for _, lsp in pairs(servers) do
     require('lspconfig')[lsp].setup {
       on_attach = on_attach,
-      flags = {
-        -- This will be the default in neovim 0.7+
-        debounce_text_changes = 150,
-      }
+      capabilities = capabilities,
     }
   end
 
@@ -537,12 +542,62 @@ lua <<EOF
     })
   })
 
-  -- Setup lspconfig.
-  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-  -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
-  require('lspconfig')['<YOUR_LSP_SERVER>'].setup {
-    capabilities = capabilities
+EOF
+endif
+
+" =============================================================================
+" Nvim aerial
+" =============================================================================
+if has('nvim')
+lua <<EOF
+  require('aerial').setup({})
+  require('telescope').load_extension('aerial')
+EOF
+endif
+
+" =============================================================================
+" Nvim null-ls
+" =============================================================================
+if has('nvim')
+lua <<EOF
+  local null_ls = require("null-ls")
+  local sources = {
+      null_ls.builtins.diagnostics.mypy,
+      null_ls.builtins.diagnostics.pylint,
+      null_ls.builtins.formatting.black,
   }
+
+  null_ls.setup({
+    sources = sources ,
+    on_attach = function(client)
+            if client.resolved_capabilities.document_formatting then
+                vim.cmd([[
+                augroup LspFormatting
+                    autocmd! * <buffer>
+                    autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+                augroup END
+                ]])
+            end
+        end,
+   })
+EOF
+endif
+
+" =============================================================================
+" Nvim Trouble
+" =============================================================================
+if has('nvim')
+lua <<EOF
+  require('trouble').setup({
+    mode = "document_diagnostics",
+    use_diagnostics_signs = false,
+  })
+  local opts = { noremap=true, silent=true }
+  vim.api.nvim_set_keymap("n", "<C-x><C-x>", "<cmd>Trouble<cr>", opts)
+  vim.api.nvim_set_keymap("n", "<C-x><C-w>", "<cmd>Trouble workspace_diagnostics<cr>", opts)
+  vim.api.nvim_set_keymap("n", "<C-x><C-d>", "<cmd>Trouble document_diagnostics<cr>", opts)
+  vim.api.nvim_set_keymap("n", "<C-x><C-l>", "<cmd>Trouble loclist<cr>", opts)
+  vim.api.nvim_set_keymap("n", "<C-x><C-q>", "<cmd>Trouble quickfix<cr>", opts)
 EOF
 endif
 
