@@ -9,7 +9,7 @@ mailboxes +inbox \
           +sent \
           +github/capture-backend \
           +github/scripture \
-          +github/search \
+          # +github/search \
           +github/coffer-app \
           +github/support-web \
           +github/cumulus \
