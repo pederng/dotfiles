@@ -89,7 +89,7 @@ IMAPAccount gmail-tsl
 Host imap.gmail.com
 User peder.galteland@softwarelab.no
 AuthMechs XOAUTH2
-PassCmd "fetch_token tsl"
+PassCmd "fetch_token gmail-tsl"
 SSLType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
