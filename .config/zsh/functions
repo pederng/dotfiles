@@ -3,17 +3,6 @@ function new-tmux-from-dir-name {
   tmux new-session -As `basename $PWD`
 }
 
-function downsync_notes() {
-  git --git-dir="$NOTES_DIR"/.git --work-tree="$NOTES_DIR" pull
-}
-
-function upsync_notes() {
-  git --git-dir="$NOTES_DIR"/.git --work-tree="$NOTES_DIR"  add .
-  git --git-dir="$NOTES_DIR"/.git --work-tree="$NOTES_DIR"  commit --author="Autocommiter <>" -m "Autocommit"
-  git --git-dir="$NOTES_DIR"/.git --work-tree="$NOTES_DIR"  push
-}
-
-
 function tm() {
   local session
   newsession=${1:-new}
