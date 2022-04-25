@@ -159,7 +159,7 @@ function preexec() {
 DO_NOT_TRACK=1
 
 # Nix
-. /home/peder/.nix-profile/etc/profile.d/nix.sh
+test -f ~/.nix-profile/etc/profile.d/nix.sh &&  . ~/.nix-profile/etc/profile.d/nix.sh
 alias nix="LD_LIBRARY_PATH= nix"
 alias nix-env="LD_LIBRARY_PATH= nix-env"
 alias cachix="LD_LIBRARY_PATH= cachix"
