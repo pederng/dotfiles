@@ -7,9 +7,6 @@ set backupdir=$XDG_DATA_HOME/vim/backup
 set viewdir=$XDG_DATA_HOME/vim/view
 set viminfo+='1000,n$XDG_DATA_HOME/vim/viminfo
 set runtimepath=$XDG_CONFIG_HOME/vim,$VIMRUNTIME,$XDG_CONFIG_HOME/vim/after
-if has('nvim')
-  set viminfo=!,<50,s10,h,'1000,n$XDG_DATA_HOME/nvim/shada/main.shada
-endif
 
 " =============================================================================
 " Load plugins
@@ -70,46 +67,18 @@ call plug#begin('$XDG_CONFIG_HOME/vim/plugged')
   Plug 'bhurlow/vim-parinfer'
   Plug 'sjl/tslime.vim'
 
-  "Nvim plugins
-  if has('nvim')
-    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-    Plug 'nvim-lua/plenary.nvim'
-		Plug 'nvim-telescope/telescope.nvim'
-		Plug 'kyazdani42/nvim-web-devicons'
-    Plug 'folke/trouble.nvim', { 'branch': 'main' }
-    Plug 'folke/lsp-colors.nvim', { 'branch': 'main' }
-		Plug 'pwntester/octo.nvim'
-		Plug 'romgrk/nvim-treesitter-context'
-    Plug 'neovim/nvim-lspconfig'
-    Plug 'hrsh7th/cmp-nvim-lsp', { 'branch': 'main' }
-    Plug 'hrsh7th/cmp-buffer', { 'branch': 'main' }
-    Plug 'hrsh7th/cmp-path', { 'branch': 'main' }
-    Plug 'hrsh7th/cmp-cmdline', { 'branch': 'main' }
-    Plug 'hrsh7th/nvim-cmp', { 'branch': 'main' }
-    Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
-    Plug 'ellisonleao/glow.nvim', {'branch': 'main'}
-    Plug 'stevearc/aerial.nvim'
-    Plug 'jose-elias-alvarez/null-ls.nvim', {'branch': 'main'}
-    Plug 'nvim-lualine/lualine.nvim'
-    Plug 'RRethy/nvim-base16'
-    Plug 'akinsho/bufferline.nvim', { 'tag': '*' }
-    Plug 'lewis6991/gitsigns.nvim', {'branch': 'main'}
-    Plug 'karb94/neoscroll.nvim'
-    Plug 'onsails/lspkind.nvim'
-  else
-    Plug 'terryma/vim-smooth-scroll'
-    Plug 'w0rp/ale'
-    Plug 'maximbaz/lightline-ale'
-    Plug 'liuchengxu/vista.vim'
-    Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}
-    Plug 'prabirshrestha/asyncomplete.vim'
-    Plug 'itchyny/lightline.vim'
-    Plug 'mgee/lightline-bufferline'
-    Plug 'daviesjamie/vim-base16-lightline'
-    Plug 'ryanoasis/vim-devicons'
-    Plug 'pedernot/base16-vim'
-    Plug 'mhinz/vim-signify'
-  endif
+  Plug 'terryma/vim-smooth-scroll'
+  Plug 'w0rp/ale'
+  Plug 'maximbaz/lightline-ale'
+  Plug 'liuchengxu/vista.vim'
+  Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}
+  Plug 'prabirshrestha/asyncomplete.vim'
+  Plug 'itchyny/lightline.vim'
+  Plug 'mgee/lightline-bufferline'
+  Plug 'daviesjamie/vim-base16-lightline'
+  Plug 'ryanoasis/vim-devicons'
+  Plug 'pedernot/base16-vim'
+  Plug 'mhinz/vim-signify'
 
 call plug#end()
 
@@ -268,50 +237,16 @@ set tags=./tags;/
 " Clap
 " =============================================================================
 
-if !has('nvim')
-  let g:clap_layout = {'relative': 'editor'}
-  nnoremap <C-p> :Clap<cr>
-  nnoremap <C-p><C-p> :Clap<cr>
-  nnoremap <C-p><C-t> :Clap proj_tags<cr>
-  nnoremap <C-p><C-o> :Clap tags<cr>
-  nnoremap <C-p><C-f> :Clap git_files<cr>
-  nnoremap <C-p><C-g> :Clap grep2<cr>
-  nnoremap <C-p><C-h> :Clap history<cr>
-  nnoremap <C-p><C-b> :Clap buffers<cr>
-endif
+let g:clap_layout = {'relative': 'editor'}
+nnoremap <C-p> :Clap<cr>
+nnoremap <C-p><C-p> :Clap<cr>
+nnoremap <C-p><C-t> :Clap proj_tags<cr>
+nnoremap <C-p><C-o> :Clap tags<cr>
+nnoremap <C-p><C-f> :Clap git_files<cr>
+nnoremap <C-p><C-g> :Clap grep2<cr>
+nnoremap <C-p><C-h> :Clap history<cr>
+nnoremap <C-p><C-b> :Clap buffers<cr>
 
-" =============================================================================
-" Telescope
-" =============================================================================
-if has('nvim')
-  nnoremap <C-p> :Telescope<cr>
-  nnoremap <C-p><C-p> :Telescope<cr>
-  " nnoremap <C-p><C-t> :Telescope tags<cr>
-  nnoremap <C-p><C-t> :Telescope lsp_dynamic_workspace_symbols<cr>
-  nnoremap <C-p><C-o> :Telescope lsp_document_symbols<cr>
-  " nnoremap <C-p><C-o> :Telescope treesitter<cr>
-  nnoremap <C-p><C-f> :Telescope git_files<cr>
-  nnoremap <C-p><C-g> :Telescope live_grep<cr>
-  nnoremap <C-p><C-h> :Telescope oldfiles<cr>
-  nnoremap <C-p><C-b> :Telescope buffers<cr>
-  nnoremap r<C-]> :Telescope lsp_references<cr>
-  nnoremap gr :Telescope lsp_references<cr>
-
-lua << EOF
-  local actions = require("telescope.actions")
-  require("telescope").setup{
-  defaults = {
-    mappings = {
-      i = {
-        ["<esc>"] = actions.close,
-        ["<C-j>"] = "move_selection_next",
-        ["<C-k>"] = "move_selection_previous",
-      }
-    }
-  }
-}
-EOF
-endif
 
 " =============================================================================
 " Filetypes and syntax
@@ -327,320 +262,100 @@ au BufNewFile,BufRead *.yaml,*.yml so ~/.config/vim/colors/yaml.vim
 " Smooth scroll
 " =============================================================================
 
-if has('nvim')
-lua << EOF
-  require('neoscroll').setup({
-      -- All these keys will be mapped to their corresponding default scrolling animation
-      mappings = {'<C-u>', '<C-d>', '<C-b>', '<C-f>',
-                  '<C-y>', '<C-e>', 'zt', 'zz', 'zb'},
-      hide_cursor = true,          -- Hide cursor while scrolling
-      stop_eof = true,             -- Stop at <EOF> when scrolling downwards
-      use_local_scrolloff = false, -- Use the local scope of scrolloff instead of the global scope
-      respect_scrolloff = false,   -- Stop scrolling when the cursor reaches the scrolloff margin of the file
-      cursor_scrolls_alone = true, -- The cursor will keep on scrolling even if the window cannot scroll further
-      easing_function = nil,       -- Default easing function
-      pre_hook = nil,              -- Function to run before the scrolling animation starts
-      post_hook = nil,             -- Function to run after the scrolling animation ends
-      performance_mode = false,    -- Disable "Performance Mode" on all buffers.
-  })
-EOF
-else
-  noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 12, 2)<CR>
-  noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 14, 2)<CR>
-  noremap <silent> <c-b> :call smooth_scroll#up(&scroll*2, 22, 4)<CR>
-  noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 24, 4)<CR>
-endif
+noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 12, 2)<CR>
+noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 14, 2)<CR>
+noremap <silent> <c-b> :call smooth_scroll#up(&scroll*2, 22, 4)<CR>
+noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 24, 4)<CR>
 
 " =============================================================================
 " Ale (async linting and completion)
 " =============================================================================
-if !has('nvim')
-  function! BashLangServProjRoot(buffer)
-    let l:git_path = ale#path#FindNearestDirectory(a:buffer, '.git')
-    let l:curr_dir = fnamemodify(bufname(a:buffer), ':h')
-    return !empty(l:git_path) ? fnamemodify(l:git_path, ':h:h') : l:curr_dir
-  endfunction
+function! BashLangServProjRoot(buffer)
+  let l:git_path = ale#path#FindNearestDirectory(a:buffer, '.git')
+  let l:curr_dir = fnamemodify(bufname(a:buffer), ':h')
+  return !empty(l:git_path) ? fnamemodify(l:git_path, ':h:h') : l:curr_dir
+endfunction
 
-  call ale#linter#Define('sh', {
-  \   'name': 'bashls',
-  \   'lsp': 'stdio',
-  \   'executable': function('ale_linters#sh#language_server#GetExecutable'),
-  \   'command': function('ale_linters#sh#language_server#GetCommand'),
-  \   'project_root': function('BashLangServProjRoot'),
-  \})
+call ale#linter#Define('sh', {
+\   'name': 'bashls',
+\   'lsp': 'stdio',
+\   'executable': function('ale_linters#sh#language_server#GetExecutable'),
+\   'command': function('ale_linters#sh#language_server#GetCommand'),
+\   'project_root': function('BashLangServProjRoot'),
+\})
 
-  let g:ale_linters = {
-        \ 'sh': ['bashls', 'shellcheck'],
-        \ 'sql': ['sqlfluff'],
-        \ 'c': ['clang'],
-        \ 'dart': ['dartanalyzer'],
-        \ 'go': ['golint', 'gopls'],
-        \ 'haskell': ['hie'],
-        \ 'javascript': ['standard'],
-        \ 'python': ['mypy', 'pylint', 'bandit'],
-        \ 'rust': ['analyzer', 'cargo'],
-        \ 'typescript': ['tslint', 'tsserver'],
-        \ 'vim': ['vint', 'vimls'],
-        \}
+let g:ale_linters = {
+      \ 'sh': ['bashls', 'shellcheck'],
+      \ 'sql': ['sqlfluff'],
+      \ 'c': ['clang'],
+      \ 'dart': ['dartanalyzer'],
+      \ 'go': ['golint', 'gopls'],
+      \ 'haskell': ['hie'],
+      \ 'javascript': ['standard'],
+      \ 'python': ['mypy', 'pylint', 'bandit'],
+      \ 'rust': ['analyzer', 'cargo'],
+      \ 'typescript': ['tslint', 'tsserver'],
+      \ 'vim': ['vint', 'vimls'],
+      \}
 
-  let g:ale_fixers = {
-        \ 'python': ['black'],
-        \ 'haskell': ['brittany', 'stylish-haskell'],
-        \ 'rust': ['rustfmt', 'trim_whitespace', 'remove_trailing_lines'],
-        \ 'dart': [],
-        \ 'go': ['gofmt'],
-        \ 'javascript': ['prettier-standard'],
-        \ 'typescript': ['tslint'],
-        \ 'html': ['prettier'],
-        \ 'css': ['prettier'],
-        \}
+let g:ale_fixers = {
+      \ 'python': ['black'],
+      \ 'haskell': ['brittany', 'stylish-haskell'],
+      \ 'rust': ['rustfmt', 'trim_whitespace', 'remove_trailing_lines'],
+      \ 'dart': [],
+      \ 'go': ['gofmt'],
+      \ 'javascript': ['prettier-standard'],
+      \ 'typescript': ['tslint'],
+      \ 'html': ['prettier'],
+      \ 'css': ['prettier'],
+      \}
 
-  let g:ale_completion_enabled = 0
-  let g:ale_fix_on_save = 1
-  let g:ale_python_black_options  = '-l 100'
-  let g:ale_python_bandit_options  = '-s B101'
+let g:ale_completion_enabled = 0
+let g:ale_fix_on_save = 1
+let g:ale_python_black_options  = '-l 100'
+let g:ale_python_bandit_options  = '-s B101'
 
-  let g:ale_rust_analyzer_config = {
-        \ 'diagnostics': { 'disabled': ['unresolved-import'] },
-        \ 'cargo': { 'loadOutDirsFromCheck': v:true },
-        \ 'procMacro': { 'enable': v:true },
-        \ 'checkOnSave': { 'command': 'clippy', 'enable': v:true }
-        \ }
-
-
-  let g:ale_hover_to_popup = 1
-  let g:ale_echo_msg_error_str = 'E'
-  let g:ale_echo_msg_warning_str = 'W'
-  let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-  let g:ale_sign_column_always = 1
-  let g:ale_type_map = {'flake8': {'ES': 'WS', 'E': 'W'}}
-
-  nmap d<c-]> :ALEGoToDefinition<CR>
-  nmap r<c-]> :ALEFindReferences<CR>
-  nmap gd :ALEGoToDefinition<CR>
-  nmap gR :ALEFindReferences<CR>
-  nmap <leader>rn :ALERename<CR>
-  nmap <c-y> :ALEHover<CR>
-
-  let g:asyncomplete_remove_duplicates = 1
-  let g:asyncomplete_smart_completion = 1
-  let g:asyncomplete_auto_popup = 1
-  imap <c-l> <Plug>(asyncomplete_force_refresh)
-
-  function! s:check_back_space() abort
-   let col = col('.') - 1
-   return !col || getline('.')[col - 1]  =~ '\s'
-  endfunction
-
-  inoremap <silent><expr> <TAB>
-    \ pumvisible() ? "\<C-n>" :
-    \ <SID>check_back_space() ? "\<TAB>" :
-    \ asyncomplete#force_refresh()
-
-  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
-
-  au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ale#get_source_options({ 'priority': 10  }))
-endif
-
-" =============================================================================
-" Nvim completion
-" =============================================================================
-
-if has('nvim')
-  set completeopt=menu,menuone,noselect
+let g:ale_rust_analyzer_config = {
+      \ 'diagnostics': { 'disabled': ['unresolved-import'] },
+      \ 'cargo': { 'loadOutDirsFromCheck': v:true },
+      \ 'procMacro': { 'enable': v:true },
+      \ 'checkOnSave': { 'command': 'clippy', 'enable': v:true }
+      \ }
 
 
-lua <<EOF
-  -- LSP's
-  -- Mappings.
-  -- See `:help vim.diagnostic.*` for documentation on any of the below functions
-  local opts = { noremap=true, silent=true }
-  vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-  vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-  vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-  vim.api.nvim_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+let g:ale_hover_to_popup = 1
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_sign_column_always = 1
+let g:ale_type_map = {'flake8': {'ES': 'WS', 'E': 'W'}}
 
-  -- Use an on_attach function to only map the following keys
-  -- after the language server attaches to the current buffer
-  local on_attach = function(client, bufnr)
-    -- Enable completion triggered by <c-x><c-o>
-    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+nmap d<c-]> :ALEGoToDefinition<CR>
+nmap r<c-]> :ALEFindReferences<CR>
+nmap gd :ALEGoToDefinition<CR>
+nmap gR :ALEFindReferences<CR>
+nmap <leader>rn :ALERename<CR>
+nmap <c-y> :ALEHover<CR>
 
-    -- Mappings.
-    -- See `:help vim.lsp.*` for documentation on any of the below functions
-    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'd<C-]>', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'r<C-]>', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-y>', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  end
+let g:asyncomplete_remove_duplicates = 1
+let g:asyncomplete_smart_completion = 1
+let g:asyncomplete_auto_popup = 1
+imap <c-l> <Plug>(asyncomplete_force_refresh)
 
-  -- Use a loop to conveniently call 'setup' on multiple servers and
-  -- map buffer local keybindings when the language server attaches
-  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-  local servers = { 'pyright' }
-  for _, lsp in pairs(servers) do
-    require('lspconfig')[lsp].setup {
-      on_attach = on_attach,
-      capabilities = capabilities,
-    }
-  end
+function! s:check_back_space() abort
+ let col = col('.') - 1
+ return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
 
-  -- Completion options
-  local has_words_before = function()
-    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-    return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('%s') == nil
-  end
-  local cmp = require'cmp'
+inoremap <silent><expr> <TAB>
+  \ pumvisible() ? "\<C-n>" :
+  \ <SID>check_back_space() ? "\<TAB>" :
+  \ asyncomplete#force_refresh()
 
-  local lspkind = require('lspkind')
-  cmp.setup({
-    formatting = {
-      format = lspkind.cmp_format(),
-    },
-    mapping = {
-      ['<C-Space>'] = cmp.mapping.confirm {
-            behavior = cmp.ConfirmBehavior.Insert,
-            select = true,
-          },
-      ['<Tab>'] = function(fallback)
-          if not cmp.select_next_item() then
-            if vim.bo.buftype ~= 'prompt' and has_words_before() then
-              cmp.complete()
-            else
-              fallback()
-            end
-          end
-        end,
-      ['<S-Tab>'] = function(fallback)
-          if not cmp.select_prev_item() then
-            if vim.bo.buftype ~= 'prompt' and has_words_before() then
-              cmp.complete()
-            else
-              fallback()
-            end
-          end
-        end,
-      ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
-      ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
-      ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
-      -- ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
-      ['<C-e>'] = cmp.mapping({
-        i = cmp.mapping.abort(),
-        c = cmp.mapping.close(),
-      }),
-      ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-    },
-    sources = cmp.config.sources({
-      { name = 'nvim_lsp' },
-    }, {
-      { name = 'buffer' },
-    })
-  })
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
 
-  -- Set configuration for specific filetype.
-  cmp.setup.filetype('gitcommit', {
-    sources = cmp.config.sources({
-      { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
-    }, {
-      { name = 'buffer' },
-    })
-  })
-
-  -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline('/', {
-    sources = {
-      { name = 'buffer' }
-    }
-  })
-
-  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline(':', {
-    sources = cmp.config.sources({
-      { name = 'path' }
-    }, {
-      { name = 'cmdline' }
-    })
-  })
-
-  -- diagnostics config
-  vim.diagnostic.config({
-    virtual_text = true,
-    signs = true,
-    underline = true,
-    update_in_insert = false,
-    severity_sort = true,
-  })
-
-  local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
-  for type, icon in pairs(signs) do
-    local hl = "DiagnosticSign" .. type
-    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-  end
-
-EOF
-endif
-
-" =============================================================================
-" Nvim aerial
-" =============================================================================
-if has('nvim')
-lua <<EOF
-  require('aerial').setup({})
-  require('telescope').load_extension('aerial')
-EOF
-endif
-
-" =============================================================================
-" Nvim null-ls
-" =============================================================================
-if has('nvim')
-lua <<EOF
-  local null_ls = require("null-ls")
-  local sources = {
-      null_ls.builtins.diagnostics.mypy,
-      null_ls.builtins.diagnostics.pylint,
-      null_ls.builtins.formatting.black,
-      null_ls.builtins.code_actions.gitsigns,
-  }
-
-  null_ls.setup({
-    sources = sources ,
-    on_attach = function(client)
-            if client.resolved_capabilities.document_formatting then
-                vim.cmd([[
-                augroup LspFormatting
-                    autocmd! * <buffer>
-                    autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting()
-                augroup END
-                ]])
-            end
-        end,
-   })
-EOF
-endif
-
-" =============================================================================
-" Nvim Trouble
-" =============================================================================
-if has('nvim')
-lua <<EOF
-  require('trouble').setup({
-    mode = "document_diagnostics",
-  })
-  local opts = { noremap=true, silent=true }
-  vim.api.nvim_set_keymap("n", "<C-x><C-x>", "<cmd>Trouble<cr>", opts)
-  vim.api.nvim_set_keymap("n", "<C-x><C-w>", "<cmd>Trouble workspace_diagnostics<cr>", opts)
-  vim.api.nvim_set_keymap("n", "<C-x><C-d>", "<cmd>Trouble document_diagnostics<cr>", opts)
-  vim.api.nvim_set_keymap("n", "<C-x><C-l>", "<cmd>Trouble loclist<cr>", opts)
-  vim.api.nvim_set_keymap("n", "<C-x><C-q>", "<cmd>Trouble quickfix<cr>", opts)
-EOF
-endif
-
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ale#get_source_options({ 'priority': 10  }))
 
 " =============================================================================
 " VCS signs
@@ -664,72 +379,16 @@ let g:jedi#completions_enabled = 0
 " Bufferline
 " =============================================================================
 
-if has('nvim')
-  set termguicolors
-lua << EOF
-  require("bufferline").setup{
-    options = {
-      diagnostics = 'nvim_lsp'
-    }
-  }
-EOF
-else
-  let g:bufferline_echo = 1
-  let g:bufferline_show_bufnr = 0
-  let g:lightline#bufferline#enable_devicons = 1
-  autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
-endif
+let g:bufferline_echo = 1
+let g:bufferline_show_bufnr = 0
+let g:lightline#bufferline#enable_devicons = 1
+autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
 
 " =============================================================================
 " Git
 " =============================================================================
 
 autocmd Filetype gitcommit setlocal spell textwidth=72
-if has('nvim')
-lua << EOF
-  require('gitsigns').setup{
-
-  on_attach = function(bufnr)
-		local gs = package.loaded.gitsigns
-
-		local function map(mode, l, r, opts)
-			opts = opts or {}
-			opts.buffer = bufnr
-			vim.keymap.set(mode, l, r, opts)
-		end
-
-		-- Navigation
-		map('n', ']c', function()
-			if vim.wo.diff then return ']c' end
-			vim.schedule(function() gs.next_hunk() end)
-			return '<Ignore>'
-		end, {expr=true})
-
-		map('n', '[c', function()
-			if vim.wo.diff then return '[c' end
-			vim.schedule(function() gs.prev_hunk() end)
-			return '<Ignore>'
-		end, {expr=true})
-
-		-- Actions
-		map({'n', 'v'}, '<leader>gs', ':Gitsigns stage_hunk<CR>')
-		map({'n', 'v'}, '<leader>gr', ':Gitsigns reset_hunk<CR>')
-		map('n', '<leader>gS', gs.stage_buffer)
-		map('n', '<leader>gu', gs.undo_stage_hunk)
-		map('n', '<leader>gR', gs.reset_buffer)
-		map('n', '<leader>gp', gs.preview_hunk)
-		map('n', '<leader>gb', function() gs.blame_line{full=true} end)
-		map('n', '<leader>tb', gs.toggle_current_line_blame)
-		map('n', '<leader>gd', gs.diffthis)
-		map('n', '<leader>gD', function() gs.diffthis('~') end)
-		map('n', '<leader>gd', gs.toggle_deleted)
-
-		-- Text object
-		map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
-	end
-  }
-EOF
-endif
 
 " =============================================================================
 " Fugitive
@@ -747,107 +406,59 @@ let g:netrw_browsex_viewer = "qutebrowser"
 " Lightline
 " =============================================================================
 
-if !has('nvim')
-  let g:lightline = {
-    \ 'colorscheme': 'base16',
-    \ 'active': {
-    \   'left': [ ['mode', 'paste'], ['readonly', 'filename', 'modified', 'fugitive']],
-    \   'right': [['linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok', 'lineinfo' ],
-    \             ['percent'],
-    \             ['fileformat', 'fileencoding', 'filetype']]
-    \ },
-    \ 'component_function': {
-    \   'fugitive': 'FugitiveHead',
-    \ },
-    \ 'separator': { 'left': '', 'right': '' },
-    \ 'subseparator': { 'left': '', 'right': '' },
-    \ 'tabline': {'left': [['buffers']], 'right': []}
-    \ }
+let g:lightline = {
+  \ 'colorscheme': 'base16',
+  \ 'active': {
+  \   'left': [ ['mode', 'paste'], ['readonly', 'filename', 'modified', 'fugitive']],
+  \   'right': [['linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok', 'lineinfo' ],
+  \             ['percent'],
+  \             ['fileformat', 'fileencoding', 'filetype']]
+  \ },
+  \ 'component_function': {
+  \   'fugitive': 'FugitiveHead',
+  \ },
+  \ 'separator': { 'left': '', 'right': '' },
+  \ 'subseparator': { 'left': '', 'right': '' },
+  \ 'tabline': {'left': [['buffers']], 'right': []}
+  \ }
 
 
-  set showtabline=2
-  let g:lightline.component_expand = {
-    \ 'buffers': 'lightline#bufferline#buffers',
-    \  'linter_checking': 'lightline#ale#checking',
-    \  'linter_warnings': 'lightline#ale#warnings',
-    \  'linter_errors': 'lightline#ale#errors',
-    \  'linter_ok': 'lightline#ale#ok',
-    \}
+set showtabline=2
+let g:lightline.component_expand = {
+  \ 'buffers': 'lightline#bufferline#buffers',
+  \  'linter_checking': 'lightline#ale#checking',
+  \  'linter_warnings': 'lightline#ale#warnings',
+  \  'linter_errors': 'lightline#ale#errors',
+  \  'linter_ok': 'lightline#ale#ok',
+  \}
 
-  let g:lightline.component_type = {
-    \ 'buffers': 'tabsel',
-    \ 'linter_checking': 'left',
-    \ 'linter_warnings': 'warning',
-    \ 'linter_errors': 'error',
-    \ 'linter_ok': 'left',
-    \ }
+let g:lightline.component_type = {
+  \ 'buffers': 'tabsel',
+  \ 'linter_checking': 'left',
+  \ 'linter_warnings': 'warning',
+  \ 'linter_errors': 'error',
+  \ 'linter_ok': 'left',
+  \ }
 
-  function! LightLineModified()
-    return &ft =~ 'help\|vimfiler' ? '' : &modified ? '+' : &modifiable ? '' : '-'
-  endfunction
+function! LightLineModified()
+  return &ft =~ 'help\|vimfiler' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+endfunction
 
-  function! LightLineReadonly()
-    return &ft !~? 'help\|vimfiler' && &readonly ? '' : ''
-  endfunction
-endif
+function! LightLineReadonly()
+  return &ft !~? 'help\|vimfiler' && &readonly ? '' : ''
+endfunction
 
-
-" =============================================================================
-" lualine
-" =============================================================================
-
-if has('nvim')
-  " hi LineNr guibg=#223b54 guifg=#627e99
-  " hi SignColumn guibg=#223b54 guifg=#627e99
-lua << END
-  require('lualine').setup()
-  local M = require('base16-colorscheme')
-  local hi = M.highlight
-  hi.LineNr                = { guifg = M.colors.base03, guibg = M.colors.base01, gui = nil,    guisp = nil }
-  hi.SignColumn            = { guifg = M.colors.base03, guibg = M.colors.base01, gui = nil,    guisp = nil }
-  hi.GitGutterAdd          = { guifg = M.colors.base0B, guibg = M.colors.base01, gui = nil,    guisp = nil }
-	hi.GitGutterChange       = { guifg = M.colors.base0D, guibg = M.colors.base01, gui = nil,    guisp = nil }
-	hi.GitGutterDelete       = { guifg = M.colors.base08, guibg = M.colors.base01, gui = nil,    guisp = nil }
-	hi.GitGutterChangeDelete = { guifg = M.colors.base0E, guibg = M.colors.base01, gui = nil,    guisp = nil }
-  hi.NormalFloat           = { guifg = M.colors.base05, guibg = M.colors.base01, gui = nil,    guisp = nil }
-  hi.FloatBorder           = { guifg = M.colors.base05, guibg = M.colors.base01, gui = nil,    guisp = nil }
-  hi.DiagnosticError       = { guifg = M.colors.base0E, guibg = M.colors.base01, gui = 'none', guisp = nil }
-  hi.DiagnosticWarn        = { guifg = M.colors.base08, guibg = M.colors.base01, gui = 'none', guisp = nil }
-  hi.DiagnosticInfo        = { guifg = M.colors.base05, guibg = M.colors.base01, gui = 'none', guisp = nil }
-  hi.DiagnosticHint        = { guifg = M.colors.base0C, guibg = M.colors.base01, gui = 'none', guisp = nil }
-END
-" Different color for each type of completion
-" TODO migrate to the above
-" gray
-highlight! CmpItemAbbrDeprecated guibg=NONE gui=strikethrough guifg=#808080
-" blue
-highlight! CmpItemAbbrMatch guibg=NONE guifg=#569CD6
-highlight! CmpItemAbbrMatchFuzzy guibg=NONE guifg=#569CD6
-" light blue
-highlight! CmpItemKindVariable guibg=NONE guifg=#9CDCFE
-highlight! CmpItemKindInterface guibg=NONE guifg=#9CDCFE
-highlight! CmpItemKindText guibg=NONE guifg=#9CDCFE
-" pink
-highlight! CmpItemKindFunction guibg=NONE guifg=#C586C0
-highlight! CmpItemKindMethod guibg=NONE guifg=#C586C0
-" front
-highlight! CmpItemKindKeyword guibg=NONE guifg=#D4D4D4
-highlight! CmpItemKindProperty guibg=NONE guifg=#D4D4D4
-highlight! CmpItemKindUnit guibg=NONE guifg=#D4D4D4
-endif
 
 " =============================================================================
 " Vista
 " =============================================================================
 
-if has('nvim')
-  let g:vista#renderer#enable_icon = 1
-  let g:vista_default_executive = 'ctags'
-  let g:vista_executive_for = {
-    \ 'python': 'ale',
-    \ 'rust': 'ale',
-    \ }
-endif
+let g:vista#renderer#enable_icon = 1
+let g:vista_default_executive = 'ctags'
+let g:vista_executive_for = {
+  \ 'python': 'ale',
+  \ 'rust': 'ale',
+  \ }
 
 " =============================================================================
 " Markdown
