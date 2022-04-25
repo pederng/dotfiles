@@ -1,82 +1,88 @@
+local set = vim.opt
+local fn = vim.fn
+
 --  =============================================================================
 --  Load plugins
 --  =============================================================================
 
-
-if vim.fn.empty(vim.fn.glob('$XDG_CONFIG_HOME/nvim/autoload/plug.vim')) then
-  vim.fn.execute '!curl -fLo $XDG_CONFIG_HOME/nvim/autoload/plug.vim https://raw.github.com/junegunn/vim-plug/master/plug.vim'
+local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+if fn.empty(fn.glob(install_path)) > 0 then
+  PACKER_BOOTSTRAP = fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path })
 end
 
-local Plug = vim.fn['plug#']
-vim.call('plug#begin', '$XDG_CONFIG_HOME/nvim/plugged')
+require('packer').startup(function(use)
+  use 'wbthomason/packer.nvim'
 
--- General Utils
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-speeddating'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-rsi'
-Plug 'ntpeters/vim-better-whitespace'
-Plug 'vim-scripts/ReplaceWithRegister'
-Plug 'christoomey/vim-system-copy'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'kyazdani42/nvim-web-devicons'
-Plug('nvim-treesitter/nvim-treesitter', { ['do'] = ':TSUpdate' })
-Plug 'nvim-lua/plenary.nvim'
-Plug 'karb94/neoscroll.nvim'
+  -- General Utils
+  use 'tpope/vim-commentary'
+  use 'tpope/vim-repeat'
+  use 'tpope/vim-unimpaired'
+  use 'tpope/vim-speeddating'
+  use 'tpope/vim-surround'
+  use 'tpope/vim-rsi'
+  use 'ntpeters/vim-better-whitespace'
+  use 'vim-scripts/ReplaceWithRegister'
+  use 'christoomey/vim-system-copy'
+  use 'christoomey/vim-tmux-navigator'
+  use 'kyazdani42/nvim-web-devicons'
+  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+  use 'nvim-lua/plenary.nvim'
+  use 'karb94/neoscroll.nvim'
 
--- Text objects
-Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-textobj-indent'
-Plug 'kana/vim-textobj-line'
-Plug 'kana/vim-textobj-entire'
-Plug 'michaeljsmith/vim-indent-object'
-Plug 'bps/vim-textobj-python'
+  -- Text objects
+  use 'kana/vim-textobj-user'
+  use 'kana/vim-textobj-indent'
+  use 'kana/vim-textobj-line'
+  use 'kana/vim-textobj-entire'
+  use 'michaeljsmith/vim-indent-object'
+  use 'bps/vim-textobj-python'
 
--- Searching
-Plug 'nvim-telescope/telescope.nvim'
+  -- Searching
+  use 'nvim-telescope/telescope.nvim'
 
--- LSP
-Plug 'neovim/nvim-lspconfig'
-Plug('folke/lsp-colors.nvim', { branch = 'main' })
-Plug('hrsh7th/cmp-nvim-lsp', { branch = 'main' })
-Plug('hrsh7th/cmp-buffer', { branch = 'main' })
-Plug('hrsh7th/cmp-path', { branch = 'main' })
-Plug('hrsh7th/cmp-cmdline', { branch = 'main' })
-Plug('hrsh7th/nvim-cmp', { branch = 'main' })
-Plug('jose-elias-alvarez/null-ls.nvim', { branch = 'main' })
-Plug 'onsails/lspkind.nvim'
+  -- LSP
+  use 'neovim/nvim-lspconfig'
+  use { 'folke/lsp-colors.nvim', branch = 'main' }
+  use { 'hrsh7th/cmp-nvim-lsp', branch = 'main' }
+  use { 'hrsh7th/cmp-buffer', branch = 'main' }
+  use { 'hrsh7th/cmp-path', branch = 'main' }
+  use { 'hrsh7th/cmp-cmdline', branch = 'main' }
+  use { 'hrsh7th/nvim-cmp', branch = 'main' }
+  use { 'jose-elias-alvarez/null-ls.nvim', branch = 'main' }
+  use 'onsails/lspkind.nvim'
 
--- DB
-Plug 'tpope/vim-dadbod'
+  -- DB
+  use 'tpope/vim-dadbod'
 
--- File system
-Plug 'tpope/vim-vinegar'
+  -- File system
+  use 'tpope/vim-vinegar'
 
--- Git
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rhubarb'
-Plug 'pwntester/octo.nvim'
-Plug('lewis6991/gitsigns.nvim', { branch = 'main' })
+  -- Git
+  use 'tpope/vim-fugitive'
+  use 'tpope/vim-rhubarb'
+  use 'pwntester/octo.nvim'
+  use { 'lewis6991/gitsigns.nvim', branch = 'main' }
 
--- Other langs
-Plug 'sheerun/vim-polyglot'
-Plug 'nathangrigg/vim-beancount'
-Plug 'jjo/vim-cue'
-Plug('ellisonleao/glow.nvim', { branch = 'main' })
+  -- Other langs
+  use 'sheerun/vim-polyglot'
+  use 'nathangrigg/vim-beancount'
+  use 'jjo/vim-cue'
+  use { 'ellisonleao/glow.nvim', branch = 'main' }
 
--- Visuals
-Plug('folke/trouble.nvim', { branch = 'main' })
-Plug 'romgrk/nvim-treesitter-context'
-Plug 'stevearc/aerial.nvim'
-Plug 'nvim-lualine/lualine.nvim'
-Plug('akinsho/bufferline.nvim', { tag = '*' })
-Plug 'RRethy/nvim-base16'
+  -- Visuals
+  use { 'folke/trouble.nvim', branch = 'main' }
+  use 'romgrk/nvim-treesitter-context'
+  use 'stevearc/aerial.nvim'
+  use 'nvim-lualine/lualine.nvim'
+  use { 'akinsho/bufferline.nvim', tag = '*' }
+  use 'RRethy/nvim-base16'
 
-vim.call('plug#end')
+  if PACKER_BOOTSTRAP then
+    require('packer').sync()
+  end
 
-local set = vim.opt
+end)
+
 -- =============================================================================
 -- Appearance
 -- =============================================================================
@@ -88,7 +94,7 @@ vim.cmd [[
   syntax enable
 ]]
 
-if vim.fn.filereadable(vim.fn.expand('$XDG_CONFIG_HOME/vim/vimrc_background')) then
+if fn.filereadable(fn.expand('$XDG_CONFIG_HOME/vim/vimrc_background')) then
   vim.cmd 'source $XDG_CONFIG_HOME/vim/vimrc_background'
 end
 
@@ -99,12 +105,6 @@ set.showcmd = true
 set.textwidth = 100
 set.wrap = false
 set.termguicolors = true
-
-
--- Status line
--- set laststatus=2
-
-
 set.autoread = true
 set.shortmess:append('I')
 set.updatetime = 100
@@ -416,7 +416,7 @@ vim.diagnostic.config({
 local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
 for type, icon in pairs(signs) do
   local hl = "DiagnosticSign" .. type
-  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+  fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
 
 
@@ -482,7 +482,7 @@ require("bufferline").setup {
 -- =============================================================================
 
 local augroup = vim.api.nvim_create_augroup('git_commit', { clear = true })
-vim.api.nvim_create_autocmd('FileType', { pattern = 'gitcommit', group = augroup, command = 'setlocal spell textwith=72' })
+vim.api.nvim_create_autocmd('FileType', { pattern = 'gitcommit', group = augroup, command = 'setlocal spell textwidth=72' })
 require('gitsigns').setup {
 
   on_attach = function(bufnr)
