@@ -1,5 +1,9 @@
 local set = vim.opt
 local fn = vim.fn
+local g = vim.g
+local autocmd = vim.api.nvim_create_autocmd
+local command = vim.api.nvim_create_user_command
+local keymap = vim.keymap.set
 
 --  =============================================================================
 --  Load plugins
@@ -122,8 +126,8 @@ set.autoindent = true
 -- Leader
 -- =============================================================================
 
-vim.keymap.set('n', '<space>', '<Nop>')
-vim.g.mapleader = " "
+keymap('n', '<space>', '<Nop>')
+g.mapleader = " "
 
 -- =============================================================================
 -- Search
@@ -134,10 +138,10 @@ set.hlsearch = true
 set.ignorecase = true
 set.smartcase = true
 set.showmatch = true
-vim.keymap.set('n', '<leader>h', ':nohlsearch<CR><C-L>')
-local augroup = vim.api.nvim_create_augroup('hightlight_cmds', { clear = true })
-vim.api.nvim_create_autocmd('InsertEnter', { pattern = '*', group = augroup, command = ':setlocal nohlsearch' })
-vim.api.nvim_create_autocmd('InsertLeave', { pattern = '*', group = augroup, command = ':setlocal hlsearch' })
+keymap('n', '<leader>h', ':nohlsearch<CR><C-L>')
+local augroup = vim.api.nvim_create_augroup('highlight_cmds', { clear = true })
+autocmd('InsertEnter', { pattern = '*', group = augroup, command = ':setlocal nohlsearch' })
+autocmd('InsertLeave', { pattern = '*', group = augroup, command = ':setlocal hlsearch' })
 
 -- =============================================================================
 -- Wildmode
@@ -157,37 +161,37 @@ set.wildignore:append('*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz')
 
 --disable autocomment
 local augroup = vim.api.nvim_create_augroup('format_opts', { clear = true })
-vim.api.nvim_create_autocmd('FileType', { pattern = '*', group = augroup, command = 'setlocal formatoptions-=c formatoptions-=r formatoptions-=o' })
+autocmd('FileType', { pattern = '*', group = augroup, command = 'setlocal formatoptions-=c formatoptions-=r formatoptions-=o' })
 
 --Run dot-command in normal if in visual
-vim.keymap.set('v', '.', ':norm.<CR>')
-vim.keymap.set('i', 'jk', '<ESC>')
-vim.keymap.set('n', 'Q', '<NOP>')
+keymap('v', '.', ':norm.<CR>')
+keymap('i', 'jk', '<ESC>')
+keymap('n', 'Q', '<NOP>')
 -- Handy pasting from clipboard
-vim.keymap.set('n', '<leader>p', ':set paste<CR>o<esc>"*]p:set nopaste<cr>')
+keymap('n', '<leader>p', ':set paste<CR>o<esc>"*]p:set nopaste<cr>')
 
 set.swapfile = false
 
 -- :W is too easy to type by accident
-vim.api.nvim_create_user_command('W', 'w', {})
-vim.api.nvim_create_user_command('Wq', 'wq', {})
-vim.api.nvim_create_user_command('WQ', 'wq', {})
-vim.api.nvim_create_user_command('Wqa', 'wqa', {})
+command('W', 'w', {})
+command('Wq', 'wq', {})
+command('WQ', 'wq', {})
+command('Wqa', 'wqa', {})
 
 -- =============================================================================
 -- Movement
 -- =============================================================================
 
 --Force hjkl usage
-vim.keymap.set('n', '<Up>', '<NOP>')
-vim.keymap.set('n', '<Down>', '<NOP>')
-vim.keymap.set('n', '<Left>', '<NOP>')
-vim.keymap.set('n', '<Right>', '<NOP>')
+keymap('n', '<Up>', '<NOP>')
+keymap('n', '<Down>', '<NOP>')
+keymap('n', '<Left>', '<NOP>')
+keymap('n', '<Right>', '<NOP>')
 
-vim.keymap.set('i', '<Up>', '<NOP>')
-vim.keymap.set('i', '<Down>', '<NOP>')
-vim.keymap.set('i', '<Left>', '<NOP>')
-vim.keymap.set('i', '<Right>', '<NOP>')
+keymap('i', '<Up>', '<NOP>')
+keymap('i', '<Down>', '<NOP>')
+keymap('i', '<Left>', '<NOP>')
+keymap('i', '<Right>', '<NOP>')
 
 -- =============================================================================
 -- Windows
@@ -195,34 +199,34 @@ vim.keymap.set('i', '<Right>', '<NOP>')
 
 set.splitbelow = true
 set.splitright = true
-vim.keymap.set('n', '<C-h>', '<C-w>h', { remap = true })
-vim.keymap.set('n', '<C-j>', '<C-w>j', { remap = true })
-vim.keymap.set('n', '<C-k>', '<C-w>k', { remap = true })
-vim.keymap.set('n', '<C-l>', '<C-w>l', { remap = true })
+keymap('n', '<C-h>', '<C-w>h', { remap = true })
+keymap('n', '<C-j>', '<C-w>j', { remap = true })
+keymap('n', '<C-k>', '<C-w>k', { remap = true })
+keymap('n', '<C-l>', '<C-w>l', { remap = true })
 
 -- =============================================================================
 -- Buffers
 -- =============================================================================
 
 set.hidden = true
-vim.g.netrw_fastbrowse = 0
+g.netrw_fastbrowse = 0
 
 -- =============================================================================
 -- Telescope
 -- =============================================================================
 
-vim.keymap.set('n', '<C-p>', ':Telescope<cr>')
-vim.keymap.set('n', '<C-p><C-p>', ':Telescope<cr>')
-vim.keymap.set('n', '<C-p><C-t>', ';:Telescope lsp_dynamic_workspace_symbols<cr>')
-vim.keymap.set('n', '<C-p><C-o>', ':Telescope lsp_document_symbols<cr>')
-vim.keymap.set('n', '<C-p><C-f>', ':Telescope git_files<cr>')
-vim.keymap.set('n', '<C-p><C-g>', ':Telescope live_grep<cr>')
-vim.keymap.set('n', '<C-p><C-h>', ':Telescope oldfiles<cr>')
-vim.keymap.set('n', '<C-p><C-b>', ':Telescope buffers<cr>')
-vim.keymap.set('n', 'r<C-]>', ':Telescope lsp_references<cr>')
-vim.keymap.set('n', 'gr', ':Telescope lsp_references<cr>')
--- vim.keymap.set('n',  '<C-p><C-t>', ':Telescope tags<cr>')
--- vim.keymap.set('n',  '<C-p><C-o>', ':Telescope treesitter<cr>')
+keymap('n', '<C-p>', ':Telescope<cr>')
+keymap('n', '<C-p><C-p>', ':Telescope<cr>')
+keymap('n', '<C-p><C-t>', ';:Telescope lsp_dynamic_workspace_symbols<cr>')
+keymap('n', '<C-p><C-o>', ':Telescope lsp_document_symbols<cr>')
+keymap('n', '<C-p><C-f>', ':Telescope git_files<cr>')
+keymap('n', '<C-p><C-g>', ':Telescope live_grep<cr>')
+keymap('n', '<C-p><C-h>', ':Telescope oldfiles<cr>')
+keymap('n', '<C-p><C-b>', ':Telescope buffers<cr>')
+keymap('n', 'r<C-]>', ':Telescope lsp_references<cr>')
+keymap('n', 'gr', ':Telescope lsp_references<cr>')
+-- keymap('n',  '<C-p><C-t>', ':Telescope tags<cr>')
+-- keymap('n',  '<C-p><C-o>', ':Telescope treesitter<cr>')
 
 local actions = require("telescope.actions")
 require("telescope").setup {
@@ -482,7 +486,7 @@ require("bufferline").setup {
 -- =============================================================================
 
 local augroup = vim.api.nvim_create_augroup('git_commit', { clear = true })
-vim.api.nvim_create_autocmd('FileType', { pattern = 'gitcommit', group = augroup, command = 'setlocal spell textwidth=72' })
+autocmd('FileType', { pattern = 'gitcommit', group = augroup, command = 'setlocal spell textwidth=72' })
 require('gitsigns').setup {
 
   on_attach = function(bufnr)
@@ -491,7 +495,7 @@ require('gitsigns').setup {
     local function map(mode, l, r, opts)
       opts = opts or {}
       opts.buffer = bufnr
-      vim.keymap.set(mode, l, r, opts)
+      keymap(mode, l, r, opts)
     end
 
     -- Navigation
@@ -530,10 +534,10 @@ require('gitsigns').setup {
 -- =============================================================================
 
 local augroup = vim.api.nvim_create_augroup('FigitiveCustom', { clear = true })
-vim.api.nvim_create_autocmd('BufRead', { pattern = 'figitive://*', group = augroup, command = 'set bufhidden=delete' })
+autocmd('BufRead', { pattern = 'figitive://*', group = augroup, command = 'set bufhidden=delete' })
 
 -- :Gbrowse uses netrw, set default browser for that
-vim.g.netrw_browsex_viewer = "qutebrowser"
+g.netrw_browsex_viewer = "qutebrowser"
 
 -- =============================================================================
 -- Lualine
@@ -570,15 +574,15 @@ hi.CmpItemKindUnit         = { guifg = M.colors.base05, guibg = nil, gui = nil, 
 -- Markdown
 -- =============================================================================
 
-vim.g.vim_markdown_folding_disabled = 1
-vim.g.vim_markdown_conceal = 0
-vim.g.vim_markdown_math = 1
-vim.g.vim_markdown_new_list_item_indent = 0
+g.vim_markdown_folding_disabled = 1
+g.vim_markdown_conceal = 0
+g.vim_markdown_math = 1
+g.vim_markdown_new_list_item_indent = 0
 local augroup = vim.api.nvim_create_augroup('markdown_cmds', { clear = true })
-vim.api.nvim_create_autocmd('FileType', { pattern = 'markdown', group = augroup, command = 'setlocal spell formatoptions=tqr' })
+autocmd('FileType', { pattern = 'markdown', group = augroup, command = 'setlocal spell formatoptions=tqr' })
 
 -- =============================================================================
 -- DB
 -- =============================================================================
 
-vim.api.nvim_create_user_command('SQL', 'enew | setlocal buftype=nofile | setlocal ft=pgsql', {})
+command('SQL', 'enew | setlocal buftype=nofile | setlocal ft=pgsql', {})
