@@ -35,8 +35,10 @@
   showUntrackedFiles = all
 [remote "origin"]
 	prune = true
+[mergetool "nvim"]
+	cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
 [merge]
-	tool = vimdiff
+	tool = nvim
 	conflictstyle = zdiff3
 [mergetool]
 	keepBackup = false

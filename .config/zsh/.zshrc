@@ -63,24 +63,24 @@ zshrc=$ZDOTDIR/.zshrc
 conf() {
     case $1 in
         pacman)      svim /etc/pacman.conf ;;
-        tmux)        vim $XDG_CONFIG_HOME/tmux/tmux.conf ;;
-        mutt)        vim $XDG_CONFIG_HOME/mutt/muttrc ;;
+        tmux)        nvim $XDG_CONFIG_HOME/tmux/tmux.conf ;;
+        mutt)        nvim $XDG_CONFIG_HOME/mutt/muttrc ;;
         vim)         vim $XDG_CONFIG_HOME/vim/vimrc ;;
-        nvim)        vim $XDG_CONFIG_HOME/nvim/init.vim ;;
+        nvim)        nvim $XDG_CONFIG_HOME/nvim/init.lua ;;
         emacs)       emacs -nw $XDG_CONFIG_HOME/emacs/init.el ;;
-        vim-local)   vim $XDG_CONFIG_HOME/vim/machine_specific_vimrc ;;
-        zathura)     vim $XDG_CONFIG_HOME/zathura/zathurarc ;;
-        zsh)         vim $zshrc && source $zshrc ;;
-        zprofile)    vim $ZDOTDIR/.zprofile ;;
-        zsh-local)   vim $ZDOTDIR/machine_specific && source $zshrc ;;
-        aliases)     vim $ZDOTDIR/aliases && source $zshrc ;;
-        functions)   vim $ZDOTDIR/functions && source $zshrc ;;
-        git)         vim $XDG_CONFIG_HOME/git/config ;;
-        qutebrowser) vim $XDG_CONFIG_HOME/qutebrowser/config.py ;;
-        ssh)         vim ~/.ssh/config ;;
-        starship)    vim $XDG_CONFIG_HOME/starship.toml ;;
-        xresources)  vim $XDG_CONFIG_HOME/X11/xresources && xrdb -merge $XDG_CONFIG_HOME/X11/xresources && xrdb -merge $XDG_CONFIG_HOME/X11/xcolors;;
-        xinit)       vim $XDG_CONFIG_HOME/X11/xinitrc;;
+        vim-local)   nvim $XDG_CONFIG_HOME/vim/machine_specific_vimrc ;;
+        zathura)     nvim $XDG_CONFIG_HOME/zathura/zathurarc ;;
+        zsh)         nvim $zshrc && source $zshrc ;;
+        zprofile)    nvim $ZDOTDIR/.zprofile ;;
+        zsh-local)   nvim $ZDOTDIR/machine_specific && source $zshrc ;;
+        aliases)     nvim $ZDOTDIR/aliases && source $zshrc ;;
+        functions)   nvim $ZDOTDIR/functions && source $zshrc ;;
+        git)         nvim $XDG_CONFIG_HOME/git/config ;;
+        qutebrowser) nvim $XDG_CONFIG_HOME/qutebrowser/config.py ;;
+        ssh)         nvim ~/.ssh/config ;;
+        starship)    nvim $XDG_CONFIG_HOME/starship.toml ;;
+        xresources)  nvim $XDG_CONFIG_HOME/X11/xresources && xrdb -merge $XDG_CONFIG_HOME/X11/xresources && xrdb -merge $XDG_CONFIG_HOME/X11/xcolors;;
+        xinit)       nvim $XDG_CONFIG_HOME/X11/xinitrc;;
         *)           echo "Unknown application: $1" ;;
     esac
 }
