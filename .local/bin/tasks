@@ -3,7 +3,7 @@ taskfile=$NOTES_DIR/tasks.md
 task="$*"
 
 if [ -z "$task" ]; then
-  vim "$taskfile"
+  nvim "$taskfile"
 else
   echo "* $task" >> "$taskfile"
 fi

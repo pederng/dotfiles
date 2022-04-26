@@ -1,6 +1,4 @@
 #!/bin/sh
 
 st -c fzfmenu -n fzfmenu -g 250x75 -e zsh -c \
-  'VIMIT=":source ~/.config/vim/vimrc" eval "$(~/.config/base16-shell/profile_helper.sh)"; \
-      vim ~/.local/share/notes/inbox.md -c "Clap grep2"' \
-  & disown
+  'eval "$(~/.config/base16-shell/profile_helper.sh)"; nvim -u ~/.config/nvim/init.lua ~/.local/share/notes/inbox.md' & disown
