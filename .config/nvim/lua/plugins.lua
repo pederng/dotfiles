@@ -82,8 +82,8 @@ require("telescope").setup {
   defaults = {
     mappings = {
       i = {
-        ["'esc'"] = actions.close,
-        ["'C-j'"] = "move_selection_next",
+        ["<esc>"] = actions.close,
+        ["<C-j>"] = "move_selection_next",
         ["<C-k>"] = "move_selection_previous",
       }
     }

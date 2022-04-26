@@ -1,4 +1,3 @@
-local g = vim.g
 local keymap = vim.keymap.set
 local remap = { remap = true }
 local silent = { silent = true }
@@ -28,7 +27,7 @@ keymap('n', '<C-l>', '<C-w>l', remap)
 
 keymap('n', '<C-p>', ':Telescope<cr>', silent)
 keymap('n', '<C-p><C-p>', ':Telescope<cr>', silent)
-keymap('n', '<C-p><C-t>', ';:Telescope lsp_dynamic_workspace_symbols<cr>', silent)
+keymap('n', '<C-p><C-t>', ':Telescope lsp_dynamic_workspace_symbols<cr>', silent)
 keymap('n', '<C-p><C-o>', ':Telescope lsp_document_symbols<cr>', silent)
 keymap('n', '<C-p><C-f>', ':Telescope git_files<cr>', silent)
 keymap('n', '<C-p><C-g>', ':Telescope live_grep<cr>', silent)
