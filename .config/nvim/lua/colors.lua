@@ -33,3 +33,5 @@ hi.CmpItemAbbrKindMethod   = { guifg = M.colors.base0E, guibg = nil, gui = nil, 
 hi.CmpItemAbbrKindKeyword  = { guifg = M.colors.base05, guibg = nil, gui = nil, guisp = nil }
 hi.CmpItemKindProperty     = { guifg = M.colors.base05, guibg = nil, gui = nil, guisp = nil }
 hi.CmpItemKindUnit         = { guifg = M.colors.base05, guibg = nil, gui = nil, guisp = nil }
+
+hi.Operator = { guifg = M.colors.base0E, guibg = nil, gui = 'none', guisp = nil }

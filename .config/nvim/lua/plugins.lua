@@ -2,6 +2,7 @@ local keymap = vim.keymap.set
 local cmd = vim.cmd
 local fn = vim.fn
 local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+
 if fn.empty(fn.glob(install_path)) > 0 then
   PACKER_BOOTSTRAP = fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path })
 end
@@ -71,6 +72,14 @@ require('packer').startup(function(use)
   use { 'nvim-lualine/lualine.nvim' }
   use { 'akinsho/bufferline.nvim', tag = '*' }
   use { 'RRethy/nvim-base16' }
+  use { 'folke/tokyonight.nvim' }
+  use { 'lewis6991/hover.nvim', config = function()
+    require('hover').setup {
+      init = function() require('hover.providers.lsp') end,
+      preview_opts = { border = nil },
+      title = true
+    }
+  end }
 
   if PACKER_BOOTSTRAP then
     require('packer').sync()
@@ -95,13 +104,13 @@ require('trouble').setup({ mode = "document_diagnostics" })
 require("bufferline").setup { options = { diagnostics = 'nvim_lsp' } }
 
 local silent = { silent = true }
-local on_attach = function(client, bufnr)
+local on_attach = function(_, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', silent)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', silent)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'd<C-]>', '<cmd>lua vim.lsp.buf.definition()<CR>', silent)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'r<C-]>', '<cmd>lua vim.lsp.buf.references()<CR>', silent)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-y>', '<cmd>lua vim.lsp.buf.hover()<CR>', silent)
+  -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'r<C-]>', '<cmd>lua vim.lsp.buf.references()<CR>', silent)
+  -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-y>', '<cmd>lua vim.lsp.buf.hover()<CR>', silent)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', silent)
 end
 
@@ -226,6 +235,12 @@ local null_ls = require("null-ls")
 local sources = {
   null_ls.builtins.diagnostics.mypy,
   null_ls.builtins.diagnostics.pylint,
+  null_ls.builtins.diagnostics.hadolint,
+  null_ls.builtins.diagnostics.ansiblelint,
+  null_ls.builtins.diagnostics.shellcheck,
+  null_ls.builtins.diagnostics.sqlfluff.with({
+    extra_args = { "--dialect", "postgres" }
+  }),
   null_ls.builtins.formatting.black,
   null_ls.builtins.code_actions.gitsigns,
 }
