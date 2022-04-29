@@ -6,7 +6,7 @@ set move = no
 set delete
 unset confirmappend
 set quit
-set editor = "vim"
+set editor = "nvim"
 set charset = "utf-8"
 set record = ""
 set quote_regexp = "^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"
