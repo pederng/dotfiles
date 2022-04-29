@@ -31,6 +31,7 @@ set.wildignore:append('*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz')
 set.completeopt = 'menu,menuone,noselect'
 
 set.swapfile = false
+set.signcolumn = 'yes'
 
 set.splitbelow = true
 set.splitright = true
