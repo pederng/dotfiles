@@ -20,7 +20,7 @@ port           587
 from           peder.galteland@softwarelab.no
 user           peder.galteland@softwarelab.no
 auth           oauthbearer
-passwordeval   "fetch_token tsl"
+passwordeval   "fetch_token gmail-tsl"
 
 # personal gmail
 account        gmail-personal
