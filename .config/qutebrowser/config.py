@@ -41,7 +41,11 @@ c.fonts.statusbar = "10pt monospace"
 # c.fonts.tabs = "10pt monospace"
 c.tabs.position = "left"
 c.tabs.width = "10%"
-c.zoom.default = "100%"
+try:
+    import custom_config
+    c.zoom.default = custom_config.ZOOM
+except (ImportError, AttributeError):
+    c.zoom.default = '100%'
 config.bind("<Ctrl-K>", "completion-item-focus prev", mode="command")
 config.bind("<Ctrl-J>", "completion-item-focus next", mode="command")
 
