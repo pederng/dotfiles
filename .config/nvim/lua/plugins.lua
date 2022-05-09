@@ -77,13 +77,16 @@ require('packer').startup(function(use)
   use { 'akinsho/bufferline.nvim', tag = '*' }
   use { 'RRethy/nvim-base16' }
   use { 'folke/tokyonight.nvim' }
-  use { 'lewis6991/hover.nvim', config = function()
-    require('hover').setup {
-      init = function() require('hover.providers.lsp') end,
-      preview_opts = { border = nil },
-      title = true
-    }
-  end }
+  use { "ray-x/lsp_signature.nvim", config = function() require('lsp_signature').setup() end }
+  use { 'lewis6991/hover.nvim',
+    config = function()
+      require('hover').setup {
+        init = function() require('hover.providers.lsp') end,
+        preview_opts = { border = nil },
+        title = true
+      }
+    end
+  }
 
   if PACKER_BOOTSTRAP then
     require('packer').sync()
