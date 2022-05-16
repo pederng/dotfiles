@@ -47,6 +47,7 @@ require('packer').startup(function(use)
   use { 'hrsh7th/nvim-cmp', branch = 'main' }
   use { 'jose-elias-alvarez/null-ls.nvim', branch = 'main' }
   use { 'onsails/lspkind.nvim' }
+  use { 'ray-x/lsp_signature.nvim' }
 
   -- DB
   use { 'tpope/vim-dadbod' }
@@ -77,7 +78,6 @@ require('packer').startup(function(use)
   use { 'akinsho/bufferline.nvim', tag = '*' }
   use { 'RRethy/nvim-base16' }
   use { 'folke/tokyonight.nvim' }
-  use { "ray-x/lsp_signature.nvim", config = function() require('lsp_signature').setup() end }
   use { 'lewis6991/hover.nvim',
     config = function()
       require('hover').setup {
@@ -119,6 +119,7 @@ local on_attach = function(_, bufnr)
   -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'r<C-]>', '<cmd>lua vim.lsp.buf.references()<CR>', silent)
   -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-y>', '<cmd>lua vim.lsp.buf.hover()<CR>', silent)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', silent)
+  require('lsp_signature').on_attach()
 end
 
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
