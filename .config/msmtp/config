@@ -5,14 +5,6 @@ tls            on
 tls_trust_file /etc/ssl/certs/ca-certificates.crt
 logfile        ~/.cache/msmtp.log
 
-# td gmail
-account        gmail-td
-host           smtp.gmail.com
-port           587
-from           peder.galteland@telenordigital.com
-user           peder.galteland@telenordigital.com
-passwordeval   "pass gmailmutt"
-
 # tsl gmail
 account        gmail-tsl
 host           smtp.gmail.com
@@ -39,4 +31,4 @@ from           peder.notto@galte.land
 user           peder.notto@galte.land
 passwordeval   "pass purelymail"
 
-account default : gmail-td
+account default : gmail-tsl
