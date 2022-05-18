@@ -35,3 +35,8 @@ hi.CmpItemKindProperty     = { guifg = M.colors.base05, guibg = nil, gui = nil, 
 hi.CmpItemKindUnit         = { guifg = M.colors.base05, guibg = nil, gui = nil, guisp = nil }
 
 hi.Operator = { guifg = M.colors.base0E, guibg = nil, gui = 'none', guisp = nil }
+
+hi.TelescopeBorder        = { guifg = M.colors.base03, guibg = nil, gui = 'none', guisp = nil }
+hi.TelescopePromptBorder  = { guifg = M.colors.base03, guibg = nil, gui = 'none', guisp = nil }
+hi.TelescopeResultsBorder = { guifg = M.colors.base03, guibg = nil, gui = 'none', guisp = nil }
+hi.TelescopePreviewBorder = { guifg = M.colors.base03, guibg = nil, gui = 'none', guisp = nil }
