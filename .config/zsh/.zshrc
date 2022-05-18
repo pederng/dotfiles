@@ -111,8 +111,20 @@ if [ ! -f $ZDOTDIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
 fi
 source $ZDOTDIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-# Jumping
+# zsh-histdb
+if [ ! -f $ZDOTDIR/zsh-histdb/sqlite-history.zsh ]; then
+  git clone https://github.com/larkery/zsh-histdb $ZDOTDIR/zsh-histdb
+fi
+source $ZDOTDIR/zsh-histdb/sqlite-history.zsh
+autoload -Uz add-zsh-hook
 
+# forgit
+if [ ! -f $ZDOTDIR/forgit/forgit.plugin.zsh ]; then
+  git clone https://github.com/wfxr/forgit $ZDOTDIR/forgit/
+fi
+source $ZDOTDIR/forgit/forgit.plugin.zsh
+
+# Jumping
 command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
 
 
@@ -122,6 +134,12 @@ export FZF_DEFAULT_OPTS="--multi"
 export FZF_DEFAULT_COMMAND='fd --type f'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 bindkey '^I' $fzf_default_completion
+
+if [ ! -f $ZDOTDIR/zsh-histdb-fzf/fzf-histdb.zsh ]; then
+  git clone https://github.com/m42e/zsh-histdb-fzf $ZDOTDIR/zsh-histdb-fzf
+fi
+export HISTDB_FZF_DEFAULT_MODE=3
+source $ZDOTDIR/zsh-histdb-fzf/fzf-histdb.zsh
 
 # Vim mode improvements
 export KEYTIMEOUT=10
