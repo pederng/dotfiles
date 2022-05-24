@@ -1,4 +1,3 @@
-# vi:syntax=zsh
 #Utilites
 alias grep='grep --color=auto'
 alias dmesg='dmesg -HL'
@@ -48,5 +47,11 @@ alias abook="abook --config "$XDG_CONFIG_HOME"/abook/abookrc --datafile "$XDG_DA
 alias dotfiles='/usr/bin/git --git-dir=$XDG_DATA_HOME/dotfiles/ --work-tree=$HOME'
 
 alias org="emacs -nw $XDG_DATA_HOME/notes/notes.org"
+alias zk="zk -W $XDG_DATA_HOME/notes/zettelkasten"
+
+alias nix="LD_LIBRARY_PATH= nix"
+alias nix-env="LD_LIBRARY_PATH= nix-env"
+alias cachix="LD_LIBRARY_PATH= cachix"
+alias neuron="LD_LIBRARY_PATH= neuron -d $XDG_DATA_HOME/notes/zettelkasten"
 
 alias j=zi
