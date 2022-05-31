@@ -81,12 +81,13 @@ conf() {
         starship)    nvim $XDG_CONFIG_HOME/starship.toml ;;
         xresources)  nvim $XDG_CONFIG_HOME/X11/xresources && xrdb -merge $XDG_CONFIG_HOME/X11/xresources && xrdb -merge $XDG_CONFIG_HOME/X11/xcolors;;
         xinit)       nvim $XDG_CONFIG_HOME/X11/xinitrc;;
+        nix)         nvim $XDG_CONFIG_HOME/nixpkgs/home.nix;;
         *)           echo "Unknown application: $1" ;;
     esac
 }
 
 function _complete_conf {
-  reply=('functions' 'aliases' 'zsh' 'zprofile' 'zsh-local' 'vim' 'emacs' 'vim-local' 'mutt' 'qutebrowser' 'tmux' 'ssh' 'starship' 'xresources' 'xinit' 'nvim')
+  reply=('functions' 'aliases' 'zsh' 'zprofile' 'zsh-local' 'vim' 'emacs' 'vim-local' 'mutt' 'qutebrowser' 'tmux' 'ssh' 'starship' 'xresources' 'xinit' 'nvim' 'nix')
 }
 compctl -K _complete_conf conf
 
