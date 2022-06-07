@@ -52,6 +52,10 @@ bindkey '^[f' forward-word
 bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
 
+# Nix
+test -f ~/.nix-profile/etc/profile.d/nix.sh &&  . ~/.nix-profile/etc/profile.d/nix.sh
+export LD_LIBRARY_PATH=
+
 #Prompt
 eval "$(starship init zsh)"
 
@@ -101,9 +105,6 @@ source ~/.local/bin/virtualenvwrapper.sh
 BASE16_SHELL=$HOME/.config/base16-shell/
 [ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
 export BASE16_SHELL_HOOKS=$XDG_CONFIG_HOME/base16-hooks
-
-# export python lib path
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib:/usr/local/lib
 
 
 #Syntax highlighting
@@ -177,8 +178,6 @@ function preexec() {
 
 DO_NOT_TRACK=1
 
-# Nix
-test -f ~/.nix-profile/etc/profile.d/nix.sh &&  . ~/.nix-profile/etc/profile.d/nix.sh
 
 #----Machine-specific----
 source $ZDOTDIR/machine_specific
