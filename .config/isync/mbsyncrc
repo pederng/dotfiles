@@ -18,21 +18,25 @@ Channel sync-purelymail-default
 Far :purelymail-remote:
 Near :purelymail-local:
 Patterns "INBOX"
+SyncState *
 
 Channel sync-purelymail-sent
 Far :purelymail-remote:Sent
 Near :purelymail-local:sent
 Create Near
+SyncState *
 
 Channel sync-purelymail-drafts
 Far :purelymail-remote:Drafts
 Near :purelymail-local:drafts
 Create Near
+SyncState *
 
 Channel sync-purelymail-archive
 Far :purelymail-remote:Trash
 Near :purelymail-local:archive
 Create Near
+SyncState *
 
 Group purelymail
 Channel sync-purelymail-default
@@ -62,21 +66,25 @@ Channel sync-gmail-personal-default
 Far :gmail-personal-remote:
 Near :gmail-personal-local:
 Patterns "INBOX"
+SyncState *
 
 Channel sync-gmail-personal-sent
 Far :gmail-personal-remote:"[Gmail]/Sent Mail"
 Near :gmail-personal-local:sent
 Create Near
+SyncState *
 
 Channel sync-gmail-personal-drafts
 Far :gmail-personal-remote:"[Gmail]/Drafts"
 Near :gmail-personal-local:drafts
 Create Near
+SyncState *
 
 Channel sync-gmail-personal-archive
 Far :gmail-personal-remote:"[Gmail]/All Mail"
 Near :gmail-personal-local:archive
 Create Near
+SyncState *
 
 Group gmail-personal
 Channel sync-gmail-personal-default
@@ -106,21 +114,25 @@ Far :gmail-tsl-remote:
 Near :gmail-tsl-local:
 Patterns "INBOX" "github*" "jira"
 Create Near
+SyncState *
 
 Channel sync-gmail-tsl-sent
 Far :gmail-tsl-remote:"[Gmail]/Sent Mail"
 Near :gmail-tsl-local:sent
 Create Near
+SyncState *
 
 Channel sync-gmail-tsl-drafts
 Far :gmail-tsl-remote:"[Gmail]/Drafts"
 Near :gmail-tsl-local:drafts
 Create Near
+SyncState *
 
 Channel sync-gmail-tsl-archive
 Far :gmail-tsl-remote:"[Gmail]/All Mail"
 Near :gmail-tsl-local:archive
 Create Near
+SyncState *
 
 Group gmail-tsl
 Channel sync-gmail-tsl-default
