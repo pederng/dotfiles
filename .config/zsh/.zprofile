@@ -41,6 +41,7 @@ export GEM_SPEC_CACHE="$XDG_CACHE_HOME"/gem
 export IPYTHONDIR="$XDG_CONFIG_HOME"/jupyter
 export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME"/jupyter
 export KUBECONFIG="$XDG_CONFIG_HOME"/kube/config
+export WGETRC="$XDG_CONFIG_HOME/wgetrc"
 
 # Custom python startup script
 export PYTHONSTARTUP="$XDG_CONFIG_HOME"/python/startup.py

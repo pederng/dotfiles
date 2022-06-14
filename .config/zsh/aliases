@@ -42,6 +42,7 @@ alias calcurse="calcurse -C $XDG_CONFIG_HOME/calcurse -D $XDG_DATA_HOME/calcurse
 alias gpg="gpg --homedir $XDG_DATA_HOME/gnupg"
 alias mbsync="mbsync -c "$XDG_CONFIG_HOME"/isync/mbsyncrc"
 alias abook="abook --config "$XDG_CONFIG_HOME"/abook/abookrc --datafile "$XDG_DATA_HOME"/notes/addressbook"
+alias wget="wget --hsts-file='$XDG_CACHE_HOME/wget-hsts'"
 
 # dotfile storage config
 alias dotfiles='/usr/bin/git --git-dir=$XDG_DATA_HOME/dotfiles/ --work-tree=$HOME'
